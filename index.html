@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Vannila Validator</title>
+	<style>
+		.error{
+			color: red;
+			border-color: red;
+		}
+		.msg-error{
+			font-size: 12px;
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	
+	<form action="#">
+		<div>
+			<input type="text" class="required">
+		</div>
+		<div>
+			<input type="email" class="required email">
+		</div>
+		<div>
+			<input type="tel" class="required phone">
+		</div>
+		<div>
+			<input type="number" class="required number">
+		</div>
+		<div>
+			<input type="file" class="required">
+		</div>
+		<div>
+			<textarea class="required"></textarea>
+		</div>
+		<div>
+			<select class="required">
+				<option value="">Selecione</option>
+				<option value="1">Teste 1</option>
+				<option value="2">Teste 2</option>
+			</select>
+		</div>
+		<div>
+			<label>
+				<input type="radio" name="teste-radio" class="required" value="teste1">
+				teste 1
+			</label>
+			<label>
+				<input type="radio" name="teste-radio" class="required" value="teste2">
+				teste 2
+			</label>
+		</div>
+		<div>
+			<label>
+				<input type="checkbox" name="teste-checkbox" class="required" value="teste1">
+				teste 1
+			</label>
+			<label>
+				<input type="checkbox" name="teste-checkbox" class="required" value="teste2">
+				teste 2
+			</label>
+		</div>
+		<div>
+			<button type="submit">Enviar</button>
+		</div>
+	</form>
+
+	<form action="#">
+		<div>
+			<input type="text" class="required">
+		</div>
+		<div>
+			<button type="submit">Enviar</button>
+		</div>
+	</form>
+
+	<script src="vanilla-validator.js"></script>
+</body>
+</html>
