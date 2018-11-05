@@ -2,6 +2,20 @@ var VanillaValidator = (function(){
 
 	var querySelector, forms;
 
+	var defaultConfig = {
+		selectors: {
+			required: "required",
+			email: "email",
+			phone: "phone",
+			cpf: "cpf",
+			cnpj: "cnpj"
+		},
+		novalidateHTML5: true,
+		clearErrosOnChange: true
+	};
+
+	var apiConfig = {};
+
 	/**
 	 * return all forms that query selector matches
 	 *
@@ -23,6 +37,9 @@ var VanillaValidator = (function(){
 	 * @param {NodeList} list of forms
 	 */
 	var setHTML5NoValidate = function(forms){
+		
+		if(!apiConfig.novalidateHTML5) return;
+
 		if(forms){
 			var i, total = forms.length;
 			for(i = 0; i < total; i++){
@@ -34,18 +51,49 @@ var VanillaValidator = (function(){
 	/**
 	 * handle the event submit of form
 	 *
-	 * @method addEventToForms
+	 * @method addEventToFormsAndFields
 	 */
-	var addEventToForms = function(){
+	var addEventToFormsAndFields = function(){
 		if(forms){
 			var i, total = forms.length;
+
 			for(i = 0; i < total; i++){
+
 				forms[i].addEventListener("submit", function(event){
 					event.preventDefault();
 
 					console.log(applyValidationRequired(this));
 
 				});
+
+				// if clearErrosOnChange is configured as true
+				if(apiConfig.clearErrosOnChange){
+
+					var fields = getFieldsRequireds(forms[i]);
+
+					if(fields){
+						var x,
+							total = fields.length;
+
+						for(x = 0; x < total; x++){
+							// clear onchange
+							fields[x].addEventListener("change", function(){
+								if(this.classList.contains("error")){
+									removeValidationView(this);
+								}
+							});
+
+							// clear on keyup
+							fields[x].addEventListener("keyup", function(){
+								if(this.classList.contains("error")){
+									removeValidationView(this);
+								}
+							});
+						}
+					}
+
+				}
+				
 			}
 		}
 	};
@@ -59,7 +107,7 @@ var VanillaValidator = (function(){
 	 */
 	var getFieldsRequireds = function(form){
 		if(form){
-			var fields = form.querySelectorAll('.required');
+			var fields = form.querySelectorAll('.' + apiConfig.selectors.required);
 			if(fields){
 				return fields;
 			}
@@ -235,23 +283,81 @@ var VanillaValidator = (function(){
 	}
 
 	/**
+	 * check if is an object
+	 *
+	 * @method isObject
+	 * @param {Object} A configuration object
+	 * @return {Boolean}
+	 */
+	var isObject = function(object){
+		return (object && typeof object === 'object' && object instanceof Object);
+	}
+
+	/**
+	 * merget default configuration with user configuration objects in apiConfig object
+	 *
+	 * @method mergeObjectsDeeply
+	 * @param {Object} A default configuration object
+	 * @param {Object} A user configuration object
+	 * @param {Object} The apiConfig global object
+	 */
+	var mergeObjectsDeeply = function(objectDefault, objectUser, target){
+
+		if(isObject(objectDefault) && isObject(objectUser) && isObject(target)){
+
+			for(t in objectDefault){
+
+				if(isObject(objectDefault[t]) && isObject(objectDefault[t])){
+
+					target[t] = objectDefault[t];
+					mergeObjectsDeeply(objectDefault[t], objectUser[t], target[t]);
+
+				}else{
+
+					if(objectUser[t] != 'undefined'){
+						target[t] = objectUser[t];
+					}else{
+						target[t] = objectDefault[t];
+					}
+
+				}
+
+			}
+
+		}
+	}
+
+	/**
 	 * Form validator class with pure Javascript
 
 	 * @class VanillaValidator
 	 * @constructor
 	 * @param {String} query selector
 	 */
-	function VanillaValidator(query){
+	function VanillaValidator(query, config){
 		querySelector = query;
 		forms = getForms();
 
+		mergeObjectsDeeply(defaultConfig, config, apiConfig);
+
+		//console.log(apiConfig);
+		//console.log(apiConfig.selectors.teste.legal.valor)
+
+		//console.log(typeof defaultConfig);
+		//console.log(defaultConfig instanceof Object)
+
 		setHTML5NoValidate(forms);
 
-		addEventToForms();
+		addEventToFormsAndFields();
 	}
 
 	return VanillaValidator;
 
 }());
 
-var valid = new VanillaValidator("form");
+
+var configuracoes = {
+	novalidateHTML5: true,
+	clearErrosOnChange: false
+};
+var valid = new VanillaValidator("form", configuracoes);
