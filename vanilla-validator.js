@@ -8,7 +8,12 @@ var VanillaValidator = (function(){
 			email: "email",
 			phone: "phone",
 			cpf: "cpf",
-			cnpj: "cnpj"
+			cnpj: "cnpj",
+			error: "error",
+			messageError: "msg-error"
+		},
+		messages: {
+			required: "Required Filed"
 		},
 		novalidateHTML5: true,
 		clearErrosOnChange: true
@@ -62,7 +67,7 @@ var VanillaValidator = (function(){
 				forms[i].addEventListener("submit", function(event){
 					event.preventDefault();
 
-					console.log(applyValidationRequired(this));
+					console.log("Required:", applyValidationRequired(this));
 
 				});
 
@@ -78,14 +83,14 @@ var VanillaValidator = (function(){
 						for(x = 0; x < total; x++){
 							// clear onchange
 							fields[x].addEventListener("change", function(){
-								if(this.classList.contains("error")){
+								if(this.classList.contains(apiConfig.selectors.error)){
 									removeValidationView(this);
 								}
 							});
 
 							// clear on keyup
 							fields[x].addEventListener("keyup", function(){
-								if(this.classList.contains("error")){
+								if(this.classList.contains(apiConfig.selectors.error)){
 									removeValidationView(this);
 								}
 							});
@@ -212,10 +217,10 @@ var VanillaValidator = (function(){
 
 			if(parentEl){
 				var messageContainer = document.createElement("SPAN");
-				messageContainer.innerHTML = "Mensagem de erro aqui";
+				messageContainer.innerHTML = apiConfig.messages.required;
 
 				var messageClass = document.createAttribute("class");
-				messageClass.value = "msg-error";
+				messageClass.value = apiConfig.selectors.messageError;
 				messageContainer.setAttributeNode(messageClass);
 
 				
@@ -223,14 +228,14 @@ var VanillaValidator = (function(){
 					var i, totalEl = element.length;
 
 					for(i = 1; i < totalEl; i++){
-						element[i].classList.add("error");
+						element[i].classList.add(apiConfig.selectors.error);
 					}
 				}else{
-					element.classList.add("error");
+					element.classList.add(apiConfig.selectors.error);
 				}
 				
 
-				var oldMessages = parentEl.querySelectorAll('.msg-error');
+				var oldMessages = parentEl.querySelectorAll("." + apiConfig.selectors.messageError);
 
 				if(oldMessages){
 					var x, totalOld = oldMessages.length;
@@ -262,13 +267,13 @@ var VanillaValidator = (function(){
 					var i, totalEl = element.length;
 
 					for(i = 1; i < totalEl; i++){
-						element[i].classList.remove("error");
+						element[i].classList.remove(apiConfig.selectors.error);
 					}
 				}else{
-					element.classList.remove("error");
+					element.classList.remove(apiConfig.selectors.error);
 				}
 
-				var oldMessages = parentEl.querySelectorAll('.msg-error');
+				var oldMessages = parentEl.querySelectorAll("." + apiConfig.selectors.messageError);
 
 				if(oldMessages){
 					var x, totalOld = oldMessages.length;
@@ -310,6 +315,8 @@ var VanillaValidator = (function(){
 				if(isObject(objectDefault[t]) && isObject(objectDefault[t])){
 
 					target[t] = objectDefault[t];
+
+					// applying recursion to copy deeply
 					mergeObjectsDeeply(objectDefault[t], objectUser[t], target[t]);
 
 				}else{
@@ -340,12 +347,6 @@ var VanillaValidator = (function(){
 
 		mergeObjectsDeeply(defaultConfig, config, apiConfig);
 
-		//console.log(apiConfig);
-		//console.log(apiConfig.selectors.teste.legal.valor)
-
-		//console.log(typeof defaultConfig);
-		//console.log(defaultConfig instanceof Object)
-
 		setHTML5NoValidate(forms);
 
 		addEventToFormsAndFields();
@@ -358,6 +359,6 @@ var VanillaValidator = (function(){
 
 var configuracoes = {
 	novalidateHTML5: true,
-	clearErrosOnChange: false
+	clearErrosOnChange: true
 };
 var valid = new VanillaValidator("form", configuracoes);
