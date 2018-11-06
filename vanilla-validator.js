@@ -13,7 +13,8 @@ var VanillaValidator = (function(){
 			messageError: "msg-error"
 		},
 		messages: {
-			required: "Required Filed"
+			required: "Required Filed",
+			email: "Invalid Email"
 		},
 		novalidateHTML5: true,
 		clearErrosOnChange: true
@@ -67,14 +68,20 @@ var VanillaValidator = (function(){
 				forms[i].addEventListener("submit", function(event){
 					event.preventDefault();
 
+
+					console.log("Email:", applyValidationEmail(this));
 					console.log("Required:", applyValidationRequired(this));
+
+
+
+					
 
 				});
 
 				// if clearErrosOnChange is configured as true
 				if(apiConfig.clearErrosOnChange){
 
-					var fields = getFieldsRequireds(forms[i]);
+					var fields = getFields(forms[i], apiConfig.selectors.required);
 
 					if(fields){
 						var x,
@@ -106,13 +113,14 @@ var VanillaValidator = (function(){
 	/**
 	 * get required fields from especified form
 	 *
-	 * @method getFieldsRequireds
+	 * @method getFields
 	 * @param {NodeList} list of forms
+	 * @param {string} class css as a selector
 	 * @return {NodeList || null} returns the fields or null
 	 */
-	var getFieldsRequireds = function(form){
+	var getFields = function(form, selector){
 		if(form){
-			var fields = form.querySelectorAll('.' + apiConfig.selectors.required);
+			var fields = form.querySelectorAll('.' + selector);
 			if(fields){
 				return fields;
 			}
@@ -128,10 +136,10 @@ var VanillaValidator = (function(){
 	 * @return {Boolean} if is valid returns true, otherwise returns false
 	 */
 	var applyValidationRequired = function(form){
+		var ret = true;
 		if(form){
 
-			var fields = getFieldsRequireds(form),
-				ret = true;;
+			var fields = getFields(form, apiConfig.selectors.required);
 	
 			if(fields){ 
 
@@ -144,16 +152,16 @@ var VanillaValidator = (function(){
 					if(fields[i].type !== 'checkbox' && fields[i].type !== 'radio'){
 						// fildes text, email, tel, textarea, select, inputfile
 
-						if(fields[i].value === ""){
+						if(fields[i].value === "" || fields[i].value.length < 1){
 							// is inválid
 
-							addValidationView(fields[i]);
+							addValidationView(fields[i], apiConfig.messages.required);
 							ret = false;
 
 						}else{
 							// is valid
 
-							removeValidationView(fields[i]);
+							//removeValidationView(fields[i]);
 						}
 
 					}else{
@@ -188,11 +196,11 @@ var VanillaValidator = (function(){
 
 						if(checkboxRadios[cr][0] === "invalid"){
 							// is invalid
-							addValidationView(checkboxRadios[cr]);
+							addValidationView(checkboxRadios[cr], apiConfig.messages.required);
 							ret = false;
 						}else{
 							// is valid
-							removeValidationView(checkboxRadios[cr]);
+							//removeValidationView(checkboxRadios[cr]);
 						}
 					}
 				}
@@ -204,20 +212,54 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	var applyValidationEmail = function(form){
+		var ret = true;
+		if(form){
+
+			var fields = getFields(form, apiConfig.selectors.email);
+	
+			if(fields){ 
+
+				var i,
+					total = fields.length;
+
+				var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+
+				for(i = 0; i < total; i++){
+					//console.log(fields[i])
+
+					if(!pattern.test(fields[i].value)){
+						
+                    	addValidationView(fields[i], apiConfig.messages.email);
+						ret = false;
+
+					}else{
+						
+						removeValidationView(fields[i]);
+
+					}
+				}
+
+			}
+
+		}
+		return ret;
+	};
+
 	/**
 	 * applies view feedback of validation
 	 *
 	 * @method addValidationView
 	 * @param {NodeList || Array} list of elements or array with checkbox and radio fileds 
 	 */
-	var addValidationView = function(element){
+	var addValidationView = function(element, message){
 		if(element){
 
 			var parentEl = (element.constructor.name === "Array") ? element[element.length-1].parentElement : element.parentElement;
 
 			if(parentEl){
 				var messageContainer = document.createElement("SPAN");
-				messageContainer.innerHTML = apiConfig.messages.required;
+				messageContainer.innerHTML = message;
 
 				var messageClass = document.createAttribute("class");
 				messageClass.value = apiConfig.selectors.messageError;
