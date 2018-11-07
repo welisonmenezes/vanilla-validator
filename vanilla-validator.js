@@ -17,7 +17,14 @@ var VanillaValidator = (function(){
 			email: "Invalid Email"
 		},
 		novalidateHTML5: true,
-		clearErrosOnChange: true
+		clearErrosOnChange: true,
+		callbacks: {
+			CB_Required: null,
+			CB_Email: null,
+			CB_BeforeValidate: null,
+			CB_AfterValidate: null,
+			CB_Error: null
+		}
 	};
 
 	var apiConfig = {};
@@ -68,14 +75,32 @@ var VanillaValidator = (function(){
 				forms[i].addEventListener("submit", function(event){
 					event.preventDefault();
 
+					var errors = 0;
 
-					console.log("Email:", applyValidationEmail(this));
-					console.log("Required:", applyValidationRequired(this));
+					callCallbackFunction(apiConfig.callbacks.CB_BeforeValidate, this);
+
+					removeValidationViewOfAll(this);
+
+					if(!applyValidationEmail(this)){
+						callCallbackFunction(apiConfig.callbacks.CB_Email, this);
+						errors++;
+					}
+
+					if(!applyValidationRequired(this)){
+						callCallbackFunction(apiConfig.callbacks.CB_Required, this);
+						errors++;
+					}
 
 
+					if(errors > 0){
+						this.classList.add(apiConfig.selectors.error);
+						callCallbackFunction(apiConfig.callbacks.CB_Error, this);
+					}
 
+					callCallbackFunction(apiConfig.callbacks.CB_AfterValidate, this);
+
+					return false;
 					
-
 				});
 
 				// if clearErrosOnChange is configured as true
@@ -129,7 +154,8 @@ var VanillaValidator = (function(){
 	};
 
 	/**
-	 * applies validation rules on fields and return if this rule is valid for all fields
+	 * applies required validation rules on fields and
+	 * return if this rule is valid for all fields
 	 *
 	 * @method applyValidationRequired
 	 * @param {NodeList} list of forms
@@ -158,10 +184,6 @@ var VanillaValidator = (function(){
 							addValidationView(fields[i], apiConfig.messages.required);
 							ret = false;
 
-						}else{
-							// is valid
-
-							//removeValidationView(fields[i]);
 						}
 
 					}else{
@@ -198,9 +220,6 @@ var VanillaValidator = (function(){
 							// is invalid
 							addValidationView(checkboxRadios[cr], apiConfig.messages.required);
 							ret = false;
-						}else{
-							// is valid
-							//removeValidationView(checkboxRadios[cr]);
 						}
 					}
 				}
@@ -212,6 +231,14 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	/**
+	 * applies email validation rules on fields and 
+	 * return if this rule is valid for all fields
+	 *
+	 * @method applyValidationEmail
+	 * @param {NodeList} list of forms
+	 * @return {Boolean} if is valid returns true, otherwise returns false
+	 */
 	var applyValidationEmail = function(form){
 		var ret = true;
 		if(form){
@@ -226,16 +253,11 @@ var VanillaValidator = (function(){
 				var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
 
 				for(i = 0; i < total; i++){
-					//console.log(fields[i])
 
 					if(!pattern.test(fields[i].value)){
 						
                     	addValidationView(fields[i], apiConfig.messages.email);
 						ret = false;
-
-					}else{
-						
-						removeValidationView(fields[i]);
 
 					}
 				}
@@ -327,7 +349,31 @@ var VanillaValidator = (function(){
 			}
 		
 		}
-	}
+	};
+
+	/**
+	 * applies removeValidationView for each fiel with error class
+	 *
+	 * @method removeValidationViewOfAll
+	 * @param {NodeList} list of forms
+	 */
+	var removeValidationViewOfAll = function(form){
+		if(form){
+			var fields = getFields(form, apiConfig.selectors.error);
+
+			form.classList.remove(apiConfig.selectors.error);
+	
+			if(fields){ 
+
+				var i,
+					total = fields.length;
+
+				for(i = 0; i < total; i++){
+					removeValidationView(fields[i]);
+				}
+			}
+		}
+	};
 
 	/**
 	 * check if is an object
@@ -337,8 +383,8 @@ var VanillaValidator = (function(){
 	 * @return {Boolean}
 	 */
 	var isObject = function(object){
-		return (object && typeof object === 'object' && object instanceof Object);
-	}
+		return (object && typeof object === 'object' && object instanceof Object && (typeof object !== 'function'));
+	};
 
 	/**
 	 * merget default configuration with user configuration objects in apiConfig object
@@ -363,7 +409,7 @@ var VanillaValidator = (function(){
 
 				}else{
 
-					if(objectUser[t] != 'undefined'){
+					if(objectUser[t] !== undefined){
 						target[t] = objectUser[t];
 					}else{
 						target[t] = objectDefault[t];
@@ -374,7 +420,20 @@ var VanillaValidator = (function(){
 			}
 
 		}
-	}
+	};
+
+	/**
+	 * check if callback is a function and applies object refence as its this
+	 *
+	 * @method callCallbackFunction
+	 * @param {Function} the callback function
+	 * @param {NodeList || Object} the Object reference, can be the form or a specific field
+	 */
+	var callCallbackFunction = function(callback, ref){
+		if(typeof callback === 'function'){
+			callback.call(ref);
+		}
+	};
 
 	/**
 	 * Form validator class with pure Javascript
@@ -392,7 +451,7 @@ var VanillaValidator = (function(){
 		setHTML5NoValidate(forms);
 
 		addEventToFormsAndFields();
-	}
+	};
 
 	return VanillaValidator;
 
@@ -401,6 +460,11 @@ var VanillaValidator = (function(){
 
 var configuracoes = {
 	novalidateHTML5: true,
-	clearErrosOnChange: true
+	clearErrosOnChange: true,
+	callbacks: {
+		CB_BeforeValidate: function(){
+			console.log('CB_BeforeValidate', this);
+		}
+	}
 };
 var valid = new VanillaValidator("form", configuracoes);
