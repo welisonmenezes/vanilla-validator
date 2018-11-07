@@ -10,6 +10,7 @@ var VanillaValidator = (function(){
 			cpf: "cpf",
 			cnpj: "cnpj",
 			error: "error",
+			formError: "form-error",
 			messageError: "msg-error"
 		},
 		messages: {
@@ -19,11 +20,21 @@ var VanillaValidator = (function(){
 		novalidateHTML5: true,
 		clearErrosOnChange: true,
 		callbacks: {
+			CB_FieldEach: null,
+			CB_Required: null,
 			CB_Required: null,
 			CB_Email: null,
+			CB_EmailEach: null,
 			CB_BeforeValidate: null,
 			CB_AfterValidate: null,
-			CB_Error: null
+			CB_Error: null,
+			CB_ClearErrors: null,
+			CB_ClearErrorsEach: null,
+			CB_Success: null
+		},
+		overrides: {
+			OV_Email: null,
+			OV_Required: null
 		}
 	};
 
@@ -81,20 +92,36 @@ var VanillaValidator = (function(){
 
 					removeValidationViewOfAll(this);
 
-					if(!applyValidationEmail(this)){
-						callCallbackFunction(apiConfig.callbacks.CB_Email, this);
-						errors++;
+					if(callOverridesFunction(apiConfig.overrides.OV_Email, this)){
+						if(! callOverridesFunction(apiConfig.overrides.OV_Email, this)()){
+							callCallbackFunction(apiConfig.callbacks.CB_Email, this);
+							errors++;
+						}
+					}else{
+						if(! applyValidationEmail(this)){
+							callCallbackFunction(apiConfig.callbacks.CB_Email, this);
+							errors++;
+						}
 					}
-
-					if(!applyValidationRequired(this)){
-						callCallbackFunction(apiConfig.callbacks.CB_Required, this);
-						errors++;
+					
+					if(callOverridesFunction(apiConfig.overrides.OV_Required, this)){
+						if(! callOverridesFunction(apiConfig.overrides.OV_Required, this)()){
+							callCallbackFunction(apiConfig.callbacks.CB_Required, this);
+							errors++;
+						}
+					}else{
+						if(! applyValidationRequired(this)){
+							callCallbackFunction(apiConfig.callbacks.CB_Required, this);
+							errors++;
+						}
 					}
 
 
 					if(errors > 0){
-						this.classList.add(apiConfig.selectors.error);
+						this.classList.add(apiConfig.selectors.formError);
 						callCallbackFunction(apiConfig.callbacks.CB_Error, this);
+					}else{
+
 					}
 
 					callCallbackFunction(apiConfig.callbacks.CB_AfterValidate, this);
@@ -116,14 +143,14 @@ var VanillaValidator = (function(){
 							// clear onchange
 							fields[x].addEventListener("change", function(){
 								if(this.classList.contains(apiConfig.selectors.error)){
-									removeValidationView(this);
+									removeValidationView(this, forms[i]);
 								}
 							});
 
 							// clear on keyup
 							fields[x].addEventListener("keyup", function(){
 								if(this.classList.contains(apiConfig.selectors.error)){
-									removeValidationView(this);
+									removeValidationView(this, forms[i]);
 								}
 							});
 						}
@@ -181,6 +208,10 @@ var VanillaValidator = (function(){
 						if(fields[i].value === "" || fields[i].value.length < 1){
 							// is inválid
 
+							// callbacks
+							callCallbackFunction(apiConfig.callbacks.CB_FieldEach, form, fields[i]);
+							callCallbackFunction(apiConfig.callbacks.CB_RequiredEach, form, fields[i]);
+
 							addValidationView(fields[i], apiConfig.messages.required);
 							ret = false;
 
@@ -218,6 +249,11 @@ var VanillaValidator = (function(){
 
 						if(checkboxRadios[cr][0] === "invalid"){
 							// is invalid
+
+							// callbacks
+							callCallbackFunction(apiConfig.callbacks.CB_FieldEach, form, checkboxRadios[cr]);
+							callCallbackFunction(apiConfig.callbacks.CB_RequiredEach, form, checkboxRadios[cr]);
+							
 							addValidationView(checkboxRadios[cr], apiConfig.messages.required);
 							ret = false;
 						}
@@ -255,7 +291,12 @@ var VanillaValidator = (function(){
 				for(i = 0; i < total; i++){
 
 					if(!pattern.test(fields[i].value)){
-						
+						// is invalid
+
+						// callbacks
+						callCallbackFunction(apiConfig.callbacks.CB_FieldEach, form, fields[i]);
+						callCallbackFunction(apiConfig.callbacks.CB_EmailEach, form, fields[i]);
+                    	
                     	addValidationView(fields[i], apiConfig.messages.email);
 						ret = false;
 
@@ -320,12 +361,14 @@ var VanillaValidator = (function(){
 	 * @method removeValidationView
 	 * @param {NodeList || Array} list of elements or array with checkbox and radio fileds 
 	 */
-	var removeValidationView = function(element){
+	var removeValidationView = function(element, form){
 		if(element){
 
 			var parentEl = (element.constructor.name === "Array") ? element[element.length-1].parentElement : element.parentElement;
 
 			if(parentEl){
+
+				callCallbackFunction(apiConfig.callbacks.CB_ClearErrorsEach, form, element);
 
 				if(element.constructor.name === "Array"){
 					var i, totalEl = element.length;
@@ -361,7 +404,9 @@ var VanillaValidator = (function(){
 		if(form){
 			var fields = getFields(form, apiConfig.selectors.error);
 
-			form.classList.remove(apiConfig.selectors.error);
+			callCallbackFunction(apiConfig.callbacks.CB_ClearErrors, form);
+
+			form.classList.remove(apiConfig.selectors.formError);
 	
 			if(fields){ 
 
@@ -369,7 +414,7 @@ var VanillaValidator = (function(){
 					total = fields.length;
 
 				for(i = 0; i < total; i++){
-					removeValidationView(fields[i]);
+					removeValidationView(fields[i], form);
 				}
 			}
 		}
@@ -429,10 +474,17 @@ var VanillaValidator = (function(){
 	 * @param {Function} the callback function
 	 * @param {NodeList || Object} the Object reference, can be the form or a specific field
 	 */
-	var callCallbackFunction = function(callback, ref){
+	var callCallbackFunction = function(callback, ref, element){
 		if(typeof callback === 'function'){
-			callback.call(ref);
+			callback.call(ref, element, apiConfig);
 		}
+	};
+
+	var callOverridesFunction = function(fn, ref, element){
+		if(typeof fn === 'function'){
+			return fn.bind(ref, element, apiConfig);
+		}
+		return null;
 	};
 
 	/**
@@ -462,8 +514,23 @@ var configuracoes = {
 	novalidateHTML5: true,
 	clearErrosOnChange: true,
 	callbacks: {
-		CB_BeforeValidate: function(){
-			console.log('CB_BeforeValidate', this);
+		///*
+		CB_Error: function(element, configurations){
+			console.log('CB', element);
+			console.log('CB', configurations);
+			//configurations.messages.required = "custom Messagem"
+			console.log('CB', this);
+		}
+		//*/
+	},
+	overrides: {
+		OV_Email: function(element, configurations){
+			console.log('OV', element);
+			console.log('OV', configurations);
+			//configurations.messages.required = "custom Messagem"
+			console.log('OV', this);
+
+			return false;
 		}
 	}
 };
