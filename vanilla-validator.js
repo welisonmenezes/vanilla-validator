@@ -1,7 +1,5 @@
 var VVchecks = (function(){
 
-	function VVchecks(){};
-
 	VVchecks.prototype.isEmpty = function(value){
 		return value === "" || value.length < 1;
 	};
@@ -72,12 +70,69 @@ var VVchecks = (function(){
     };
 
 
+    // the constructor
+    function VVchecks(){
+		// force call with new operator
+		if (!(this instanceof VVchecks)) { 
+			throw new TypeError("Cannot call a class as a function");
+		}
+	};
+
 	return VVchecks;
 }());
 
-var vv = new VVchecks();
+var VanillaValidator = (function(){
 
-//console.log(vv)
+	/**
+	 * Simulates inheritance in javascript. Propagates only the prototypes.
+	 *
+	 * @method _inherits
+	 * @param {Object} object that will be a subClass
+	 * @param {Object} object that will be a superClass
+	 */
+	var _inherits = function(subClass, superClass) {
+
+		// superClass need to be a function or null
+		if (typeof superClass !== "function" && superClass !== null) { 
+			throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); 
+		} 
+
+		subClass.prototype = Object.create(superClass && superClass.prototype, { 
+			constructor: { 
+				value: subClass, 
+				enumerable: false, 
+				writable: true, 
+				configurable: true 
+			} 
+		}); 
+
+		if (superClass){
+			Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+		}
+	}
+	// makes VanillaValidator inherit from VVchecks
+	_inherits(VanillaValidator, VVchecks);
+
+
+	// the constructor
+	function VanillaValidator(query, config){
+
+		// force call with new operator
+		if (!(this instanceof VanillaValidator)) { 
+			throw new TypeError("Cannot call a class as a function");
+		}
+
+		// Propagates only the attributes.
+		VVchecks.apply(this, arguments);
+	};
+
+	return VanillaValidator;
+}());
+
+
+
+var vv = new VanillaValidator();
+
 console.log('Está vazio? ', vv.isEmpty(''));
 console.log('É um email? ', vv.isEmail('email@email.com'));
 console.log('É um objeto? ', vv.isObject({}));
@@ -91,9 +146,4 @@ console.log('Tem exatamente 7? ', vv.hasEqualLength('welison', 7));
 console.log('É uma data? ', vv.isDate('12/12/2006'));
 
 
-var VanillaValidator = (function(){
 
-	function VanillaValidator(query, config){};
-
-	return VanillaValidator;
-}());
