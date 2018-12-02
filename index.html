@@ -90,20 +90,20 @@
 		var vv = new VanillaValidator();
 
 		var $ = new VVElements();
-		//console.log(el);
-		//console.log($.getElements('form'));
-		//console.log($.getElement('#form-1'));
+		console.log($);
 
-		//var form1 = $.getElement('#form-1');
+		console.log($.getElements('form'));
+		console.log($.getElement('#form-1'));
 
-		//$.addClass(form1, 'teste');
-		//$.removeClass(form1, 'xx');
-		//console.log($.getChild('input', form1));
+		var form1 = $.getElement('#form-1');
+		$.addClass(form1, 'teste');
+		$.removeClass(form1, 'xx');
+		console.log($.getChild('input', form1));
 
 		var teste = $.getElement('#teste');
 		$.inner(teste, '0');
 
-		/*
+		//*
 
 		console.log('Está vazio? ', vv.isEmpty(''));
 		console.log('É um email? ', vv.isEmail('email@email.com'));
@@ -131,8 +131,9 @@
 		console.log('É um objeto? ', vv.isObject({}));
 		console.log('É uma função? ', vv.isFunction(function(){}));
 		console.log('É uma função? ', vv.isArray([1, 2, 3]));
+		console.log('É um elemento? ', vv.isHTMLElement(form1));
 
-		*/
+		//*/
 	</script>
 </body>
 </html>

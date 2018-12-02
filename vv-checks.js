@@ -291,8 +291,11 @@ var VVChecks = (function(){
 
 	VVChecks.prototype.isArray = function(array){
 		return Object.prototype.toString.call(array) === "[object Array]";
-	}
+	};
 
+    VVChecks.prototype.isHTMLElement = function(element){
+        return element instanceof Element || element instanceof HTMLDocument;
+    };
 
     // the constructor
     function VVChecks(){
