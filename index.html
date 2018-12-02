@@ -16,7 +16,7 @@
 </head>
 <body>
 	
-	<form action="#">
+	<form action="#" id="form-1" class="xx">
 		<div>
 			<input type="text" class="required">
 		</div>
@@ -71,7 +71,7 @@
 		</div>
 	</form>
 
-	<form action="#">
+	<form action="#" class="form-2">
 		<div>
 			<input type="text" class="required">
 		</div>
@@ -80,6 +80,54 @@
 		</div>
 	</form>
 
+	<script src="vv-checks.js"></script>
+	<script src="vv-elements.js"></script>
 	<script src="vanilla-validator.js"></script>
+
+	<script type="text/javascript">
+		var vv = new VanillaValidator();
+
+		var $ = new VVElements();
+		//console.log(el);
+		//console.log($.getForms('form'));
+		//console.log($.getForm('#form-1'));
+
+		var form1 = $.getForm('#form-1');
+
+		$.addClass(form1, 'teste');
+		$.removeClass(form1, 'xx');
+		console.log($.getFormChilds('input', form1));
+
+		/*
+
+		console.log('Está vazio? ', vv.isEmpty(''));
+		console.log('É um email? ', vv.isEmail('email@email.com'));
+		console.log('É um inteiro? ', vv.isInteger(10000));
+		console.log('É um digito? ', vv.isDigit('a165'));
+		console.log('É uma url? ', vv.isUrl('https://www.google.com'));
+		console.log('Tem menos que 5? ', vv.hasLessThan('weli', 5));
+		console.log('Tem mais que 5? ', vv.hasMoreThan('welison', 5));
+		console.log('Está entre 5 e 7? ', vv.hasRangeLength('welison', 5, 7));
+		console.log('Tem exatamente 7? ', vv.hasEqualLength('welison', 7));
+		console.log('É uma data? ', vv.isDate('12/12/2006'));
+		console.log('É menor que 5? ', vv.isMin(4, 5));
+		console.log('É maior que 5? ', vv.isMax(6, 5));
+		console.log('Está entre 3 e 5? ', vv.isRange(4, 3, 5));
+		console.log('É igual a 5? ', vv.equalTo(5, 5));
+		console.log('É um cpf? ', vv.isCpf('061.052.500-02'));
+		console.log('É um cnpj? ', vv.isCnpj('88.769.754/0001-51'));
+		console.log('É um cnh? ', vv.isCnh('33776838759'));
+		console.log('É um cep? ', vv.isCep('89806-267'));
+		console.log('É um telefone? ', vv.isPhone('+51 (49) 0 9999-9900'));
+		console.log('É um cartão de crédito? ', vv.isCreditCard('5511 4129 2741 1007'));
+		console.log('Tem e extenção .jpg? ', vv.hasExtension('image.jpg', ['.jpg', '.png', '.gif']));
+		console.log('É moeda? ', vv.isCurrency('R$ 231,45'));
+		console.log('É um número? ', vv.isNumeric(6));
+		console.log('É um objeto? ', vv.isObject({}));
+		console.log('É uma função? ', vv.isFunction(function(){}));
+		console.log('É uma função? ', vv.isArray([1, 2, 3]));
+
+		*/
+	</script>
 </body>
 </html>
