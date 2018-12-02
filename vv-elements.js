@@ -14,9 +14,9 @@ var VVElements = (function(){
 		return (document.forms) ? document.forms[0] : null;
 	};
 
-	VVElements.prototype.getFormChilds = function(query, form){
-		if(query && form && form.tagName === 'FORM'){
-			return form.querySelectorAll(query);
+	VVElements.prototype.getChildren = function(query, parent){
+		if(query && parent && (parent instanceof Element || parent instanceof HTMLDocument) ){
+			return parent.querySelectorAll(query);
 		}
 		return null;
 	};
