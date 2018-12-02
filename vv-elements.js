@@ -1,17 +1,24 @@
 var VVElements = (function(){
 
-	VVElements.prototype.getForms = function(query){
+	VVElements.prototype.getElements = function(query){
 		if(query){
 			return document.querySelectorAll(query);
 		}
-		return document.forms;
+		return null;
 	};
 
-	VVElements.prototype.getForm = function(query){
+	VVElements.prototype.getElement = function(query){
 		if(query){
 			return document.querySelector(query);
 		}
-		return (document.forms) ? document.forms[0] : null;
+		return null;
+	};
+
+	VVElements.prototype.getChild = function(query, parent){
+		if(query && parent && (parent instanceof Element || parent instanceof HTMLDocument) ){
+			return parent.querySelector(query);
+		}
+		return null;
 	};
 
 	VVElements.prototype.getChildren = function(query, parent){
@@ -46,6 +53,16 @@ var VVElements = (function(){
 			}
 		}
 	};
+
+	VVElements.prototype.inner = function(element, content){
+		if(element){
+			if(content !== undefined){
+				element.innerHTML = content;
+			}else{
+				element.innerHTML = '';
+			}
+		}
+	}
 
 	// the constructor
     function VVElements(){};

@@ -15,6 +15,8 @@
 	</style>
 </head>
 <body>
+
+	<div id="teste"></div>
 	
 	<form action="#" id="form-1" class="xx">
 		<div>
@@ -89,14 +91,17 @@
 
 		var $ = new VVElements();
 		//console.log(el);
-		//console.log($.getForms('form'));
-		//console.log($.getForm('#form-1'));
+		//console.log($.getElements('form'));
+		//console.log($.getElement('#form-1'));
 
-		var form1 = $.getForm('#form-1');
+		//var form1 = $.getElement('#form-1');
 
-		$.addClass(form1, 'teste');
-		$.removeClass(form1, 'xx');
-		console.log($.getChildren('input', form1));
+		//$.addClass(form1, 'teste');
+		//$.removeClass(form1, 'xx');
+		//console.log($.getChild('input', form1));
+
+		var teste = $.getElement('#teste');
+		$.inner(teste, '0');
 
 		/*
 
