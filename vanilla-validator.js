@@ -119,9 +119,128 @@ var VVchecks = (function(){
 	    return true;
 	};
 
-	VVchecks.prototype.isObject = function(object){
-		return (object != false && typeof object === 'object' && object instanceof Object && (typeof object !== 'function'));
+	VVchecks.prototype.isCnpj = function(value){
+        var str = value, 
+            numeros, digitos, soma, i, resultado, pos, tamanho, 
+            digitos_iguais, cnpj;
+
+        str  = str.replace('.','');
+        str  = str.replace('.','');
+        str  = str.replace('.','');
+        str  = str.replace('-','');
+        str  = str.replace('/','');
+        cnpj = str;
+        
+        digitos_iguais = 1;
+        if (cnpj.length < 14 && cnpj.length < 15) return false;
+
+        for (i = 0; i < cnpj.length - 1; i++) {
+            if (cnpj.charAt(i) != cnpj.charAt(i + 1)){
+                digitos_iguais = 0;
+                break;
+            }
+        }
+
+        if (!digitos_iguais) {
+            tamanho = cnpj.length - 2
+            numeros = cnpj.substring(0,tamanho);
+            digitos = cnpj.substring(tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2) pos = 9;
+            }
+
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+
+            if (resultado != digitos.charAt(0)) return false;
+
+            tamanho = tamanho + 1;
+            numeros = cnpj.substring(0,tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+
+                if (pos < 2) pos = 9;
+            }
+
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(1))  return false;
+
+            return true;
+        }
+        return false;
+    };
+
+	VVchecks.prototype.isCnh = function(value) {
+		var cnh = value;
+		var char1 = cnh.charAt(0);
+
+		if (cnh.replace(/[^\d]/g, '').length !== 11 || char1.repeat(11) === cnh) return false;
+
+		for (var i = 0, j = 9, v = 0; i < 9; ++i, --j) {
+			v += +(cnh.charAt(i) * j);
+		}
+
+		var dsc = 0,
+		vl1 = v % 11;
+
+		if (vl1 >= 10) {
+			vl1 = 0;
+			dsc = 2;
+		}
+
+		for (i = 0, j = 1, v = 0; i < 9; ++i, ++j) {
+			v += +(cnh.charAt(i) * j);
+		}
+
+		var x = v % 11;
+		var vl2 = (x >= 10) ? 0 : x - dsc;
+
+		return ('' + vl1 + vl2) === cnh.substr(-2);
 	};
+
+	VVchecks.prototype.isCreditCard = function(value){
+
+        if ( /[^0-9 \-]+/.test( value ) )  return false;
+   
+        var nCheck = 0,
+            nDigit = 0,
+            bEven = false,
+            n, cDigit;
+
+        var cardNum = value.replace( /\D/g, "" );
+
+        if ( cardNum.length < 13 || cardNum.length > 19 )  return false;
+
+        for ( n = cardNum.length - 1; n >= 0; n--) {
+
+            cDigit = cardNum.charAt( n );
+            nDigit = parseInt( cDigit, 10 );
+
+            if ( bEven ) {
+                if ( ( nDigit *= 2 ) > 9 )  nDigit -= 9;
+            }
+
+            nCheck += nDigit;
+            bEven = !bEven;
+        }
+
+        return ( nCheck % 10 ) === 0;
+    };
+
+	VVchecks.prototype.isCep = function(value){
+        return /^\d{2}.\d{3}-\d{3}?$|^\d{5}-?\d{3}?$/.test(value);
+    };
+
+    VVchecks.prototype.isPhone = function(value){
+        var phoneNum = value.replace(/[\(\)\-_ \+]/g,'');
+        return /^([0-9]{8,14})$/.test(phoneNum);
+    };
 
 	VVchecks.prototype.isDate = function(value){
         var check = false,
@@ -149,6 +268,30 @@ var VVchecks = (function(){
         }
         return check;
     };
+
+    VVchecks.prototype.hasExtension = function(value, extensions){
+        return (new RegExp('(' + extensions.join('|').replace(/\./g, '\\.') + ')$')).test(value);
+    };
+
+    VVchecks.prototype.isCurrency = function(value){
+        return /^(R\$ )?(\d{1,3}.)?(\d{1,3}.)?(\d{1,3}.)?\d{1,3},\d{2}$/.test(value);
+    };
+
+    VVchecks.prototype.isNumeric = function(value){
+        return !isNaN(value);
+    };
+
+    VVchecks.prototype.isObject = function(object){
+		return (object != false && typeof object === 'object' && object instanceof Object && (typeof object !== 'function'));
+	};
+
+	VVchecks.prototype.isFunction = function(fn){
+	    return Object.prototype.toString.call(fn) == '[object Function]';
+	};
+
+	VVchecks.prototype.isArray = function(array){
+		return Object.prototype.toString.call(array) === "[object Array]";
+	}
 
 
     // the constructor
@@ -216,7 +359,6 @@ var vv = new VanillaValidator();
 
 console.log('Está vazio? ', vv.isEmpty(''));
 console.log('É um email? ', vv.isEmail('email@email.com'));
-console.log('É um objeto? ', vv.isObject({}));
 console.log('É um inteiro? ', vv.isInteger(10000));
 console.log('É um digito? ', vv.isDigit('a165'));
 console.log('É uma url? ', vv.isUrl('https://www.google.com'));
@@ -230,4 +372,14 @@ console.log('É maior que 5? ', vv.isMax(6, 5));
 console.log('Está entre 3 e 5? ', vv.isRange(4, 3, 5));
 console.log('É igual a 5? ', vv.equalTo(5, 5));
 console.log('É um cpf? ', vv.isCpf('061.052.500-02'));
-
+console.log('É um cnpj? ', vv.isCnpj('88.769.754/0001-51'));
+console.log('É um cnh? ', vv.isCnh('33776838759'));
+console.log('É um cep? ', vv.isCep('89806-267'));
+console.log('É um telefone? ', vv.isPhone('+51 (49) 0 9999-9900'));
+console.log('É um cartão de crédito? ', vv.isCreditCard('5511 4129 2741 1007'));
+console.log('Tem e extenção .jpg? ', vv.hasExtension('image.jpg', ['.jpg', '.png', '.gif']));
+console.log('É moeda? ', vv.isCurrency('R$ 231,45'));
+console.log('É um número? ', vv.isNumeric(6));
+console.log('É um objeto? ', vv.isObject({}));
+console.log('É uma função? ', vv.isFunction(function(){}));
+console.log('É uma função? ', vv.isArray([1, 2, 3]));
