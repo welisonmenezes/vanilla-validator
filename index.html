@@ -50,11 +50,15 @@
 		</div>
 		<div>
 			<label>
-				<input type="radio" name="teste-radio" class="required" value="teste1">
+				<input type="radio" name="teste-radio" class="required cls-radio" checked value="teste1">
 				teste 1
 			</label>
 			<label>
 				<input type="radio" name="teste-radio" class="required" value="teste2">
+				teste 2
+			</label>
+			<label>
+				<input type="radio" name="xteste-radio" class="required" value="teste2">
 				teste 2
 			</label>
 		</div>
@@ -100,10 +104,14 @@
 		$.removeClass(form1, 'xx');
 		console.log($.getChild('input', form1));
 
+		console.log($.getRadiosByName('teste-radio', form1, 'cls-radio', true));
+
+		console.log($.getCheckboxesByName('teste-checkbox', form1));
+
 		var teste = $.getElement('#teste');
 		$.inner(teste, '0');
 
-		//*
+		/*
 
 		console.log('Está vazio? ', vv.isEmpty(''));
 		console.log('É um email? ', vv.isEmail('email@email.com'));

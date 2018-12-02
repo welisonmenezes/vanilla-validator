@@ -2,28 +2,32 @@ var VVElements = (function(){
 
 	VVElements.prototype.getElements = function(query){
 		if(query){
-			return document.querySelectorAll(query);
+			var nodes = document.querySelectorAll(query);
+			return (nodes.length) ? nodes : null;
 		}
 		return null;
 	};
 
 	VVElements.prototype.getElement = function(query){
 		if(query){
-			return document.querySelector(query);
+			var node = document.querySelector(query);
+			return (node.length) ? node : null;
 		}
 		return null;
 	};
 
 	VVElements.prototype.getChild = function(query, parent){
 		if(query && parent && (parent instanceof Element || parent instanceof HTMLDocument) ){
-			return parent.querySelector(query);
+			var node = parent.querySelector(query);
+			return (node.length) ? node : null;
 		}
 		return null;
 	};
 
 	VVElements.prototype.getChildren = function(query, parent){
 		if(query && parent && (parent instanceof Element || parent instanceof HTMLDocument) ){
-			return parent.querySelectorAll(query);
+			var nodes = parent.querySelectorAll(query);
+			return (nodes.length) ? nodes : null;
 		}
 		return null;
 	};
@@ -62,7 +66,27 @@ var VVElements = (function(){
 				element.innerHTML = '';
 			}
 		}
-	}
+	};
+
+	VVElements.prototype.getRadiosByName = function(name, parent, cls, isChecked){
+		if(name && parent){
+			s_cls = (cls) ? '.' + cls : '';
+			s_checked = (isChecked) ? ':checked' : '';
+
+			return this.getChildren('input'+ s_cls +'[type=radio][name="'+ name +'"]' + s_checked, parent);
+		}
+		return null;
+	};
+
+	VVElements.prototype.getCheckboxesByName = function(name, parent, cls, isChecked){
+		if(name && parent){
+			s_cls = (cls) ? '.' + cls : '';
+			s_checked = (isChecked) ? ':checked' : '';
+
+			return this.getChildren('input'+ s_cls +'[type=checkbox][name="'+ name +'"]' + s_checked, parent);
+		}
+		return null;
+	};
 
 	// the constructor
     function VVElements(){};
