@@ -85,9 +85,11 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.addFormSubmitEvent = function(){
 
-		if(this.container.length){
+		if(this.container && this.container.length){
 
-			var i, total = this.container.length;
+			var i,
+			total = this.container.length;
+
 			for(i = 0; i < total; i++){
 
 				if(this.container[i].tagName === 'FORM'){
@@ -104,12 +106,13 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.addButtonClickEvent = function(){
 
-		if(this.container.length){
+		if(this.container && this.container.length){
 
 			var i, total = this.container.length, button = null;
 			for(i = 0; i < total; i++){
 
-				var button, container = this.container[i];
+				var button,
+					container = this.container[i];
 
 				if(this.config.button && $.getChild(this.config.button, container)){
 
@@ -119,11 +122,15 @@ var VanillaValidator = (function(){
 					button = $.getButtonSubmit(container);
 				}
 				
-				button.addEventListener('click', function(event){
+				if(button){
 
-					event.preventDefault();
-					alert('click');
-				});
+					button.addEventListener('click', function(event){
+
+						event.preventDefault();
+						alert('click');
+					});
+				}
+				
 			}
 		}
 	};

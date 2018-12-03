@@ -1,66 +1,82 @@
 var VVChecks = (function(){
 
 	VVChecks.prototype.isEmpty = function(value){
+
 		return value === "" || value.length < 1;
 	};
 
 	VVChecks.prototype.isEmail = function(value){
+
 		var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-		return pattern.test(value);
+		
+        return pattern.test(value);
 	};
 
 	VVChecks.prototype.isInteger = function(value){
+
         return /^[0-9]+$/.test(value);
     };
 
     VVChecks.prototype.isDigit = function(value){
+
         return /^[a-zA-Z0-9]+$/.test(value);
     };
 
     VVChecks.prototype.isUrl = function(value){
+
         var pattern = new RegExp(/^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i);
+       
         return pattern.test(value);
     };
 
     VVChecks.prototype.hasLessThan = function(value, size){
+
         return (value.length < size);
     };
 
     VVChecks.prototype.hasMoreThan = function(value, size){
+
         return (value.length > size);
     };
 
     VVChecks.prototype.hasRangeLength = function(value, min, max){
+
         return ( (value.length <= max) && (value.length >= min) );
     };
 
     VVChecks.prototype.hasEqualLength = function(value, size){
+
         return ( value.length == size );
     };
 
     VVChecks.prototype.isMin = function(value, min){
+
         return (value < min);
     };
 
     VVChecks.prototype.isMax = function(value, max){
+
         return (value > max);
     };
 
     VVChecks.prototype.isRange = function(value, min, max){
+
         return ( (value <= max) && (value >= min) );
     };
 
     VVChecks.prototype.equalTo = function(value, param){
+
         return value === param;
     };
 
     VVChecks.prototype.isCpf = function(value){
-	    var CPF = value, cpfv, x;  
 
+	    var CPF = value, cpfv, x;  
 	    if(!CPF) return false;
 
 	    cpfv  = CPF;
 	    if(cpfv.length == 14 || cpfv.length == 11) {
+
 	        cpfv = cpfv.replace('.', '');
 	        cpfv = cpfv.replace('.', '');
 	        cpfv = cpfv.replace('-', '');
@@ -68,8 +84,10 @@ var VVChecks = (function(){
 	        var nonNumbers = /\D/;
 	        
 	        if(nonNumbers.test(cpfv)){
+
 	            return false;
 	        } else{
+
 	            if (cpfv == "00000000000" ||
 	                cpfv == "11111111111" ||
 	                cpfv == "22222222222" ||
@@ -85,13 +103,16 @@ var VVChecks = (function(){
 	            var b = 0;
 	            var c = 11;
 	            for(var i=0; i<11; i++){
+
 	                a[i] = cpfv.charAt(i);
 	                if (i < 9) b += (a[i] * --c);
 	            }
 
 	            if((x = b % 11) < 2){
+
 	                a[9] = 0;
 	            } else{
+
 	                a[9] = 11-x;
 	            }
 
@@ -100,18 +121,23 @@ var VVChecks = (function(){
 	            for (var y=0; y<10; y++) b += (a[y] * c--);
 
 	            if((x = b % 11) < 2){
+
 	                a[10] = 0;
 	            } else{
+
 	                a[10] = 11-x;
 	            }
 
 	            if((cpfv.charAt(9) != a[9]) || (cpfv.charAt(10) != a[10])) return false;
 	        }
 	    } else{
+
 	        if(cpfv.length === 0){
+
 	            return false;
 	        
 	        } else{
+
 	            return false;
 	        }
 	    }
@@ -120,6 +146,7 @@ var VVChecks = (function(){
 	};
 
 	VVChecks.prototype.isCnpj = function(value){
+
         var str = value, 
             numeros, digitos, soma, i, resultado, pos, tamanho, 
             digitos_iguais, cnpj;
@@ -135,13 +162,16 @@ var VVChecks = (function(){
         if (cnpj.length < 14 && cnpj.length < 15) return false;
 
         for (i = 0; i < cnpj.length - 1; i++) {
+
             if (cnpj.charAt(i) != cnpj.charAt(i + 1)){
+
                 digitos_iguais = 0;
                 break;
             }
         }
 
         if (!digitos_iguais) {
+
             tamanho = cnpj.length - 2
             numeros = cnpj.substring(0,tamanho);
             digitos = cnpj.substring(tamanho);
@@ -149,6 +179,7 @@ var VVChecks = (function(){
             pos = tamanho - 7;
 
             for (i = tamanho; i >= 1; i--) {
+
                 soma += numeros.charAt(tamanho - i) * pos--;
                 if (pos < 2) pos = 9;
             }
@@ -163,8 +194,8 @@ var VVChecks = (function(){
             pos = tamanho - 7;
 
             for (i = tamanho; i >= 1; i--) {
-                soma += numeros.charAt(tamanho - i) * pos--;
 
+                soma += numeros.charAt(tamanho - i) * pos--;
                 if (pos < 2) pos = 9;
             }
 
@@ -173,6 +204,7 @@ var VVChecks = (function(){
 
             return true;
         }
+
         return false;
     };
 
@@ -183,6 +215,7 @@ var VVChecks = (function(){
 		if (cnh.replace(/[^\d]/g, '').length !== 11 || char1.repeat(11) === cnh) return false;
 
 		for (var i = 0, j = 9, v = 0; i < 9; ++i, --j) {
+
 			v += +(cnh.charAt(i) * j);
 		}
 
@@ -190,11 +223,13 @@ var VVChecks = (function(){
 		vl1 = v % 11;
 
 		if (vl1 >= 10) {
+
 			vl1 = 0;
 			dsc = 2;
 		}
 
 		for (i = 0, j = 1, v = 0; i < 9; ++i, ++j) {
+
 			v += +(cnh.charAt(i) * j);
 		}
 
@@ -223,6 +258,7 @@ var VVChecks = (function(){
             nDigit = parseInt( cDigit, 10 );
 
             if ( bEven ) {
+
                 if ( ( nDigit *= 2 ) > 9 )  nDigit -= 9;
             }
 
@@ -234,73 +270,85 @@ var VVChecks = (function(){
     };
 
 	VVChecks.prototype.isCep = function(value){
+
         return /^\d{2}.\d{3}-\d{3}?$|^\d{5}-?\d{3}?$/.test(value);
     };
 
     VVChecks.prototype.isPhone = function(value){
+
         var phoneNum = value.replace(/[\(\)\-_ \+]/g,'');
+       
         return /^([0-9]{8,14})$/.test(phoneNum);
     };
 
 	VVChecks.prototype.isDate = function(value){
+
         var check = false,
         re = /^\d{1,2}\/\d{1,2}\/\d{4}$/,
         adata, gg, mm, aaaa, xdata;
-        if ( re.test(value)) 
-        {
+        if ( re.test(value)) {
+
             adata = value.split("/");
             gg = parseInt(adata[0], 10);
             mm = parseInt(adata[1], 10);
             aaaa = parseInt(adata[2], 10);
             xdata = new Date(aaaa, mm - 1, gg, 12, 0, 0, 0);
-            if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth () === mm - 1 ) && ( xdata.getUTCDate() === gg ) ) 
-            {
+            if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth () === mm - 1 ) && ( xdata.getUTCDate() === gg ) ){
+                
                 check = true;
-            } 
-            else 
-            {
+            }else{
+
                 check = false;
             }
-        } 
-        else 
-        {
+        }else{
+
             check = false;
         }
+
         return check;
     };
 
     VVChecks.prototype.hasExtension = function(value, extensions){
+
         return (new RegExp('(' + extensions.join('|').replace(/\./g, '\\.') + ')$')).test(value);
     };
 
     VVChecks.prototype.isCurrency = function(value){
+
         return /^(R\$ )?(\d{1,3}.)?(\d{1,3}.)?(\d{1,3}.)?\d{1,3},\d{2}$/.test(value);
     };
 
     VVChecks.prototype.isNumeric = function(value){
+
         return !isNaN(value);
     };
 
     VVChecks.prototype.isObject = function(object){
+
 		return (object != false && typeof object === 'object' && object instanceof Object && (typeof object !== 'function'));
 	};
 
 	VVChecks.prototype.isFunction = function(fn){
+
 	    return Object.prototype.toString.call(fn) == '[object Function]';
 	};
 
 	VVChecks.prototype.isArray = function(array){
+
 		return Object.prototype.toString.call(array) === "[object Array]";
 	};
 
     VVChecks.prototype.isHTMLElement = function(element){
+
         return element instanceof Element || element instanceof HTMLDocument;
     };
 
     // the constructor
     function VVChecks(){
+
 		// force call with new operator
 		if (!(this instanceof VVChecks)) { 
+
 			throw new TypeError("Cannot call a class as a function");
 		}
 	};
