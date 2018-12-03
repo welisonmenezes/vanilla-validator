@@ -88,11 +88,67 @@
 
 	<script src="vv-checks.js"></script>
 	<script src="vv-elements.js"></script>
+	<script src="vv-utils.js"></script>
 	<script src="vanilla-validator.js"></script>
 
 	<script type="text/javascript">
-		var vv = new VanillaValidator();
+		var config = {
+			selectors: {
+				required: 'obrigatorio'
+			},
+			messages: {
+				required: 'Custom message required',
+				email: 'Custom message email'
+			},
+			novalidateHTML5: false
+		};
 
+		var vv = new VanillaValidator(config);
+
+		var config2 = {
+			selectors: {
+				required: 'teste'
+			},
+			novalidateHTML5: false
+		};
+		var vv2 = new VanillaValidator(config2);
+
+
+		setTimeout(() => {
+			console.log(vv.config);
+			console.log(vv2.config);
+		}, 2000);
+
+
+		/*
+		var config = {
+			selectors: {
+				required: 'required',
+				email: 'email'
+			},
+			messages: {
+				required: 'campo obrigatório',
+				email: 'email inválido'
+			},
+			novalidateHTML5: true
+		};
+
+		var userConfig = {
+			selectors: {
+				required: 'userReq'
+			},
+			novalidateHTML5: false
+		};
+
+		var target = {};
+
+		var util = new VVUtils();
+		util.mergeObjectsDeeply(target, config, userConfig);
+
+		console.log(target);
+		*/
+
+		/*
 		var $ = new VVElements();
 		console.log($);
 
@@ -110,6 +166,7 @@
 
 		var teste = $.getElement('#teste');
 		$.inner(teste, '0');
+		//*/
 
 		/*
 

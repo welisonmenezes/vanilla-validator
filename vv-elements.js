@@ -32,6 +32,26 @@ var VVElements = (function(){
 		return null;
 	};
 
+	VVElements.prototype.getRadiosByName = function(name, parent, cls, isChecked){
+		if(name && parent){
+			s_cls = (cls) ? '.' + cls : '';
+			s_checked = (isChecked) ? ':checked' : '';
+
+			return this.getChildren('input'+ s_cls +'[type=radio][name="'+ name +'"]' + s_checked, parent);
+		}
+		return null;
+	};
+
+	VVElements.prototype.getCheckboxesByName = function(name, parent, cls, isChecked){
+		if(name && parent){
+			s_cls = (cls) ? '.' + cls : '';
+			s_checked = (isChecked) ? ':checked' : '';
+
+			return this.getChildren('input'+ s_cls +'[type=checkbox][name="'+ name +'"]' + s_checked, parent);
+		}
+		return null;
+	};
+
 	VVElements.prototype.addClass = function(element, cls){
 		if(element && cls){
 			if(Object.prototype.toString.call(cls) === "[object Array]"){
@@ -66,26 +86,6 @@ var VVElements = (function(){
 				element.innerHTML = '';
 			}
 		}
-	};
-
-	VVElements.prototype.getRadiosByName = function(name, parent, cls, isChecked){
-		if(name && parent){
-			s_cls = (cls) ? '.' + cls : '';
-			s_checked = (isChecked) ? ':checked' : '';
-
-			return this.getChildren('input'+ s_cls +'[type=radio][name="'+ name +'"]' + s_checked, parent);
-		}
-		return null;
-	};
-
-	VVElements.prototype.getCheckboxesByName = function(name, parent, cls, isChecked){
-		if(name && parent){
-			s_cls = (cls) ? '.' + cls : '';
-			s_checked = (isChecked) ? ':checked' : '';
-
-			return this.getChildren('input'+ s_cls +'[type=checkbox][name="'+ name +'"]' + s_checked, parent);
-		}
-		return null;
 	};
 
 	// the constructor
