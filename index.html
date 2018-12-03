@@ -77,7 +77,7 @@
 		</div>
 	</form>
 
-	<form action="#" class="form-2">
+	<form action="#" class="form-2" id="form-2">
 		<div>
 			<input type="text" class="required">
 		</div>
@@ -93,6 +93,7 @@
 
 	<script type="text/javascript">
 		var config = {
+			container: '#form-1',
 			selectors: {
 				required: 'obrigatorio'
 			},
@@ -106,6 +107,8 @@
 		var vv = new VanillaValidator(config);
 
 		var config2 = {
+			container: '#form-2',
+			validationBy: 'onsubmit',
 			selectors: {
 				required: 'teste'
 			},
@@ -114,10 +117,10 @@
 		var vv2 = new VanillaValidator(config2);
 
 
-		setTimeout(() => {
-			console.log(vv.config);
-			console.log(vv2.config);
-		}, 2000);
+		// setTimeout(() => {
+		// 	console.log(vv.container);
+		// 	console.log(vv2.container);
+		// }, 2000);
 
 
 		/*

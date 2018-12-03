@@ -11,15 +11,16 @@ var VVElements = (function(){
 	VVElements.prototype.getElement = function(query){
 		if(query){
 			var node = document.querySelector(query);
-			return (node.length) ? node : null;
+			return (node) ? node : null;
 		}
 		return null;
 	};
 
 	VVElements.prototype.getChild = function(query, parent){
 		if(query && parent && (parent instanceof Element || parent instanceof HTMLDocument) ){
+
 			var node = parent.querySelector(query);
-			return (node.length) ? node : null;
+			return (node) ? node : null;
 		}
 		return null;
 	};
@@ -31,6 +32,10 @@ var VVElements = (function(){
 		}
 		return null;
 	};
+
+	VVElements.prototype.getButtonSubmit = function(parent){
+		return (this.getChild('button', parent)) ? this.getChild('button', parent) : this.getChild('input[type="submit"]', parent);
+	}
 
 	VVElements.prototype.getRadiosByName = function(name, parent, cls, isChecked){
 		if(name && parent){

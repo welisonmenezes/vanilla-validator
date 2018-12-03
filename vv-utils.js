@@ -1,10 +1,8 @@
 var VVUtils = (function(){
 
 	var isObject = function(object){
-		return (object && typeof object === 'object' && object instanceof Object && (typeof object !== 'function'));
+		return (object != false && typeof object === 'object' && object instanceof Object && (typeof object !== 'function'));
 	};
-
-	var target = {};
 
 	VVUtils.prototype.mergeObjectsDeeply = function(target, objectDefault, objectUser){
 
@@ -32,6 +30,8 @@ var VVUtils = (function(){
 			}
 
 		}
+
+		return target;
 	};
 
 	// the constructor

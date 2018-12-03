@@ -3,9 +3,12 @@ var VanillaValidator = (function(){
 	var $ = new VVElements();
 	var utils = new VVUtils();
 
-	var setConfigurations = function(userConfig){
+	var _setConfigurations = function(userConfig){
 		// default configurations
 		this.config = {
+			container: 'form',
+			button: null,
+			validationBy: 'onclick', // [onclick, onsubmit]
 			selectors: {
 				required: "required",
 				email: "email",
@@ -44,7 +47,7 @@ var VanillaValidator = (function(){
 		};
 
 		// merge with user configurations
-		utils.mergeObjectsDeeply({}, this.config, userConfig);
+		this.config = utils.mergeObjectsDeeply({}, this.config, userConfig);
 	};
 
 	/**
@@ -58,6 +61,7 @@ var VanillaValidator = (function(){
 
 		// superClass need to be a function or null
 		if (typeof superClass !== "function" && superClass !== null) { 
+
 			throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); 
 		} 
 
@@ -71,6 +75,7 @@ var VanillaValidator = (function(){
 		}); 
 
 		if (superClass){
+
 			Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 		}
 	}
@@ -78,11 +83,73 @@ var VanillaValidator = (function(){
 	_inherits(VanillaValidator, VVChecks);
 
 
+	VanillaValidator.prototype.addFormSubmitEvent = function(){
+
+		if(this.container.length){
+
+			var i, total = this.container.length;
+			for(i = 0; i < total; i++){
+
+				if(this.container[i].tagName === 'FORM'){
+
+					this.container[i].addEventListener('submit', function(event){
+
+						event.preventDefault();
+						alert('Submit');
+					});
+				}
+			}
+		}
+	};
+
+	VanillaValidator.prototype.addButtonClickEvent = function(){
+
+		if(this.container.length){
+
+			var i, total = this.container.length, button = null;
+			for(i = 0; i < total; i++){
+
+				var button, container = this.container[i];
+
+				if(this.config.button && $.getChild(this.config.button, container)){
+
+					button = $.getChild(this.config.button, container)
+				}else{
+
+					button = $.getButtonSubmit(container);
+				}
+				
+				button.addEventListener('click', function(event){
+
+					event.preventDefault();
+					alert('click');
+				});
+			}
+		}
+	};
+
+
+
+	VanillaValidator.prototype._init = function(){
+
+		this.container = $.getElements(this.config.container);
+
+		if(this.config.validationBy === 'onclick'){
+
+			this.addButtonClickEvent();
+		}else{
+
+			this.addFormSubmitEvent();
+		}
+	}
+
+
 	// the constructor
 	function VanillaValidator(userConfig){
 
 		// force call with new operator
 		if (!(this instanceof VanillaValidator)) { 
+
 			throw new TypeError("Cannot call a class as a function");
 		}
 
@@ -90,8 +157,13 @@ var VanillaValidator = (function(){
 		VVChecks.apply(this, arguments);
 
 		// set configurations for this instance
-		setConfigurations.apply(this, [userConfig]);
+		_setConfigurations.apply(this, [userConfig]);
+
+		this._init();
+
 	};
+
+
 
 	
 
