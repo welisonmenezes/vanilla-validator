@@ -4,12 +4,13 @@ var VanillaValidator = (function(){
 	var utils = new VVUtils();
 
 	var _setConfigurations = function(userConfig){
+
 		// default configurations
 		this.config = {
 			container: 'form',
 			button: null,
 			validationBy: 'onclick', // [onclick, onsubmit]
-			selectors: {
+			selectors: { // just css classes
 				required: "required",
 				email: "email",
 				phone: "phone",
@@ -85,19 +86,20 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.addFormSubmitEvent = function(){
 
-		if(this.container && this.container.length){
+		if(this.containers && this.containers.length){
 
-			var i,
-			total = this.container.length;
+			var self = this,
+				i,
+				total = this.containers.length;
+			for(var i = 0; i < total; i++){
 
-			for(i = 0; i < total; i++){
-
-				if(this.container[i].tagName === 'FORM'){
-
-					this.container[i].addEventListener('submit', function(event){
+				if(this.containers[i].tagName === 'FORM'){
+					
+					this.containers[i].addEventListener('submit', function(event){
 
 						event.preventDefault();
-						alert('Submit');
+
+						self.validateContainer(event.target);
 					});
 				}
 			}
@@ -106,14 +108,16 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.addButtonClickEvent = function(){
 
-		if(this.container && this.container.length){
+		if(this.containers && this.containers.length){
 
-			var i, total = this.container.length, button = null;
+			var self = this,
+				i,
+				total = this.containers.length,
+				button = null;
 			for(i = 0; i < total; i++){
 
 				var button,
-					container = this.container[i];
-
+					container = this.containers[i];
 				if(this.config.button && $.getChild(this.config.button, container)){
 
 					button = $.getChild(this.config.button, container)
@@ -124,10 +128,12 @@ var VanillaValidator = (function(){
 				
 				if(button){
 
+					var container = this.containers[i];
 					button.addEventListener('click', function(event){
 
 						event.preventDefault();
-						alert('click');
+						
+						self.validateContainer(container);
 					});
 				}
 				
@@ -135,11 +141,47 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	VanillaValidator.prototype.validateContainer = function(container){
+		
+		if(container){
+			if(this.isContainerValid(container)){
+			
+				console.log('É válido!');
+			}else{
+
+				console.log('Não é válido!');
+			}
+		}
+		
+	}
+
+	VanillaValidator.prototype.isContainerValid = function(container){
+
+		if(container){
+			this.validateRequired(container);
+		}
+
+		return true;
+	};
+
+	VanillaValidator.prototype.validateRequired = function(container){
+
+		if(container){
+
+			var fields = $.getChildren('.required', container);
+			console.log(fields);
+		}
+	};
+
+	// VanillaValidator.prototype.getElementsOfContainer = function(container){
+
+	// };
+
 
 
 	VanillaValidator.prototype._init = function(){
 
-		this.container = $.getElements(this.config.container);
+		this.containers = $.getElements(this.config.container);
 
 		if(this.config.validationBy === 'onclick'){
 
