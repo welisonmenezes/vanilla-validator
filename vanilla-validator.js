@@ -158,7 +158,7 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.isContainerValid = function(container){
 
 		if(container){
-			this.validateRequired(container);
+			console.log('validateRequired', this.validateRequired(container));
 		}
 
 		return true;
@@ -166,16 +166,80 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.validateRequired = function(container){
 
+		var ret = true;
 		if(container){
 
-			var fields = $.getChildren('.required', container);
-			console.log(fields);
+			var fields = $.getChildren('.' + this.config.selectors.required, container);
+			if(fields){
+
+				var i; total = fields.length;
+				for(i = 0; i < total; i++){
+
+					var field = fields[i];
+					if(field.type !== 'radio' && field.type !== 'checkbox'){
+
+						if(this.isEmpty(field.value)){
+
+							this.addValidationView(field, 'Mensagem de erro');
+							ret = false;
+						}
+					}else if(field.type === 'radio' || field.type === 'checkbox'){
+
+						console.log(field.type);
+					}
+				}
+			}
 		}
+
+		return ret;
 	};
 
 	// VanillaValidator.prototype.getElementsOfContainer = function(container){
 
 	// };
+
+	VanillaValidator.prototype.addValidationView = function(element, message){
+		if(element){
+
+			var parentEl = (element.constructor.name === "Array") ? element[element.length-1].parentElement : element.parentElement;
+
+			if(parentEl){
+
+				var messageContainer = document.createElement("SPAN");
+				messageContainer.innerHTML = message;
+
+				var messageClass = document.createAttribute("class");
+				messageClass.value = this.config.selectors.messageError;
+				messageContainer.setAttributeNode(messageClass);
+
+				if(element.constructor.name === "Array"){
+
+					var i, totalEl = element.length;
+					for(i = 1; i < totalEl; i++){
+
+						element[i].classList.add(this.config.selectors.error);
+					}
+				}else{
+
+					element.classList.add(this.config.selectors.error);
+				}
+				
+
+				var oldMessages = parentEl.querySelectorAll(this.config.selectors.error);
+				if(oldMessages){
+
+					var x, totalOld = oldMessages.length;
+					for(x = 0; x < totalOld; x++){
+
+						oldMessages[x].remove();
+					}
+				}
+
+				parentEl.append(messageContainer);
+			}
+			
+		}
+	};
 
 
 
