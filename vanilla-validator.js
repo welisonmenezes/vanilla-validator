@@ -172,7 +172,9 @@ var VanillaValidator = (function(){
 			var fields = $.getChildren('.' + this.config.selectors.required, container);
 			if(fields){
 
-				var i; total = fields.length;
+				var i; 
+					total = fields.length,
+					checkboxRadios = {};
 				for(i = 0; i < total; i++){
 
 					var field = fields[i];
@@ -180,13 +182,59 @@ var VanillaValidator = (function(){
 
 						if(this.isEmpty(field.value)){
 
-							this.addValidationView(field, 'Mensagem de erro');
+							this.addValidationView(field, this.config.messages.required);
 							ret = false;
 						}
 					}else if(field.type === 'radio' || field.type === 'checkbox'){
 
-						console.log(field.type);
+						// add checkbox and radio fields into array to validate after
+						if(! checkboxRadios[field.name]){
+
+							checkboxRadios[field.name] = [];
+
+							// item responsible for validating the field
+							checkboxRadios[field.name].push("invalid");
+						}
+						checkboxRadios[field.name].push(field);
+						//console.log(field.type);
 					}
+				}
+			}
+		}
+
+		//console.log(checkboxRadios);
+		if(! this.validateRequiredRadiosAndCheckboxes(checkboxRadios)){
+
+			ret = false;
+		}
+
+		return ret;
+	};
+
+	VanillaValidator.prototype.validateRequiredRadiosAndCheckboxes = function(checkboxRadios){
+
+		var ret = true;
+		// validate checkbox and radio fields
+		for(cr in checkboxRadios){
+
+			if(checkboxRadios[cr].length){
+
+				var x,
+					totalCR = checkboxRadios[cr].length;
+
+				for(x = 1; x < totalCR; x++){
+
+					if(checkboxRadios[cr][x].checked){
+						
+						// turn fiedl valid if it is checked
+						checkboxRadios[cr][0] = "valid";
+					}
+				}
+
+				if(checkboxRadios[cr][0] === "invalid"){
+
+					this.addValidationView(checkboxRadios[cr], this.config.messages.required);
+					ret = false;
 				}
 			}
 		}
