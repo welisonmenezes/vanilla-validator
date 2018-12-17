@@ -159,6 +159,7 @@ var VanillaValidator = (function(){
 
 		if(container){
 			console.log('validateRequired', this.validateRequired(container));
+			console.log('validateRequiredRadiosAndCheckboxes', this.validateRequiredRadiosAndCheckboxes(container));
 		}
 
 		return true;
@@ -169,72 +170,73 @@ var VanillaValidator = (function(){
 		var ret = true;
 		if(container){
 
-			var fields = $.getChildren('.' + this.config.selectors.required, container);
+			var fields = $.getChildren('.' + this.config.selectors.required + ':not([type="checkbox"]):not([type="radio"])', container);
 			if(fields){
 
-				var i; 
-					total = fields.length,
-					checkboxRadios = {};
+				var i, total = fields.length;
 				for(i = 0; i < total; i++){
 
 					var field = fields[i];
-					if(field.type !== 'radio' && field.type !== 'checkbox'){
 
-						if(this.isEmpty(field.value)){
+					if(this.isEmpty(field.value)){
 
-							this.addValidationView(field, this.config.messages.required);
-							ret = false;
-						}
-					}else if(field.type === 'radio' || field.type === 'checkbox'){
-
-						// add checkbox and radio fields into array to validate after
-						if(! checkboxRadios[field.name]){
-
-							checkboxRadios[field.name] = [];
-
-							// item responsible for validating the field
-							checkboxRadios[field.name].push("invalid");
-						}
-						checkboxRadios[field.name].push(field);
-						//console.log(field.type);
+						this.addValidationView(field, this.config.messages.required);
+						ret = false;
 					}
 				}
 			}
 		}
 
-		//console.log(checkboxRadios);
-		if(! this.validateRequiredRadiosAndCheckboxes(checkboxRadios)){
-
-			ret = false;
-		}
-
 		return ret;
 	};
 
-	VanillaValidator.prototype.validateRequiredRadiosAndCheckboxes = function(checkboxRadios){
+	VanillaValidator.prototype.validateRequiredRadiosAndCheckboxes = function(container){
 
 		var ret = true;
-		// validate checkbox and radio fields
-		for(cr in checkboxRadios){
+		if(container){
 
-			if(checkboxRadios[cr].length){
+			var fields = $.getChildren('.' + this.config.selectors.required + '[type="checkbox"], .' + this.config.selectors.required + '[type="radio"]', container);
+			if(fields){
 
-				var x,
-					totalCR = checkboxRadios[cr].length;
+				var i,
+					total = fields.length,
+					checkboxRadios = {};
+				for(i = 0; i < total; i++){
 
-				for(x = 1; x < totalCR; x++){
+					var field = fields[i];
 
-					if(checkboxRadios[cr][x].checked){
-						
-						// turn fiedl valid if it is checked
-						checkboxRadios[cr][0] = "valid";
+					// add checkbox and radio fields into array to validate after
+					if(! checkboxRadios[field.name]){
+
+						checkboxRadios[field.name] = [];
+
+						// item responsible for validating the field
+						checkboxRadios[field.name].push("invalid");
 					}
+					checkboxRadios[field.name].push(field);
 				}
 
-				if(checkboxRadios[cr][0] === "invalid"){
+				for(cr in checkboxRadios){
 
-					this.addValidationView(checkboxRadios[cr], this.config.messages.required);
-					ret = false;
+					if(checkboxRadios[cr].length){
+
+						var x,
+							totalCR = checkboxRadios[cr].length;
+						for(x = 1; x < totalCR; x++){
+
+							if(checkboxRadios[cr][x].checked){
+
+								// turn fiedl valid if it is checked
+								checkboxRadios[cr][0] = "valid";
+							}
+						}
+
+						if(checkboxRadios[cr][0] === "invalid"){
+
+							this.addValidationView(checkboxRadios[cr], this.config.messages.required);
+							ret = false;
+						}
+					}
 				}
 			}
 		}
