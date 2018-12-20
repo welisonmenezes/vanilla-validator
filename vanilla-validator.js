@@ -84,62 +84,92 @@ var VanillaValidator = (function(){
 	_inherits(VanillaValidator, VVChecks);
 
 
-	VanillaValidator.prototype.addFormSubmitEvent = function(){
-
+	VanillaValidator.prototype.loopThroughContainers = function(){
 		if(this.containers && this.containers.length){
-
 			var self = this,
-				i,
+				i, container,
 				total = this.containers.length;
 			for(var i = 0; i < total; i++){
-
-				if(this.containers[i].tagName === 'FORM'){
-					
-					this.containers[i].addEventListener('submit', function(event){
-
-						event.preventDefault();
-
-						self.validateContainer(event.target);
-					});
-				}
+				container = this.containers[i];
+				this.defineSubmitionType(container);
+				this.addControlClassesOnFields(container);
 			}
 		}
 	};
 
-	VanillaValidator.prototype.addButtonClickEvent = function(){
+	VanillaValidator.prototype.defineSubmitionType = function(container){
+		if(this.config.validationBy === 'onclick'){
+			this.addButtonClickEvent(container);
+		}else{
+			this.addFormSubmitEvent(container);
+		}
+	};
 
-		if(this.containers && this.containers.length){
+	VanillaValidator.prototype.addFormSubmitEvent = function(container){
+		var self = this;
+		if(container.tagName === 'FORM'){
+			container.addEventListener('submit', function(event){
+				event.preventDefault();
+				self.validateContainer(event.target);
+			});
+		}
+	};
 
-			var self = this,
-				i,
-				total = this.containers.length,
-				button = null;
+	VanillaValidator.prototype.addButtonClickEvent = function(container){
+		var self = this,
+			button;
+		if(this.config.button && $.getChild(this.config.button, container)){
+			button = $.getChild(this.config.button, container);
+		}else{
+			button = $.getButtonSubmit(container);
+		}
+		if(button){
+			button.addEventListener('click', function(event){
+				event.preventDefault();
+				self.validateContainer(container);
+			});
+		}
+	};
+
+	VanillaValidator.prototype.addControlClassesOnFields = function(container){
+		var field;
+		for (var key in this.config.selectors) {
+			field = $.getChildren('.' + this.config.selectors[key] + ':not(.vv-control)', container);
+			this.loopThroughFieldsToAddControls(field);
+		}
+	};
+
+	VanillaValidator.prototype.loopThroughFieldsToAddControls = function(fields){
+		if(fields){
+			var i,
+				field,
+				total = fields.length;
 			for(i = 0; i < total; i++){
+				field = fields[i];
+				field.classList.add('vv-control');
 
-				var button,
-					container = this.containers[i];
-				if(this.config.button && $.getChild(this.config.button, container)){
-
-					button = $.getChild(this.config.button, container)
-				}else{
-
-					button = $.getButtonSubmit(container);
+				if(this.config.clearErrosOnChange){
+					this.addClearEventsOnField(field);
 				}
-				
-				if(button){
-
-					var container = this.containers[i];
-					button.addEventListener('click', function(event){
-
-						event.preventDefault();
-						
-						self.validateContainer(container);
-					});
-				}
-				
 			}
 		}
 	};
+
+	VanillaValidator.prototype.addClearEventsOnField = function(field){
+		if(field){
+			var self = this;
+			field.addEventListener("change", function(){
+				if(this.classList.contains(self.config.selectors.error)){
+					self.removeValidationView(field);
+				}
+			});
+			field.addEventListener("keyup", function(){
+				if(this.classList.contains(self.config.selectors.error)){
+					self.removeValidationView(field);
+				}
+			});
+		}
+	}
 
 	VanillaValidator.prototype.validateContainer = function(container){
 		
@@ -372,19 +402,10 @@ var VanillaValidator = (function(){
 		}
 	};
 
-
-
 	VanillaValidator.prototype._init = function(){
 
 		this.containers = $.getElements(this.config.container);
-
-		if(this.config.validationBy === 'onclick'){
-
-			this.addButtonClickEvent();
-		}else{
-
-			this.addFormSubmitEvent();
-		}
+		this.loopThroughContainers();
 	};
 
 
