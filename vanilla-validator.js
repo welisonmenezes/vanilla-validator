@@ -79,7 +79,7 @@ var VanillaValidator = (function(){
 
 			Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 		}
-	}
+	};
 	// makes VanillaValidator inherit from VVChecks
 	_inherits(VanillaValidator, VVChecks);
 
@@ -144,6 +144,9 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.validateContainer = function(container){
 		
 		if(container){
+
+			this.removeValidationViewOfAll(container);
+
 			if(this.isContainerValid(container)){
 			
 				console.log('É válido!');
@@ -153,13 +156,16 @@ var VanillaValidator = (function(){
 			}
 		}
 		
-	}
+	};
 
 	VanillaValidator.prototype.isContainerValid = function(container){
 
 		if(container){
+
+			console.log('validateEmail', this.validateEmail(container));
 			console.log('validateRequired', this.validateRequired(container));
 			console.log('validateRequiredRadiosAndCheckboxes', this.validateRequiredRadiosAndCheckboxes(container));
+			
 		}
 
 		return true;
@@ -244,6 +250,31 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	VanillaValidator.prototype.validateEmail = function(container){
+
+		var ret = true;
+		if(container){
+
+			var fields = $.getChildren('.' + this.config.selectors.email, container);
+			if(fields){
+
+				var i, total = fields.length;
+				for(i = 0; i < total; i++){
+
+					var field = fields[i];
+
+					if(!this.isEmail(field.value)){
+
+						this.addValidationView(field, this.config.messages.email);
+						ret = false;
+					}
+				}
+			}
+		}
+
+		return ret;
+	};
+
 	// VanillaValidator.prototype.getElementsOfContainer = function(container){
 
 	// };
@@ -275,7 +306,7 @@ var VanillaValidator = (function(){
 				}
 				
 
-				var oldMessages = parentEl.querySelectorAll(this.config.selectors.error);
+				var oldMessages = parentEl.querySelectorAll('.' + this.config.selectors.messageError);
 				if(oldMessages){
 
 					var x, totalOld = oldMessages.length;
@@ -292,6 +323,56 @@ var VanillaValidator = (function(){
 	};
 
 
+	VanillaValidator.prototype.removeValidationView = function(element){
+		if(element){
+
+			var parentEl = (element.constructor.name === "Array") ? element[element.length-1].parentElement : element.parentElement;
+
+			if(parentEl){
+
+				if(element.constructor.name === "Array"){
+					var i, totalEl = element.length;
+
+					for(i = 1; i < totalEl; i++){
+						element[i].classList.remove(this.config.selectors.error);
+					}
+				}else{
+					element.classList.remove(this.config.selectors.error);
+				}
+
+				var oldMessages = parentEl.querySelectorAll("." + this.config.selectors.messageError);
+
+				if(oldMessages){
+					var x, totalOld = oldMessages.length;
+					for(x = 0; x < totalOld; x++){
+						oldMessages[x].remove();
+					}
+				}
+
+			}
+		
+		}
+	};
+
+	VanillaValidator.prototype.removeValidationViewOfAll = function(container){
+		if(container){
+			var fields = $.getChildren('.' + this.config.selectors.error, container);
+
+			container.classList.remove(this.config.selectors.formError);
+	
+			if(fields){ 
+
+				var i,
+					total = fields.length;
+
+				for(i = 0; i < total; i++){
+					this.removeValidationView(fields[i], container);
+				}
+			}
+		}
+	};
+
+
 
 	VanillaValidator.prototype._init = function(){
 
@@ -304,7 +385,7 @@ var VanillaValidator = (function(){
 
 			this.addFormSubmitEvent();
 		}
-	}
+	};
 
 
 	// the constructor
