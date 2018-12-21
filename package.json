@@ -1,0 +1,19 @@
+{
+  "name": "Vanilla Validator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "vanilla-validator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/welisonmenezes/VanillaValidator.git"
+  },
+  "author": "Welison Menezes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/welisonmenezes/VanillaValidator/issues"
+  },
+  "homepage": "https://github.com/welisonmenezes/VanillaValidator#readme"
+}

@@ -6,6 +6,7 @@ var VVUtils = (function(){
 
 	VVUtils.prototype.mergeObjectsDeeply = function(target, objectDefault, objectUser){
 		if(isObject(objectDefault) && isObject(objectUser) && isObject(target)){
+			var t;
 			for(t in objectDefault){
 				if(isObject(objectDefault[t]) && isObject(objectDefault[t])){
 					target[t] = objectDefault[t];
@@ -24,7 +25,7 @@ var VVUtils = (function(){
 	};
 
 	// the constructor
-    function VVUtils(){};
+    function VVUtils(){}
 
 	return VVUtils;
 })();

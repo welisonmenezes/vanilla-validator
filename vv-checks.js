@@ -1,7 +1,7 @@
 var VVChecks = (function(){
 
 	VVChecks.prototype.isEmpty = function(value){
-		return value === "" || value.length < 1;
+		return value === '' || value.length < 1;
 	};
 
 	VVChecks.prototype.isEmail = function(value){
@@ -20,7 +20,7 @@ var VVChecks = (function(){
     VVChecks.prototype.isUrl = function(value){
         var pattern = new RegExp(/^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i);
         return pattern.test(value);
-    };
+	};
 
     VVChecks.prototype.hasLessThan = function(value, size){
         return (value.length < size);
@@ -55,54 +55,54 @@ var VVChecks = (function(){
     };
 
     VVChecks.prototype.isCpf = function(value){
-	    var CPF = value, cpfv, x;  
-	    if(!CPF) return false;
-	    cpfv  = CPF;
-	    if(cpfv.length == 14 || cpfv.length == 11) {
-	        cpfv = cpfv.replace('.', '');
-	        cpfv = cpfv.replace('.', '');
-	        cpfv = cpfv.replace('-', '');
-	        var nonNumbers = /\D/;
-	        if(nonNumbers.test(cpfv)){
-	            return false;
-	        } else{
-	            if (cpfv == "00000000000" ||
-	                cpfv == "11111111111" ||
-	                cpfv == "22222222222" ||
-	                cpfv == "33333333333" ||
-	                cpfv == "44444444444" ||
-	                cpfv == "55555555555" ||
-	                cpfv == "66666666666" ||
-	                cpfv == "77777777777" ||
-	                cpfv == "88888888888" ||
-	                cpfv == "99999999999") return false;
-	            var a = [];
-	            var b = 0;
-	            var c = 11;
-	            for(var i=0; i<11; i++){
-	                a[i] = cpfv.charAt(i);
-	                if (i < 9) b += (a[i] * --c);
-	            }
-	            if((x = b % 11) < 2){
-	                a[9] = 0;
-	            } else{
-	                a[9] = 11-x;
-	            }
-	            b = 0;
-	            c = 11;
-	            for (var y=0; y<10; y++) b += (a[y] * c--);
-	            if((x = b % 11) < 2){
-	                a[10] = 0;
-	            } else{
-	                a[10] = 11-x;
-	            }
-	            if((cpfv.charAt(9) != a[9]) || (cpfv.charAt(10) != a[10])) return false;
-	        }
-	    } else{
+        var CPF = value, cpfv, x;  
+        if(!CPF) return false;
+        cpfv  = CPF;
+        if(cpfv.length == 14 || cpfv.length == 11) {
+            cpfv = cpfv.replace('.', '');
+            cpfv = cpfv.replace('.', '');
+            cpfv = cpfv.replace('-', '');
+            var nonNumbers = /\D/;
+            if(nonNumbers.test(cpfv)){
+                return false;
+            } else{
+                if (cpfv == '00000000000' ||
+                    cpfv == '11111111111' ||
+                    cpfv == '22222222222' ||
+                    cpfv == '33333333333' ||
+                    cpfv == '44444444444' ||
+                    cpfv == '55555555555' ||
+                    cpfv == '66666666666' ||
+                    cpfv == '77777777777' ||
+                    cpfv == '88888888888' ||
+                    cpfv == '99999999999') return false;
+                var a = [];
+                var b = 0;
+                var c = 11;
+                for(var i=0; i<11; i++){
+                    a[i] = cpfv.charAt(i);
+                    if (i < 9) b += (a[i] * --c);
+                }
+                if((x = b % 11) < 2){
+                    a[9] = 0;
+                } else{
+                    a[9] = 11-x;
+                }
+                b = 0;
+                c = 11;
+                for (var y=0; y<10; y++) b += (a[y] * c--);
+                if((x = b % 11) < 2){
+                    a[10] = 0;
+                } else{
+                    a[10] = 11-x;
+                }
+                if((cpfv.charAt(9) != a[9]) || (cpfv.charAt(10) != a[10])) return false;
+            }
+        } else{
             return !(cpfv.length === 0);
-	    }
-	    return true;
-	};
+        }
+        return true;
+    };
 
 	VVChecks.prototype.isCnpj = function(value){
         var str = value, 
@@ -123,7 +123,7 @@ var VVChecks = (function(){
             }
         }
         if (!digitos_iguais) {
-            tamanho = cnpj.length - 2
+            tamanho = cnpj.length - 2;
             numeros = cnpj.substring(0,tamanho);
             digitos = cnpj.substring(tamanho);
             soma = 0;
@@ -171,12 +171,12 @@ var VVChecks = (function(){
 	};
 
 	VVChecks.prototype.isCreditCard = function(value){
-        if ( /[^0-9 \-]+/.test( value ) )  return false;
+        if ( /[^0-9 -]+/.test( value ) )  return false;
         var nCheck = 0,
             nDigit = 0,
             bEven = false,
             n, cDigit;
-        var cardNum = value.replace( /\D/g, "" );
+        var cardNum = value.replace( /\D/g, '' );
         if ( cardNum.length < 13 || cardNum.length > 19 )  return false;
         for ( n = cardNum.length - 1; n >= 0; n--) {
             cDigit = cardNum.charAt( n );
@@ -195,7 +195,7 @@ var VVChecks = (function(){
     };
 
     VVChecks.prototype.isPhone = function(value){
-        var phoneNum = value.replace(/[\(\)\-_ \+]/g,'');
+        var phoneNum = value.replace(/[()\-_ +]/g,'');
         return /^([0-9]{8,14})$/.test(phoneNum);
     };
 
@@ -204,7 +204,7 @@ var VVChecks = (function(){
         re = /^\d{1,2}\/\d{1,2}\/\d{4}$/,
         adata, gg, mm, aaaa, xdata;
         if ( re.test(value)) {
-            adata = value.split("/");
+            adata = value.split('/');
             gg = parseInt(adata[0], 10);
             mm = parseInt(adata[1], 10);
             aaaa = parseInt(adata[2], 10);
@@ -238,11 +238,11 @@ var VVChecks = (function(){
 	};
 
 	VVChecks.prototype.isFunction = function(fn){
-	    return Object.prototype.toString.call(fn) == '[object Function]';
+        return Object.prototype.toString.call(fn) == '[object Function]';
 	};
 
 	VVChecks.prototype.isArray = function(array){
-		return Object.prototype.toString.call(array) === "[object Array]";
+		return Object.prototype.toString.call(array) === '[object Array]';
 	};
 
     VVChecks.prototype.isHTMLElement = function(element){
@@ -257,9 +257,9 @@ var VVChecks = (function(){
     function VVChecks(){
 		// force call with new operator
 		if (!(this instanceof VVChecks)) { 
-			throw new TypeError("Cannot call a class as a function");
+			throw new TypeError('Cannot call a class as a function');
 		}
-	};
+	}
 
 	return VVChecks;
 })();

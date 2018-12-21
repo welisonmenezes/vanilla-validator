@@ -38,8 +38,8 @@ var VVElements = (function(){
 
 	VVElements.prototype.getRadiosByName = function(name, parent, cls, isChecked){
 		if(name && parent){
-			s_cls = (cls) ? '.' + cls : '';
-			s_checked = (isChecked) ? ':checked' : '';
+			var s_cls = (cls) ? '.' + cls : '';
+			var s_checked = (isChecked) ? ':checked' : '';
 			return this.getChildren('input'+ s_cls +'[type=radio][name="'+ name +'"]' + s_checked, parent);
 		}
 		return null;
@@ -47,8 +47,8 @@ var VVElements = (function(){
 
 	VVElements.prototype.getCheckboxesByName = function(name, parent, cls, isChecked){
 		if(name && parent){
-			s_cls = (cls) ? '.' + cls : '';
-			s_checked = (isChecked) ? ':checked' : '';
+			var s_cls = (cls) ? '.' + cls : '';
+			var s_checked = (isChecked) ? ':checked' : '';
 			return this.getChildren('input'+ s_cls +'[type=checkbox][name="'+ name +'"]' + s_checked, parent);
 		}
 		return null;
@@ -56,7 +56,7 @@ var VVElements = (function(){
 
 	VVElements.prototype.addClass = function(element, cls){
 		if(element && cls){
-			if(Object.prototype.toString.call(cls) === "[object Array]"){
+			if(Object.prototype.toString.call(cls) === '[object Array]'){
 				var i, total = cls.length;
 				for(i = 0; i < total; i++){
 					element.classList.add(cls[i]);
@@ -69,7 +69,7 @@ var VVElements = (function(){
 
 	VVElements.prototype.removeClass = function(element, cls){
 		if(element && cls){
-			if(Object.prototype.toString.call(cls) === "[object Array]"){
+			if(Object.prototype.toString.call(cls) === '[object Array]'){
 				var i, total = cls.length;
 				for(i = 0; i < total; i++){
 					element.classList.remove(cls[i]);
@@ -91,7 +91,7 @@ var VVElements = (function(){
 	};
 
 	// the constructor
-    function VVElements(){};
+    function VVElements(){}
 
 	return VVElements;
 })();

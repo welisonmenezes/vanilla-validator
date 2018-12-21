@@ -3,33 +3,33 @@ var VanillaValidator = (function(){
 	var $ = new VVElements();
 	var utils = new VVUtils();
 
-	var _setConfigurations = function(userConfig){
+	var _setConfigurations = function(userConfig) {
 		// default configurations
 		this.config = {
 			container: 'form',
 			button: null,
 			validationBy: 'onclick', // [onclick, onsubmit]
 			selectors: { // just css classes
-				control: "vv-control",
-				required: "required",
-				email: "email",
-				integer: "integer",
-				digit: "digit",
-				phone: "phone",
-				pattern: "pattern",
-				cpf: "cpf",
-				cnpj: "cnpj",
-				error: "error",
-				formError: "form-error",
-				messageError: "msg-error"
+				control: 'vv-control',
+				required: 'required',
+				email: 'email',
+				integer: 'integer',
+				digit: 'digit',
+				phone: 'phone',
+				pattern: 'pattern',
+				cpf: 'cpf',
+				cnpj: 'cnpj',
+				error: 'error',
+				formError: 'form-error',
+				messageError: 'msg-error'
 			},
 			messages: {
-				required: "Required field",
-				email: "Invalid email",
-				integer: "Needs to be a integer",
-				digit: "Only letters and numbers",
-				pattern: "Needs to matchs pattern",
-				phone: "Invalid phone number"
+				required: 'Required field',
+				email: 'Invalid email',
+				integer: 'Needs to be a integer',
+				digit: 'Only letters and numbers',
+				pattern: 'Needs to matchs pattern',
+				phone: 'Invalid phone number'
 			},
 			customPatternValidation: {
 				pattern: '[0-9]',
@@ -39,7 +39,6 @@ var VanillaValidator = (function(){
 			validateOnFieldChanges: true,
 			callbacks: {
 				CB_FieldEach: null,
-				CB_Required: null,
 				CB_Required: null,
 				CB_Email: null,
 				CB_EmailEach: null,
@@ -70,8 +69,8 @@ var VanillaValidator = (function(){
 	 */
 	var _inherits = function(subClass, superClass) {
 		// superClass need to be a function or null
-		if (typeof superClass !== "function" && superClass !== null) { 
-			throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); 
+		if (typeof superClass !== 'function' && superClass !== null) { 
+			throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); 
 		} 
 		subClass.prototype = Object.create(superClass && superClass.prototype, { 
 			constructor: { 
@@ -91,10 +90,9 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.loopThroughContainers = function(){
 		if(this.containers && this.containers.length){
-			var self = this,
-				i, container,
+			var i, container,
 				total = this.containers.length;
-			for(var i = 0; i < total; i++){
+			for(i = 0; i < total; i++){
 				container = this.containers[i];
 				this.defineSubmitionType(container);
 				this.addControlClassesOnFields(container);
@@ -167,11 +165,11 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.addValidationsOnFieldsEvent = function(field, container){
 		if(field){
 			var self = this;
-			field.addEventListener("change", function(event){
+			field.addEventListener('change', function(event){
 				event.preventDefault();
 				self.validateFields(field, container);
 			});
-			field.addEventListener("keyup", function(event){
+			field.addEventListener('keyup', function(event){
 				event.preventDefault();
 				self.validateFields(field, container);
 			});
@@ -308,17 +306,17 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.addValidationView = function(field, message){
 		if(field){
-			var parentEl = (field.constructor.name === "Array") ? field[field.length-1].parentElement : field.parentElement;
+			var parentEl = (field.constructor.name === 'Array') ? field[field.length-1].parentElement : field.parentElement;
 			if(parentEl){
-				var messageContainer = document.createElement("SPAN");
-				var message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
+				var messageContainer = document.createElement('SPAN');
+				message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
 				messageContainer.innerHTML = message;
 
-				var messageClass = document.createAttribute("class");
+				var messageClass = document.createAttribute('class');
 				messageClass.value = this.config.selectors.messageError;
 				messageContainer.setAttributeNode(messageClass);
 
-				if(field.constructor.name === "Array"){
+				if(field.constructor.name === 'Array'){
 					var i, totalEl = field.length;
 					for(i = 1; i < totalEl; i++){
 						field[i].classList.add(this.config.selectors.error);
@@ -341,9 +339,9 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.removeValidationView = function(field){
 		if(field){
-			var parentEl = (field.constructor.name === "Array") ? field[field.length-1].parentElement : field.parentElement;
+			var parentEl = (field.constructor.name === 'Array') ? field[field.length-1].parentElement : field.parentElement;
 			if(parentEl){
-				if(field.constructor.name === "Array"){
+				if(field.constructor.name === 'Array'){
 					var i, totalEl = field.length;
 					for(i = 1; i < totalEl; i++){
 						field[i].classList.remove(this.config.selectors.error);
@@ -352,7 +350,7 @@ var VanillaValidator = (function(){
 					field.classList.remove(this.config.selectors.error);
 				}
 
-				var oldMessages = parentEl.querySelectorAll("." + this.config.selectors.messageError);
+				var oldMessages = parentEl.querySelectorAll('.' + this.config.selectors.messageError);
 				if(oldMessages){
 					var x, totalOld = oldMessages.length;
 					for(x = 0; x < totalOld; x++){
@@ -372,7 +370,7 @@ var VanillaValidator = (function(){
 	function VanillaValidator(userConfig){
 		// force call with new operator
 		if (!(this instanceof VanillaValidator)) { 
-			throw new TypeError("Cannot call a class as a function");
+			throw new TypeError('Cannot call a class as a function');
 		}
 
 		// Propagates only the attributes.
@@ -382,7 +380,7 @@ var VanillaValidator = (function(){
 		_setConfigurations.apply(this, [userConfig]);
 
 		this._init();
-	};
+	}
 
 	return VanillaValidator;
 }());
