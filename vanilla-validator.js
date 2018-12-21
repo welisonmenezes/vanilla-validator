@@ -115,7 +115,7 @@ var VanillaValidator = (function(){
 		if(container.tagName === 'FORM'){
 			container.addEventListener('submit', function(event){
 				event.preventDefault();
-				self.validateContainer(event.target);
+				self.formValidateFinal(container);
 			});
 		}
 	};
@@ -130,9 +130,13 @@ var VanillaValidator = (function(){
 		if(button){
 			button.addEventListener('click', function(event){
 				event.preventDefault();
-				self.validateContainer(container);
+				self.formValidateFinal(container);
 			});
 		}
+	};
+
+	VanillaValidator.prototype.formValidateFinal = function(container){
+		console.log('IS VALID?', this.validateContainer(container));
 	};
 
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
@@ -175,56 +179,60 @@ var VanillaValidator = (function(){
 	};
 
 	VanillaValidator.prototype.validateFields = function(field, container){
+		var ret = true;
 		if(field && container){
 			this.removeValidationView(field);
 
 			// EMAIL
 			if(field.classList.contains(this.config.selectors.email)){
-				this.validateEmail(field);
+				if(!this.validateEmail(field)) ret = false;
 			}
 
 			// INTEGER
 			if(field.classList.contains(this.config.selectors.integer)){
-				this.validateInteger(field);
+				if(!this.validateInteger(field)) ret = false;
 			}
 
 			// DIGIT
 			if(field.classList.contains(this.config.selectors.digit)){
-				this.validateDigit(field);
+				if(!this.validateDigit(field)) ret = false;
 			}
 
 			// DIGIT
 			if(field.classList.contains(this.config.selectors.digit)){
-				this.validateDigit(field);
+				if(!this.validateDigit(field)) ret = false;
 			}
 
 			// PATTERN
 			if(field.classList.contains(this.config.selectors.pattern)){
-				this.validatePattern(field);
+				if(!this.validatePattern(field)) ret = false;
 			}
 
 			// REQUIRED
 			if(field.classList.contains(this.config.selectors.required)){
 				if(field.type === 'checkbox' || field.type === 'radio'){
-					this.validateRequiredCR(field, container);
+					if(!this.validateRequiredCR(field, container)) ret = false;
 				}else{
-					this.validateRequired(field);
+					if(!this.validateRequired(field)) ret = false;
 				}
 			}
 		}
+		return ret;
 	};
 
 	VanillaValidator.prototype.validateContainer = function(container){
+		var ret = true;
 		if(container){
 			var fields = $.getChildren('.' + this.config.selectors.control, container);
 			if(fields){
 				var i, total = fields.length, field;
 				for(i = 0; i < total; i++){
 					field = fields[i];
-					this.validateFields(field, container);
+					if(!this.validateFields(field, container)) ret = false;
 				}
 			}
 		}
+		return ret;
 	};
 
 	VanillaValidator.prototype.validateRequired = function(field){
