@@ -4,13 +4,13 @@ var VanillaValidator = (function(){
 	var utils = new VVUtils();
 
 	var _setConfigurations = function(userConfig){
-
 		// default configurations
 		this.config = {
 			container: 'form',
 			button: null,
 			validationBy: 'onclick', // [onclick, onsubmit]
 			selectors: { // just css classes
+				control: "vv-control",
 				required: "required",
 				email: "email",
 				phone: "phone",
@@ -26,7 +26,7 @@ var VanillaValidator = (function(){
 				phone: "Invalid phone number"
 			},
 			novalidateHTML5: true,
-			clearErrosOnChange: true,
+			validateOnFieldChanges: true,
 			callbacks: {
 				CB_FieldEach: null,
 				CB_Required: null,
@@ -59,13 +59,10 @@ var VanillaValidator = (function(){
 	 * @param {Object} object that will be a superClass
 	 */
 	var _inherits = function(subClass, superClass) {
-
 		// superClass need to be a function or null
 		if (typeof superClass !== "function" && superClass !== null) { 
-
 			throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); 
 		} 
-
 		subClass.prototype = Object.create(superClass && superClass.prototype, { 
 			constructor: { 
 				value: subClass, 
@@ -74,9 +71,7 @@ var VanillaValidator = (function(){
 				configurable: true 
 			} 
 		}); 
-
 		if (superClass){
-
 			Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 		}
 	};
@@ -110,14 +105,13 @@ var VanillaValidator = (function(){
 		if(container.tagName === 'FORM'){
 			container.addEventListener('submit', function(event){
 				event.preventDefault();
-				//self.validateContainer(event.target);
+				self.validateContainer(event.target);
 			});
 		}
 	};
 
 	VanillaValidator.prototype.addButtonClickEvent = function(container){
-		var self = this,
-			button;
+		var self = this, button;
 		if(this.config.button && $.getChild(this.config.button, container)){
 			button = $.getChild(this.config.button, container);
 		}else{
@@ -126,7 +120,7 @@ var VanillaValidator = (function(){
 		if(button){
 			button.addEventListener('click', function(event){
 				event.preventDefault();
-				//self.validateContainer(container);
+				self.validateContainer(container);
 			});
 		}
 	};
@@ -134,8 +128,10 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
 		var field;
 		for (var key in this.config.selectors) {
-			field = $.getChildren('.' + this.config.selectors[key] + ':not(.vv-control)', container);
-			this.loopThroughFieldsToAddControls(field, container);
+			if(key != this.config.selectors.control){
+				field = $.getChildren('.' + this.config.selectors[key] + ':not(.' + this.config.selectors.control + ')', container);
+				this.loopThroughFieldsToAddControls(field, container);
+			}
 		}
 	};
 
@@ -146,32 +142,30 @@ var VanillaValidator = (function(){
 				total = fields.length;
 			for(i = 0; i < total; i++){
 				field = fields[i];
-				field.classList.add('vv-control');
-
-				if(this.config.clearErrosOnChange){
-					this.addClearEventsOnField(field, container);
+				field.classList.add(this.config.selectors.control);
+				if(this.config.validateOnFieldChanges){
+					this.addValidationsOnFieldsEvent(field, container);
 				}
 			}
 		}
 	};
 
-	VanillaValidator.prototype.addClearEventsOnField = function(field, container){
-
+	VanillaValidator.prototype.addValidationsOnFieldsEvent = function(field, container){
 		if(field){
 			var self = this;
-			field.addEventListener("change", function(){
+			field.addEventListener("change", function(event){
+				event.preventDefault();
 				self.validateFields(field, container);
 			});
-			field.addEventListener("keyup", function(){
+			field.addEventListener("keyup", function(event){
+				event.preventDefault();
 				self.validateFields(field, container);
 			});
 		}
 	};
 
 	VanillaValidator.prototype.validateFields = function(field, container){
-
 		if(field && container){
-
 			this.removeValidationView(field);
 
 			// EMAIL
@@ -185,6 +179,19 @@ var VanillaValidator = (function(){
 					this.validateRequiredRC(field, container);
 				}else{
 					this.validateRequired(field);
+				}
+			}
+		}
+	};
+
+	VanillaValidator.prototype.validateContainer = function(container){
+		if(container){
+			var fields = $.getChildren('.' + this.config.selectors.control, container);
+			if(fields){
+				var i, total = fields.length, field;
+				for(i = 0; i < total; i++){
+					field = fields[i];
+					this.validateFields(field, container);
 				}
 			}
 		}
@@ -225,152 +232,12 @@ var VanillaValidator = (function(){
 			}
 			return true;
 		}
-	}
-
-	/*
-	VanillaValidator.prototype.validateContainer = function(container){
-		
-		if(container){
-
-			this.removeValidationViewOfAll(container);
-
-			if(this.isContainerValid(container)){
-			
-				console.log('É válido!');
-			}else{
-
-				console.log('Não é válido!');
-			}
-		}
-		
 	};
 
-	VanillaValidator.prototype.isContainerValid = function(container){
-
-		if(container){
-
-			console.log('validateEmail', this.validateEmail(container));
-			console.log('validateRequired', this.validateRequired(container));
-			console.log('validateRequiredRadiosAndCheckboxes', this.validateRequiredRadiosAndCheckboxes(container));
-			
-		}
-
-		return true;
-	};
-
-	VanillaValidator.prototype.validateRequired = function(container){
-
-		var ret = true;
-		if(container){
-
-			var fields = $.getChildren('.' + this.config.selectors.required + ':not([type="checkbox"]):not([type="radio"])', container);
-			if(fields){
-
-				var i, total = fields.length;
-				for(i = 0; i < total; i++){
-
-					var field = fields[i];
-
-					if(this.isEmpty(field.value)){
-
-						this.addValidationView(field, this.config.messages.required);
-						ret = false;
-					}
-				}
-			}
-		}
-
-		return ret;
-	};
-
-	VanillaValidator.prototype.validateRequiredRadiosAndCheckboxes = function(container){
-
-		var ret = true;
-		if(container){
-
-			var fields = $.getChildren('.' + this.config.selectors.required + '[type="checkbox"], .' + this.config.selectors.required + '[type="radio"]', container);
-			if(fields){
-
-				var i,
-					total = fields.length,
-					checkboxRadios = {};
-				for(i = 0; i < total; i++){
-
-					var field = fields[i];
-
-					// add checkbox and radio fields into array to validate after
-					if(! checkboxRadios[field.name]){
-
-						checkboxRadios[field.name] = [];
-
-						// item responsible for validating the field
-						checkboxRadios[field.name].push("invalid");
-					}
-					checkboxRadios[field.name].push(field);
-				}
-
-				for(cr in checkboxRadios){
-
-					if(checkboxRadios[cr].length){
-
-						var x,
-							totalCR = checkboxRadios[cr].length;
-						for(x = 1; x < totalCR; x++){
-
-							if(checkboxRadios[cr][x].checked){
-
-								// turn fiedl valid if it is checked
-								checkboxRadios[cr][0] = "valid";
-							}
-						}
-
-						if(checkboxRadios[cr][0] === "invalid"){
-
-							this.addValidationView(checkboxRadios[cr], this.config.messages.required);
-							ret = false;
-						}
-					}
-				}
-			}
-		}
-
-		return ret;
-	};
-
-	VanillaValidator.prototype.validateEmail = function(container){
-
-		var ret = true;
-		if(container){
-
-			var fields = $.getChildren('.' + this.config.selectors.email, container);
-			if(fields){
-
-				var i, total = fields.length;
-				for(i = 0; i < total; i++){
-
-					var field = fields[i];
-
-					if(!this.isEmail(field.value)){
-
-						this.addValidationView(field, this.config.messages.email);
-						ret = false;
-					}
-				}
-			}
-		}
-
-		return ret;
-	};
-
-	*/
-
-	VanillaValidator.prototype.addValidationView = function(element, message){
-		if(element){
-
-			var parentEl = (element.constructor.name === "Array") ? element[element.length-1].parentElement : element.parentElement;
-
+	VanillaValidator.prototype.addValidationView = function(field, message){
+		if(field){
+			var parentEl = (field.constructor.name === "Array") ? field[field.length-1].parentElement : field.parentElement;
 			if(parentEl){
-
 				var messageContainer = document.createElement("SPAN");
 				messageContainer.innerHTML = message;
 
@@ -378,98 +245,60 @@ var VanillaValidator = (function(){
 				messageClass.value = this.config.selectors.messageError;
 				messageContainer.setAttributeNode(messageClass);
 
-				if(element.constructor.name === "Array"){
-
-					var i, totalEl = element.length;
+				if(field.constructor.name === "Array"){
+					var i, totalEl = field.length;
 					for(i = 1; i < totalEl; i++){
-
-						element[i].classList.add(this.config.selectors.error);
+						field[i].classList.add(this.config.selectors.error);
 					}
 				}else{
-
-					element.classList.add(this.config.selectors.error);
+					field.classList.add(this.config.selectors.error);
 				}
 				
-
 				var oldMessages = parentEl.querySelectorAll('.' + this.config.selectors.messageError);
 				if(oldMessages){
-
 					var x, totalOld = oldMessages.length;
 					for(x = 0; x < totalOld; x++){
-
 						oldMessages[x].remove();
 					}
 				}
-
 				parentEl.append(messageContainer);
 			}
-			
 		}
 	};
 
-
-	VanillaValidator.prototype.removeValidationView = function(element){
-		if(element){
-
-			var parentEl = (element.constructor.name === "Array") ? element[element.length-1].parentElement : element.parentElement;
-
+	VanillaValidator.prototype.removeValidationView = function(field){
+		if(field){
+			var parentEl = (field.constructor.name === "Array") ? field[field.length-1].parentElement : field.parentElement;
 			if(parentEl){
-
-				if(element.constructor.name === "Array"){
-					var i, totalEl = element.length;
-
+				if(field.constructor.name === "Array"){
+					var i, totalEl = field.length;
 					for(i = 1; i < totalEl; i++){
-						element[i].classList.remove(this.config.selectors.error);
+						field[i].classList.remove(this.config.selectors.error);
 					}
 				}else{
-					element.classList.remove(this.config.selectors.error);
+					field.classList.remove(this.config.selectors.error);
 				}
 
 				var oldMessages = parentEl.querySelectorAll("." + this.config.selectors.messageError);
-
 				if(oldMessages){
 					var x, totalOld = oldMessages.length;
 					for(x = 0; x < totalOld; x++){
 						oldMessages[x].remove();
 					}
-				}
-
-			}
-		
-		}
-	};
-
-	VanillaValidator.prototype.removeValidationViewOfAll = function(container){
-		if(container){
-			var fields = $.getChildren('.' + this.config.selectors.error, container);
-
-			container.classList.remove(this.config.selectors.formError);
-	
-			if(fields){ 
-
-				var i,
-					total = fields.length;
-
-				for(i = 0; i < total; i++){
-					this.removeValidationView(fields[i], container);
 				}
 			}
 		}
 	};
 
 	VanillaValidator.prototype._init = function(){
-
 		this.containers = $.getElements(this.config.container);
 		this.loopThroughContainers();
 	};
 
-
 	// the constructor
 	function VanillaValidator(userConfig){
-
 		// force call with new operator
 		if (!(this instanceof VanillaValidator)) { 
-
 			throw new TypeError("Cannot call a class as a function");
 		}
 
@@ -480,12 +309,7 @@ var VanillaValidator = (function(){
 		_setConfigurations.apply(this, [userConfig]);
 
 		this._init();
-
 	};
-
-
-
-	
 
 	return VanillaValidator;
 }());
