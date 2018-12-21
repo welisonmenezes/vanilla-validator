@@ -343,6 +343,10 @@ var VVChecks = (function(){
         return element instanceof Element || element instanceof HTMLDocument;
     };
 
+    VVChecks.prototype.isPattern = function(value, pattern, flags){
+        return new RegExp(pattern, flags).test(value);
+    };
+
     // the constructor
     function VVChecks(){
 

@@ -20,7 +20,7 @@
 	
 	<form action="#" id="form-1" class="xx">
 		<div>
-			<input type="text" class="required" placeholder="name">
+			<input type="text" class="required" data-message-error="Obrigatório" placeholder="name">
 		</div>
 		<div>
 			<input type="email" class="required email" placeholder="email">
@@ -33,6 +33,12 @@
 		</div>
 		<div>
 			<input type="text" class="required digit" placeholder="digit">
+		</div>
+		<div>
+			<input type="text" class="pattern" placeholder="pattern">
+		</div>
+		<div>
+			<input type="text" class="pattern" data-pattern="[x]" data-flags="ig" data-message-error="Precisa conter um x" placeholder="custom pattern">
 		</div>
 		<div>
 			<input type="file" class="required">

@@ -16,6 +16,7 @@ var VanillaValidator = (function(){
 				integer: "integer",
 				digit: "digit",
 				phone: "phone",
+				pattern: "pattern",
 				cpf: "cpf",
 				cnpj: "cnpj",
 				error: "error",
@@ -27,7 +28,12 @@ var VanillaValidator = (function(){
 				email: "Invalid email",
 				integer: "Needs to be a integer",
 				digit: "Only letters and numbers",
+				pattern: "Needs to matchs pattern",
 				phone: "Invalid phone number"
+			},
+			customPatternValidation: {
+				pattern: '[0-9]',
+				flags: 'g'
 			},
 			novalidateHTML5: true,
 			validateOnFieldChanges: true,
@@ -187,6 +193,16 @@ var VanillaValidator = (function(){
 				this.validateDigit(field);
 			}
 
+			// DIGIT
+			if(field.classList.contains(this.config.selectors.digit)){
+				this.validateDigit(field);
+			}
+
+			// PATTERN
+			if(field.classList.contains(this.config.selectors.pattern)){
+				this.validatePattern(field);
+			}
+
 			// REQUIRED
 			if(field.classList.contains(this.config.selectors.required)){
 				if(field.type === 'checkbox' || field.type === 'radio'){
@@ -270,11 +286,24 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	VanillaValidator.prototype.validatePattern = function(field){
+		if(field){
+			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.customPatternValidation.pattern;
+			var flags = (field.getAttribute('data-flags')) ? field.getAttribute('data-flags') : this.config.customPatternValidation.flags;
+			if(!this.isPattern(field.value, pattern, flags)){
+				this.addValidationView(field, this.config.messages.pattern);
+				return false;
+			}
+			return true;
+		}
+	};
+
 	VanillaValidator.prototype.addValidationView = function(field, message){
 		if(field){
 			var parentEl = (field.constructor.name === "Array") ? field[field.length-1].parentElement : field.parentElement;
 			if(parentEl){
 				var messageContainer = document.createElement("SPAN");
+				var message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
 				messageContainer.innerHTML = message;
 
 				var messageClass = document.createAttribute("class");
