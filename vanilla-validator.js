@@ -21,7 +21,7 @@ var VanillaValidator = (function(){
 				messageError: "msg-error"
 			},
 			messages: {
-				required: "Required filed",
+				required: "Required field",
 				email: "Invalid email",
 				phone: "Invalid phone number"
 			},
@@ -110,7 +110,7 @@ var VanillaValidator = (function(){
 		if(container.tagName === 'FORM'){
 			container.addEventListener('submit', function(event){
 				event.preventDefault();
-				self.validateContainer(event.target);
+				//self.validateContainer(event.target);
 			});
 		}
 	};
@@ -126,7 +126,7 @@ var VanillaValidator = (function(){
 		if(button){
 			button.addEventListener('click', function(event){
 				event.preventDefault();
-				self.validateContainer(container);
+				//self.validateContainer(container);
 			});
 		}
 	};
@@ -135,11 +135,11 @@ var VanillaValidator = (function(){
 		var field;
 		for (var key in this.config.selectors) {
 			field = $.getChildren('.' + this.config.selectors[key] + ':not(.vv-control)', container);
-			this.loopThroughFieldsToAddControls(field);
+			this.loopThroughFieldsToAddControls(field, container);
 		}
 	};
 
-	VanillaValidator.prototype.loopThroughFieldsToAddControls = function(fields){
+	VanillaValidator.prototype.loopThroughFieldsToAddControls = function(fields, container){
 		if(fields){
 			var i,
 				field,
@@ -149,28 +149,85 @@ var VanillaValidator = (function(){
 				field.classList.add('vv-control');
 
 				if(this.config.clearErrosOnChange){
-					this.addClearEventsOnField(field);
+					this.addClearEventsOnField(field, container);
 				}
 			}
 		}
 	};
 
-	VanillaValidator.prototype.addClearEventsOnField = function(field){
+	VanillaValidator.prototype.addClearEventsOnField = function(field, container){
+
 		if(field){
 			var self = this;
 			field.addEventListener("change", function(){
-				if(this.classList.contains(self.config.selectors.error)){
-					self.removeValidationView(field);
-				}
+				self.validateFields(field, container);
 			});
 			field.addEventListener("keyup", function(){
-				if(this.classList.contains(self.config.selectors.error)){
-					self.removeValidationView(field);
-				}
+				self.validateFields(field, container);
 			});
+		}
+	};
+
+	VanillaValidator.prototype.validateFields = function(field, container){
+
+		if(field && container){
+
+			this.removeValidationView(field);
+
+			// EMAIL
+			if(field.classList.contains(this.config.selectors.email)){
+				this.validateEmail(field);
+			}
+
+			// REQUIRED
+			if(field.classList.contains(this.config.selectors.required)){
+				if(field.type === 'checkbox' || field.type === 'radio'){
+					this.validateRequiredRC(field, container);
+				}else{
+					this.validateRequired(field);
+				}
+			}
+		}
+	};
+
+	VanillaValidator.prototype.validateRequired = function(field){
+		if(field){
+			if(this.isEmpty(field.value)){
+				this.addValidationView(field, this.config.messages.required);
+				return false;
+			}
+			return true;
+		}
+	};
+
+	VanillaValidator.prototype.validateRequiredRC = function(field, container){
+		if(field && container){
+			if(field.name){
+				var fieldsRC = $.getChildren('.' + this.config.selectors.required + '[name=' + field.name + ']', container);
+				if(fieldsRC){
+					var fieldChecked = $.getChildren('.' + this.config.selectors.required + '[name=' + field.name + ']:checked', container);
+					var lastFieldRC = fieldsRC[fieldsRC.length-1];
+					if(!fieldChecked){
+						this.addValidationView(lastFieldRC, this.config.messages.required);
+						return false;
+					}
+					return true;
+				}
+			}
+		}
+	};
+
+	VanillaValidator.prototype.validateEmail = function(field){
+		if(field){
+			if(!this.isEmail(field.value)){
+				this.addValidationView(field, this.config.messages.email);
+				return false;
+			}
+			return true;
 		}
 	}
 
+	/*
 	VanillaValidator.prototype.validateContainer = function(container){
 		
 		if(container){
@@ -305,9 +362,7 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
-	// VanillaValidator.prototype.getElementsOfContainer = function(container){
-
-	// };
+	*/
 
 	VanillaValidator.prototype.addValidationView = function(element, message){
 		if(element){
