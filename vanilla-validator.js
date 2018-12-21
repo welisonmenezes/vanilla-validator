@@ -134,7 +134,9 @@ var VanillaValidator = (function(){
 	};
 
 	VanillaValidator.prototype.formValidateFinal = function(container){
+		this.callCallbackFunction(this.config.callbacks.CB_BeforeValidate, this, container);
 		console.log('IS VALID?', this.validateContainer(container));
+		this.callCallbackFunction(this.config.callbacks.CB_AfterValidate, this, container);
 	};
 
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
@@ -358,6 +360,12 @@ var VanillaValidator = (function(){
 					}
 				}
 			}
+		}
+	};
+
+	VanillaValidator.prototype.callCallbackFunction = function(callback, ref, element){
+		if(typeof callback === 'function'){
+			callback.call(ref, element, this.config);
 		}
 	};
 

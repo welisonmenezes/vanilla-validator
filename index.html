@@ -110,7 +110,14 @@
 				required: 'Custom message required',
 				email: 'Custom message email'
 			},
-			novalidateHTML5: false
+			novalidateHTML5: false,
+			callbacks: {
+				CB_BeforeValidate: function(element, config){
+					console.log('ELEMENT',element)
+					console.log('CONFIG',config)
+					console.log('THIS',this)
+				}
+			}
 		};
 
 		var vv = new VanillaValidator(config);
