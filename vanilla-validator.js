@@ -190,7 +190,7 @@ var VanillaValidator = (function(){
 			// REQUIRED
 			if(field.classList.contains(this.config.selectors.required)){
 				if(field.type === 'checkbox' || field.type === 'radio'){
-					this.validateRequiredRC(field, container);
+					this.validateRequiredCR(field, container);
 				}else{
 					this.validateRequired(field);
 				}
@@ -221,7 +221,7 @@ var VanillaValidator = (function(){
 		}
 	};
 
-	VanillaValidator.prototype.validateRequiredRC = function(field, container){
+	VanillaValidator.prototype.validateRequiredCR = function(field, container){
 		if(field && container){
 			if(field.name){
 				var fieldsRC = $.getChildren('.' + this.config.selectors.required + '[name=' + field.name + ']', container);
@@ -231,8 +231,10 @@ var VanillaValidator = (function(){
 					if(!fieldChecked){
 						this.addValidationView(lastFieldRC, this.config.messages.required);
 						return false;
+					}else{
+						this.removeValidationView(lastFieldRC);
+						return true;
 					}
-					return true;
 				}
 			}
 		}
