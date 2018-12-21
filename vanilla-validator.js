@@ -13,6 +13,8 @@ var VanillaValidator = (function(){
 				control: "vv-control",
 				required: "required",
 				email: "email",
+				integer: "integer",
+				digit: "digit",
 				phone: "phone",
 				cpf: "cpf",
 				cnpj: "cnpj",
@@ -23,6 +25,8 @@ var VanillaValidator = (function(){
 			messages: {
 				required: "Required field",
 				email: "Invalid email",
+				integer: "Needs to be a integer",
+				digit: "Only letters and numbers",
 				phone: "Invalid phone number"
 			},
 			novalidateHTML5: true,
@@ -173,6 +177,16 @@ var VanillaValidator = (function(){
 				this.validateEmail(field);
 			}
 
+			// INTEGER
+			if(field.classList.contains(this.config.selectors.integer)){
+				this.validateInteger(field);
+			}
+
+			// DIGIT
+			if(field.classList.contains(this.config.selectors.digit)){
+				this.validateDigit(field);
+			}
+
 			// REQUIRED
 			if(field.classList.contains(this.config.selectors.required)){
 				if(field.type === 'checkbox' || field.type === 'radio'){
@@ -228,6 +242,26 @@ var VanillaValidator = (function(){
 		if(field){
 			if(!this.isEmail(field.value)){
 				this.addValidationView(field, this.config.messages.email);
+				return false;
+			}
+			return true;
+		}
+	};
+
+	VanillaValidator.prototype.validateInteger = function(field){
+		if(field){
+			if(!this.isInteger(field.value)){
+				this.addValidationView(field, this.config.messages.integer);
+				return false;
+			}
+			return true;
+		}
+	};
+
+	VanillaValidator.prototype.validateDigit = function(field){
+		if(field){
+			if(!this.isDigit(field.value)){
+				this.addValidationView(field, this.config.messages.digit);
 				return false;
 			}
 			return true;
