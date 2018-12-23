@@ -1,7 +1,7 @@
 var VVChecks = (function(){
 
-	VVChecks.prototype.isEmpty = function(value){
-		return value === '' || value.length < 1;
+	VVChecks.prototype.isNotEmpty = function(value){
+		return !(value === '' || value.length < 1);
 	};
 
 	VVChecks.prototype.isEmail = function(value){

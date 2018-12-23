@@ -228,22 +228,17 @@ var VanillaValidator = (function(){
 
 			// EMAIL
 			if(field.classList.contains(this.config.selectors.email)){
-				if(!this.validateEmail(field)) ret = false;
+				if(!this.factoryValidate(field, this.isEmail, this.config.messages.email, this.config.callbacks.emailError, this.config.callbacks.emailSuccess)) ret = false;
 			}
 
 			// INTEGER
 			if(field.classList.contains(this.config.selectors.integer)){
-				if(!this.validateInteger(field)) ret = false;
+				if(!this.factoryValidate(field, this.isInteger, this.config.messages.integer, this.config.callbacks.integerError, this.config.callbacks.integerSuccess)) ret = false;
 			}
 
 			// DIGIT
 			if(field.classList.contains(this.config.selectors.digit)){
-				if(!this.validateDigit(field)) ret = false;
-			}
-
-			// DIGIT
-			if(field.classList.contains(this.config.selectors.digit)){
-				if(!this.validateDigit(field)) ret = false;
+				if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess)) ret = false;
 			}
 
 			// PATTERN
@@ -253,7 +248,6 @@ var VanillaValidator = (function(){
 
 			// CUSTOM VALIDATE 
 			if(field.classList.contains(this.config.selectors.customValidate)){
-				//console.log(this.config.selectors.customValidate)
 				if(!this.validateCustom(field)) ret = false;
 			}
 
@@ -262,7 +256,8 @@ var VanillaValidator = (function(){
 				if(field.type === 'checkbox' || field.type === 'radio'){
 					if(!this.validateRequiredCR(field, container)) ret = false;
 				}else{
-					if(!this.validateRequired(field)) ret = false;
+					//if(!this.validateRequired(field)) ret = false;
+					if(!this.factoryValidate(field, this.isNotEmpty, this.config.messages.required, this.config.callbacks.requiredError, this.config.callbacks.requiredSuccess)) ret = false;
 				}
 			}
 		}
@@ -289,15 +284,15 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
-	VanillaValidator.prototype.validateRequired = function(field){
+	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn){
 		if(field){
-			if(this.isEmpty(field.value)){
-				this.addValidationView(field, this.config.messages.required);
-				this.callCallbackFunction(this.config.callbacks.requiredError, this, field);
+			if(!validationFn(field.value)){
+				this.addValidationView(field, message);
+				this.callCallbackFunction(callbackErrorFn, this, field);
 				return false;
 			}
 		}
-		this.callCallbackFunction(this.config.callbacks.requiredSuccess, this, field);
+		this.callCallbackFunction(callbackSuccessFn, this, field);
 		return true;
 	};
 
@@ -319,42 +314,6 @@ var VanillaValidator = (function(){
 			}
 		}
 		this.callCallbackFunction(this.config.callbacks.requiredSuccess, this, field);
-		return true;
-	};
-
-	VanillaValidator.prototype.validateEmail = function(field){
-		if(field){
-			if(!this.isEmail(field.value)){
-				this.addValidationView(field, this.config.messages.email);
-				this.callCallbackFunction(this.config.callbacks.emailError, this, field);
-				return false;
-			}
-		}
-		this.callCallbackFunction(this.config.callbacks.emailSuccess, this, field);
-		return true;
-	};
-
-	VanillaValidator.prototype.validateInteger = function(field){
-		if(field){
-			if(!this.isInteger(field.value)){
-				this.addValidationView(field, this.config.messages.integer);
-				this.callCallbackFunction(this.config.callbacks.integerError, this, field);
-				return false;
-			}
-		}
-		this.callCallbackFunction(this.config.callbacks.integerSuccess, this, field);
-		return true;
-	};
-
-	VanillaValidator.prototype.validateDigit = function(field){
-		if(field){
-			if(!this.isDigit(field.value)){
-				this.addValidationView(field, this.config.messages.digit);
-				this.callCallbackFunction(this.config.callbacks.digitError, this, field);
-				return false;
-			}
-		}
-		this.callCallbackFunction(this.config.callbacks.digitSuccess, this, field);
 		return true;
 	};
 
@@ -381,10 +340,10 @@ var VanillaValidator = (function(){
 					if(this.isFunction(myCustom.fn)){
 						return myCustom.fn.call(this, field, myCustom.message);
 					}else{
-						console.error('The fn of custom validation must be a function');
+						throw new TypeError('The fn of custom validation must be a function');
 					}
 				}else{
-					console.error('Check if your custom validation is correctly configured');
+					throw new TypeError('Check if your custom validation is correctly configured');
 				}
 			}
 		}
