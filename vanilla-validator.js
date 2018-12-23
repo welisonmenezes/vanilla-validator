@@ -9,14 +9,16 @@ var VanillaValidator = (function(){
 			container: 'form',
 			button: null,
 			validationBy: 'onclick', // [onclick, onsubmit]
+			novalidateHTML5: true,
+			validateOnFieldChanges: true,
 			selectors: { // just css classes
 				control: 'vv-control',
 				required: 'required',
 				email: 'email',
 				integer: 'integer',
 				digit: 'digit',
-				phone: 'phone',
 				pattern: 'pattern',
+				phone: 'phone',
 				cpf: 'cpf',
 				cnpj: 'cnpj',
 				customValidate: 'custom-validate',
@@ -24,7 +26,7 @@ var VanillaValidator = (function(){
 				formError: 'form-error',
 				messageError: 'msg-error'
 			},
-			messages: {
+			messages: { // or by html attribute 'data-message-error'
 				required: 'Required field',
 				email: 'Invalid email',
 				integer: 'Needs to be a integer',
@@ -32,12 +34,10 @@ var VanillaValidator = (function(){
 				pattern: 'Needs to matchs pattern',
 				phone: 'Invalid phone number'
 			},
-			customPatternValidation: {
-				pattern: '[0-9]',
-				flags: 'g'
+			patternValidation: {
+				pattern: '[0-9]', // or by html attribute 'data-pattern'
+				flags: 'g' // or by html attribute 'data-flags'
 			},
-			novalidateHTML5: true,
-			validateOnFieldChanges: true,
 			callbacks: {
 				eachFieldError: null,
 				eachFieldSuccess: null,
@@ -62,7 +62,7 @@ var VanillaValidator = (function(){
 				OV_Success: null
 			},
 			customValidates: {
-				'my-custom-validate' : {
+				'my-custom-validate' : { // must inform this key in html attribute 'data-validate-key'
 					message: 'Custom error message',
 					fn: function(field, message){
 						if(field.value === 'foo'){
@@ -350,8 +350,8 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.validatePattern = function(field){
 		if(field){
-			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.customPatternValidation.pattern;
-			var flags = (field.getAttribute('data-flags')) ? field.getAttribute('data-flags') : this.config.customPatternValidation.flags;
+			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.patternValidation.pattern;
+			var flags = (field.getAttribute('data-flags')) ? field.getAttribute('data-flags') : this.config.patternValidation.flags;
 			if(!this.isPattern(field.value, pattern, flags)){
 				this.addValidationView(field, this.config.messages.pattern);
 				this.callCallbackFunction(this.config.callbacks.patternError, this, field);
@@ -405,12 +405,9 @@ var VanillaValidator = (function(){
 						field.classList.add(this.config.selectors.error);
 					}
 					
-					var oldMessages = parentEl.querySelectorAll('.' + this.config.selectors.messageError);
-					if(oldMessages){
-						var x, totalOld = oldMessages.length;
-						for(x = 0; x < totalOld; x++){
-							oldMessages[x].remove();
-						}
+					var oldMessage = parentEl.querySelector('.' + this.config.selectors.messageError);
+					if(oldMessage){
+						oldMessage.remove();
 					}
 					parentEl.append(messageContainer);
 				}
