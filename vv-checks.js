@@ -76,10 +76,8 @@ var VVChecks = (function(){
                     cpfv == '77777777777' ||
                     cpfv == '88888888888' ||
                     cpfv == '99999999999') return false;
-                var a = [];
-                var b = 0;
-                var c = 11;
-                for(var i=0; i<11; i++){
+                var a = [], b = 0, c = 11, i;
+                for(i=0; i<11; i++){
                     a[i] = cpfv.charAt(i);
                     if (i < 9) b += (a[i] * --c);
                 }
@@ -90,7 +88,8 @@ var VVChecks = (function(){
                 }
                 b = 0;
                 c = 11;
-                for (var y=0; y<10; y++) b += (a[y] * c--);
+                var y;
+                for (y=0; y<10; y++) b += (a[y] * c--);
                 if((x = b % 11) < 2){
                     a[10] = 0;
                 } else{
@@ -105,14 +104,12 @@ var VVChecks = (function(){
     };
 
 	VVChecks.prototype.isCnpj = function(value){
-        var str = value, 
-            numeros, digitos, soma, i, resultado, pos, tamanho, 
-            digitos_iguais, cnpj;
-        str  = str.replace('.','');
-        str  = str.replace('.','');
-        str  = str.replace('.','');
-        str  = str.replace('-','');
-        str  = str.replace('/','');
+        var str = value, numeros, digitos, soma, i, resultado, pos, tamanho, digitos_iguais, cnpj;
+        str = str.replace('.','');
+        str = str.replace('.','');
+        str = str.replace('.','');
+        str = str.replace('-','');
+        str = str.replace('/','');
         cnpj = str;
         digitos_iguais = 1;
         if (cnpj.length < 14 && cnpj.length < 15) return false;
@@ -153,7 +150,8 @@ var VVChecks = (function(){
 		var cnh = value;
 		var char1 = cnh.charAt(0);
 		if (cnh.replace(/[^\d]/g, '').length !== 11 || char1.repeat(11) === cnh) return false;
-		for (var i = 0, j = 9, v = 0; i < 9; ++i, --j) {
+        var i, j, v;
+        for (i = 0, j = 9, v = 0; i < 9; ++i, --j) {
 			v += +(cnh.charAt(i) * j);
 		}
 		var dsc = 0,
@@ -172,10 +170,7 @@ var VVChecks = (function(){
 
 	VVChecks.prototype.isCreditCard = function(value){
         if ( /[^0-9 -]+/.test( value ) )  return false;
-        var nCheck = 0,
-            nDigit = 0,
-            bEven = false,
-            n, cDigit;
+        var nCheck = 0, nDigit = 0, bEven = false, n, cDigit;
         var cardNum = value.replace( /\D/g, '' );
         if ( cardNum.length < 13 || cardNum.length > 19 )  return false;
         for ( n = cardNum.length - 1; n >= 0; n--) {
@@ -212,7 +207,6 @@ var VVChecks = (function(){
             if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth () === mm - 1 ) && ( xdata.getUTCDate() === gg ) ){
                 check = true;
             }else{
-
                 check = false;
             }
         }else{

@@ -40,7 +40,7 @@ var VVElements = (function(){
 		if(name && parent){
 			var s_cls = (cls) ? '.' + cls : '';
 			var s_checked = (isChecked) ? ':checked' : '';
-			return this.getChildren('input'+ s_cls +'[type=radio][name="'+ name +'"]' + s_checked, parent);
+			return this.getChildren('input'+ s_cls + '[type=radio][name="'+ name +'"]' + s_checked, parent);
 		}
 		return null;
 	};

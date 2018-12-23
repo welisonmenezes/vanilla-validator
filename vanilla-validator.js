@@ -109,8 +109,7 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.loopThroughContainers = function(){
 		if(this.containers && this.containers.length){
-			var i, container,
-				total = this.containers.length;
+			var i, container, total = this.containers.length;
 			for(i = 0; i < total; i++){
 				container = this.containers[i];
 				this.defineSubmitionType(container);
@@ -183,8 +182,8 @@ var VanillaValidator = (function(){
 	};
 
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
-		var field;
-		for (var key in this.config.selectors) {
+		var field, key;
+		for (key in this.config.selectors) {
 			if(this.config.selectors.hasOwnProperty(key)){
 				if(key != this.config.selectors.control){
 					field = $.getChildren('.' + this.config.selectors[key] + ':not(.' + this.config.selectors.control + ')', container);
@@ -196,9 +195,7 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.loopThroughFieldsToAddControls = function(fields, container){
 		if(fields){
-			var i,
-				field,
-				total = fields.length;
+			var i, field, total = fields.length;
 			for(i = 0; i < total; i++){
 				field = fields[i];
 				field.classList.add(this.config.selectors.control);
@@ -400,16 +397,14 @@ var VanillaValidator = (function(){
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.add)){
 				this.config.customViewErrors.add.call(this, field, message);
 			}else{
-				var parentEl = (field.constructor.name === 'Array') ? field[field.length-1].parentElement : field.parentElement;
+				var parentEl = (this.isArray(field)) ? field[field.length-1].parentElement : field.parentElement;
 				if(parentEl){
 					var messageContainer = document.createElement('SPAN');
-					messageContainer.innerHTML = message;
-	
 					var messageClass = document.createAttribute('class');
+					messageContainer.innerHTML = message;
 					messageClass.value = this.config.selectors.messageError;
 					messageContainer.setAttributeNode(messageClass);
-	
-					if(field.constructor.name === 'Array'){
+					if(this.isArray(field)){
 						var i, totalEl = field.length;
 						for(i = 1; i < totalEl; i++){
 							field[i].classList.add(this.config.selectors.error);
@@ -417,7 +412,6 @@ var VanillaValidator = (function(){
 					}else{
 						field.classList.add(this.config.selectors.error);
 					}
-					
 					var oldMessage = parentEl.querySelector('.' + this.config.selectors.messageError);
 					if(oldMessage){
 						oldMessage.remove();
@@ -433,9 +427,9 @@ var VanillaValidator = (function(){
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.remove)){
 				this.config.customViewErrors.remove.call(this, field);
 			}else{
-				var parentEl = (field.constructor.name === 'Array') ? field[field.length-1].parentElement : field.parentElement;
+				var parentEl = (this.isArray(field)) ? field[field.length-1].parentElement : field.parentElement;
 				if(parentEl){
-					if(field.constructor.name === 'Array'){
+					if(this.isArray(field)){
 						var i, totalEl = field.length;
 						for(i = 1; i < totalEl; i++){
 							field[i].classList.remove(this.config.selectors.error);
@@ -443,7 +437,6 @@ var VanillaValidator = (function(){
 					}else{
 						field.classList.remove(this.config.selectors.error);
 					}
-	
 					var oldMessage = parentEl.querySelector('.' + this.config.selectors.messageError);
 					if(oldMessage){
 						oldMessage.remove();
@@ -491,13 +484,10 @@ var VanillaValidator = (function(){
 		if (!(this instanceof VanillaValidator)) { 
 			throw new TypeError('Cannot call a class as a function');
 		}
-
 		// Propagates only the attributes.
 		VVChecks.apply(this, arguments);
-
 		// set configurations for this instance
 		_setConfigurations.apply(this, [userConfig]);
-
 		this._init();
 	}
 
