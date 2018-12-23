@@ -12,6 +12,12 @@
 			font-size: 12px;
 			color: red;
 		}
+		.enviar{
+			cursor: pointer;
+			display: inline-block;
+			background: #ccc;
+			padding: 6px;
+		}
 	</style>
 </head>
 <body>
@@ -85,13 +91,14 @@
 			</label>
 		</div>
 		<div>
-			<button type="submit">Enviar</button>
+			<span class="enviar">Enviar</span>
+			<!-- <button type="submit">Enviar</button> -->
 		</div>
 	</form>
 
 	<form action="#" class="form-2" id="form-2">
 		<div>
-			<input type="text" class="required"  placeholder="name">
+			<input type="text" class="required" required  placeholder="name">
 		</div>
 		<div>
 			<input type="text" class="custom-validate" data-validate-key="no-bad-words" placeholder="custom validate">
@@ -109,6 +116,7 @@
 	<script type="text/javascript">
 		var config = {
 			container: '#form-1',
+			button: '.enviar',
 			selectors: {
 				required: 'required'
 			},
@@ -177,7 +185,7 @@
 			selectors: {
 				required: 'required'
 			},
-			novalidateHTML5: false,
+			novalidateHTML5: true,
 			customValidates: {
 				'no-bad-words' : {
 					message: 'Forbiden words detected',
@@ -204,93 +212,6 @@
 			}
 		};
 		var vv2 = new VanillaValidator(config2);
-
-
-		// setTimeout(() => {
-		// 	console.log(vv.container);
-		// 	console.log(vv2.container);
-		// }, 2000);
-
-
-		/*
-		var config = {
-			selectors: {
-				required: 'required',
-				email: 'email'
-			},
-			messages: {
-				required: 'campo obrigatório',
-				email: 'email inválido'
-			},
-			novalidateHTML5: true
-		};
-
-		var userConfig = {
-			selectors: {
-				required: 'userReq'
-			},
-			novalidateHTML5: false
-		};
-
-		var target = {};
-
-		var util = new VVUtils();
-		util.mergeObjectsDeeply(target, config, userConfig);
-
-		console.log(target);
-		*/
-
-		/*
-		var $ = new VVElements();
-		console.log($);
-
-		console.log($.getElements('form'));
-		console.log($.getElement('#form-1'));
-
-		var form1 = $.getElement('#form-1');
-		$.addClass(form1, 'teste');
-		$.removeClass(form1, 'xx');
-		console.log($.getChild('input', form1));
-
-		console.log($.getRadiosByName('teste-radio', form1, 'cls-radio', true));
-
-		console.log($.getCheckboxesByName('teste-checkbox', form1));
-
-		var teste = $.getElement('#teste');
-		$.inner(teste, '0');
-		//*/
-
-		/*
-
-		console.log('Está vazio? ', vv.isEmpty(''));
-		console.log('É um email? ', vv.isEmail('email@email.com'));
-		console.log('É um inteiro? ', vv.isInteger(10000));
-		console.log('É um digito? ', vv.isDigit('a165'));
-		console.log('É uma url? ', vv.isUrl('https://www.google.com'));
-		console.log('Tem menos que 5? ', vv.hasLessThan('weli', 5));
-		console.log('Tem mais que 5? ', vv.hasMoreThan('welison', 5));
-		console.log('Está entre 5 e 7? ', vv.hasRangeLength('welison', 5, 7));
-		console.log('Tem exatamente 7? ', vv.hasEqualLength('welison', 7));
-		console.log('É uma data? ', vv.isDate('12/12/2006'));
-		console.log('É menor que 5? ', vv.isMin(4, 5));
-		console.log('É maior que 5? ', vv.isMax(6, 5));
-		console.log('Está entre 3 e 5? ', vv.isRange(4, 3, 5));
-		console.log('É igual a 5? ', vv.equalTo(5, 5));
-		console.log('É um cpf? ', vv.isCpf('061.052.500-02'));
-		console.log('É um cnpj? ', vv.isCnpj('88.769.754/0001-51'));
-		console.log('É um cnh? ', vv.isCnh('33776838759'));
-		console.log('É um cep? ', vv.isCep('89806-267'));
-		console.log('É um telefone? ', vv.isPhone('+51 (49) 0 9999-9900'));
-		console.log('É um cartão de crédito? ', vv.isCreditCard('5511 4129 2741 1007'));
-		console.log('Tem e extenção .jpg? ', vv.hasExtension('image.jpg', ['.jpg', '.png', '.gif']));
-		console.log('É moeda? ', vv.isCurrency('R$ 231,45'));
-		console.log('É um número? ', vv.isNumeric(6));
-		console.log('É um objeto? ', vv.isObject({}));
-		console.log('É uma função? ', vv.isFunction(function(){}));
-		console.log('É uma função? ', vv.isArray([1, 2, 3]));
-		console.log('É um elemento? ', vv.isHTMLElement(form1));
-
-		//*/
 	</script>
 </body>
 </html>

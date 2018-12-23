@@ -118,6 +118,7 @@ var VanillaValidator = (function(){
 			for(i = 0; i < total; i++){
 				container = this.containers[i];
 				this.defineSubmitionType(container);
+				this.setHTML5NoValidate(container);
 				this.addControlClassesOnFields(container);
 			}
 		}
@@ -455,6 +456,14 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.callCallbackFunction = function(callback, ref, element){
 		if(this.isFunction(callback)){
 			callback.call(ref, element);
+		}
+	};
+
+	VanillaValidator.prototype.setHTML5NoValidate = function(container){
+		if(this.config.novalidateHTML5 && container){
+			if(container.tagName && container.tagName === 'FORM'){
+				container.setAttribute('novalidate', true);
+			}
 		}
 	};
 
