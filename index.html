@@ -189,6 +189,18 @@
 						return true;
 					}
 				}
+			},
+			customViewErrors: {
+				add: function(field, message){
+					var messageContainer = document.createElement('SPAN');
+					messageContainer.innerHTML = message;
+					field.parentElement.insertBefore(messageContainer, field);
+				},
+				remove: function(field){
+					if(field.parentElement.querySelector('span')){
+						field.parentElement.querySelector('span').remove();
+					}
+				}
 			}
 		};
 		var vv2 = new VanillaValidator(config2);

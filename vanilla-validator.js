@@ -72,6 +72,10 @@ var VanillaValidator = (function(){
 						return true;
 					}
 				}
+			},
+			customViewErrors: {
+				add: null,
+				remove: null
 			}
 		};
 
@@ -377,55 +381,60 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.addValidationView = function(field, message){
 		if(field){
-			var parentEl = (field.constructor.name === 'Array') ? field[field.length-1].parentElement : field.parentElement;
-			if(parentEl){
-				var messageContainer = document.createElement('SPAN');
-				message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
-				messageContainer.innerHTML = message;
-
-				var messageClass = document.createAttribute('class');
-				messageClass.value = this.config.selectors.messageError;
-				messageContainer.setAttributeNode(messageClass);
-
-				if(field.constructor.name === 'Array'){
-					var i, totalEl = field.length;
-					for(i = 1; i < totalEl; i++){
-						field[i].classList.add(this.config.selectors.error);
+			message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
+			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.add)){
+				this.config.customViewErrors.add.call(this, field, message);
+			}else{
+				var parentEl = (field.constructor.name === 'Array') ? field[field.length-1].parentElement : field.parentElement;
+				if(parentEl){
+					var messageContainer = document.createElement('SPAN');
+					messageContainer.innerHTML = message;
+	
+					var messageClass = document.createAttribute('class');
+					messageClass.value = this.config.selectors.messageError;
+					messageContainer.setAttributeNode(messageClass);
+	
+					if(field.constructor.name === 'Array'){
+						var i, totalEl = field.length;
+						for(i = 1; i < totalEl; i++){
+							field[i].classList.add(this.config.selectors.error);
+						}
+					}else{
+						field.classList.add(this.config.selectors.error);
 					}
-				}else{
-					field.classList.add(this.config.selectors.error);
-				}
-				
-				var oldMessages = parentEl.querySelectorAll('.' + this.config.selectors.messageError);
-				if(oldMessages){
-					var x, totalOld = oldMessages.length;
-					for(x = 0; x < totalOld; x++){
-						oldMessages[x].remove();
+					
+					var oldMessages = parentEl.querySelectorAll('.' + this.config.selectors.messageError);
+					if(oldMessages){
+						var x, totalOld = oldMessages.length;
+						for(x = 0; x < totalOld; x++){
+							oldMessages[x].remove();
+						}
 					}
+					parentEl.append(messageContainer);
 				}
-				parentEl.append(messageContainer);
 			}
 		}
 	};
 
 	VanillaValidator.prototype.removeValidationView = function(field){
 		if(field){
-			var parentEl = (field.constructor.name === 'Array') ? field[field.length-1].parentElement : field.parentElement;
-			if(parentEl){
-				if(field.constructor.name === 'Array'){
-					var i, totalEl = field.length;
-					for(i = 1; i < totalEl; i++){
-						field[i].classList.remove(this.config.selectors.error);
+			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.remove)){
+				this.config.customViewErrors.remove.call(this, field);
+			}else{
+				var parentEl = (field.constructor.name === 'Array') ? field[field.length-1].parentElement : field.parentElement;
+				if(parentEl){
+					if(field.constructor.name === 'Array'){
+						var i, totalEl = field.length;
+						for(i = 1; i < totalEl; i++){
+							field[i].classList.remove(this.config.selectors.error);
+						}
+					}else{
+						field.classList.remove(this.config.selectors.error);
 					}
-				}else{
-					field.classList.remove(this.config.selectors.error);
-				}
-
-				var oldMessages = parentEl.querySelectorAll('.' + this.config.selectors.messageError);
-				if(oldMessages){
-					var x, totalOld = oldMessages.length;
-					for(x = 0; x < totalOld; x++){
-						oldMessages[x].remove();
+	
+					var oldMessage = parentEl.querySelector('.' + this.config.selectors.messageError);
+					if(oldMessage){
+						oldMessage.remove();
 					}
 				}
 			}
