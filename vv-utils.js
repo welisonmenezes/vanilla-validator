@@ -8,15 +8,17 @@ var VVUtils = (function(){
 		if(isObject(objectDefault) && isObject(objectUser) && isObject(target)){
 			var t;
 			for(t in objectDefault){
-				if(isObject(objectDefault[t]) && isObject(objectDefault[t])){
-					target[t] = objectDefault[t];
-					// applying recursion to copy deeply
-					this.mergeObjectsDeeply(target[t], objectDefault[t], objectUser[t]);
-				}else{
-					if(objectUser[t] !== undefined){
-						target[t] = objectUser[t];
-					}else{
+				if(objectDefault.hasOwnProperty(t)){
+					if(isObject(objectDefault[t]) && isObject(objectDefault[t])){
 						target[t] = objectDefault[t];
+						// applying recursion to copy deeply
+						this.mergeObjectsDeeply(target[t], objectDefault[t], objectUser[t]);
+					}else{
+						if(objectUser[t] !== undefined){
+							target[t] = objectUser[t];
+						}else{
+							target[t] = objectDefault[t];
+						}
 					}
 				}
 			}

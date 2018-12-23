@@ -172,9 +172,11 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
 		var field;
 		for (var key in this.config.selectors) {
-			if(key != this.config.selectors.control){
-				field = $.getChildren('.' + this.config.selectors[key] + ':not(.' + this.config.selectors.control + ')', container);
-				this.loopThroughFieldsToAddControls(field, container);
+			if(this.config.selectors.hasOwnProperty(key)){
+				if(key != this.config.selectors.control){
+					field = $.getChildren('.' + this.config.selectors[key] + ':not(.' + this.config.selectors.control + ')', container);
+					this.loopThroughFieldsToAddControls(field, container);
+				}
 			}
 		}
 	};
