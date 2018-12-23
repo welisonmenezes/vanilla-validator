@@ -118,10 +118,53 @@
 			},
 			novalidateHTML5: false,
 			callbacks: {
-				CB_BeforeValidate: function(element, config){
-					console.log('ELEMENT',element)
-					console.log('CONFIG',config)
-					console.log('THIS',this)
+				beforeValidate: function(element){
+					console.log('beforeValidateError')
+				},
+				afterValidate: function(element){
+					console.log('afterValidateError')
+				},
+				eachFieldError: function(element){
+					console.log('eachFieldError');
+				},
+				eachFieldSuccess: function(element){
+					console.log('eachFieldSuccess');
+				},
+				requiredError: function(element){
+					console.log('requiredError');
+				},
+				requiredSuccess: function(element){
+					console.log('requiredSuccess');
+				},
+				emailError: function(element){
+					console.log('emailError');
+				},
+				emailSuccess: function(element){
+					console.log('emailSuccess');
+				},
+				integerError: function(element){
+					console.log('integerError');
+				},
+				integerSuccess: function(element){
+					console.log('integerSuccess');
+				},
+				digitError: function(element){
+					console.log('digitError');
+				},
+				digitSuccess: function(element){
+					console.log('digitSuccess');
+				},
+				patternError: function(element){
+					console.log('patternError');
+				},
+				patternSuccess: function(element){
+					console.log('patternSuccess');
+				},
+				error: function(element){
+					console.log('error');
+				},
+				success: function(element){
+					console.log('success');
 				}
 			}
 		};

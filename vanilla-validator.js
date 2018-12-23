@@ -39,16 +39,22 @@ var VanillaValidator = (function(){
 			novalidateHTML5: true,
 			validateOnFieldChanges: true,
 			callbacks: {
-				CB_FieldEach: null,
-				CB_Required: null,
-				CB_Email: null,
-				CB_EmailEach: null,
-				CB_BeforeValidate: null,
-				CB_AfterValidate: null,
-				CB_Error: null,
-				CB_ClearErrors: null,
-				CB_ClearErrorsEach: null,
-				CB_Success: null
+				eachFieldError: null,
+				eachFieldSuccess: null,
+				requiredError: null,
+				requiredSuccess: null,
+				emailError: null,
+				emailSuccess: null,
+				integerError: null,
+				integerSuccess: null,
+				digitError: null,
+				digitSuccess: null,
+				patternError: null,
+				patternSuccess: null,
+				beforeValidate: null,
+				afterValidate: null,
+				error: null,
+				success: null
 			},
 			overrides: {
 				OV_Email: null,
@@ -58,7 +64,7 @@ var VanillaValidator = (function(){
 			customValidates: {
 				'my-custom-validate' : {
 					message: 'Custom error message',
-					fn: function(field, message, config){
+					fn: function(field, message){
 						if(field.value === 'foo'){
 							this.addValidationView(field, message);
 							return false;
@@ -147,9 +153,16 @@ var VanillaValidator = (function(){
 	};
 
 	VanillaValidator.prototype.formValidateFinal = function(container){
-		this.callCallbackFunction(this.config.callbacks.CB_BeforeValidate, this, container);
-		console.log('IS VALID?', this.validateContainer(container));
-		this.callCallbackFunction(this.config.callbacks.CB_AfterValidate, this, container);
+		var ret = true;
+		this.callCallbackFunction(this.config.callbacks.beforeValidate, this, container);
+		ret = this.validateContainer(container);
+		this.callCallbackFunction(this.config.callbacks.afterValidate, this, container);
+		if(ret){
+			this.callCallbackFunction(this.config.callbacks.success, this, container);
+		}else{
+			this.callCallbackFunction(this.config.callbacks.error, this, container);
+		}
+		return ret;
 	};
 
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
@@ -237,6 +250,11 @@ var VanillaValidator = (function(){
 				}
 			}
 		}
+		if(ret){
+			this.callCallbackFunction(this.config.callbacks.eachFieldSuccess, this, field);
+		}else{
+			this.callCallbackFunction(this.config.callbacks.eachFieldError, this, field);
+		}
 		return ret;
 	};
 
@@ -259,9 +277,11 @@ var VanillaValidator = (function(){
 		if(field){
 			if(this.isEmpty(field.value)){
 				this.addValidationView(field, this.config.messages.required);
+				this.callCallbackFunction(this.config.callbacks.requiredError, this, field);
 				return false;
 			}
 		}
+		this.callCallbackFunction(this.config.callbacks.requiredSuccess, this, field);
 		return true;
 	};
 
@@ -274,14 +294,15 @@ var VanillaValidator = (function(){
 					var lastFieldRC = fieldsRC[fieldsRC.length-1];
 					if(!fieldChecked){
 						this.addValidationView(lastFieldRC, this.config.messages.required);
+						this.callCallbackFunction(this.config.callbacks.requiredError, this, field);
 						return false;
 					}else{
 						this.removeValidationView(lastFieldRC);
-						return true;
 					}
 				}
 			}
 		}
+		this.callCallbackFunction(this.config.callbacks.requiredSuccess, this, field);
 		return true;
 	};
 
@@ -289,9 +310,11 @@ var VanillaValidator = (function(){
 		if(field){
 			if(!this.isEmail(field.value)){
 				this.addValidationView(field, this.config.messages.email);
+				this.callCallbackFunction(this.config.callbacks.emailError, this, field);
 				return false;
 			}
 		}
+		this.callCallbackFunction(this.config.callbacks.emailSuccess, this, field);
 		return true;
 	};
 
@@ -299,9 +322,11 @@ var VanillaValidator = (function(){
 		if(field){
 			if(!this.isInteger(field.value)){
 				this.addValidationView(field, this.config.messages.integer);
+				this.callCallbackFunction(this.config.callbacks.integerError, this, field);
 				return false;
 			}
 		}
+		this.callCallbackFunction(this.config.callbacks.integerSuccess, this, field);
 		return true;
 	};
 
@@ -309,22 +334,36 @@ var VanillaValidator = (function(){
 		if(field){
 			if(!this.isDigit(field.value)){
 				this.addValidationView(field, this.config.messages.digit);
+				this.callCallbackFunction(this.config.callbacks.digitError, this, field);
 				return false;
 			}
 		}
+		this.callCallbackFunction(this.config.callbacks.digitSuccess, this, field);
 		return true;
+	};
+
+	VanillaValidator.prototype.validatePattern = function(field){
+		if(field){
+			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.customPatternValidation.pattern;
+			var flags = (field.getAttribute('data-flags')) ? field.getAttribute('data-flags') : this.config.customPatternValidation.flags;
+			if(!this.isPattern(field.value, pattern, flags)){
+				this.addValidationView(field, this.config.messages.pattern);
+				this.callCallbackFunction(this.config.callbacks.patternError, this, field);
+				return false;
+			}
+			this.callCallbackFunction(this.config.callbacks.patternSuccess, this, field);
+			return true;
+		}
 	};
 
 	VanillaValidator.prototype.validateCustom = function(field){
 		if(field){
 			var customKey = field.getAttribute('data-validate-key');
 			if(customKey){
-				
 				var myCustom = this.config.customValidates[customKey];
-
 				if(myCustom && myCustom.message && myCustom.fn){
 					if(this.isFunction(myCustom.fn)){
-						return myCustom.fn.call(this, field, myCustom.message, this.config);
+						return myCustom.fn.call(this, field, myCustom.message);
 					}else{
 						console.error('The fn of custom validation must be a function');
 					}
@@ -334,17 +373,6 @@ var VanillaValidator = (function(){
 			}
 		}
 		return true;
-	};
-	VanillaValidator.prototype.validatePattern = function(field){
-		if(field){
-			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.customPatternValidation.pattern;
-			var flags = (field.getAttribute('data-flags')) ? field.getAttribute('data-flags') : this.config.customPatternValidation.flags;
-			if(!this.isPattern(field.value, pattern, flags)){
-				this.addValidationView(field, this.config.messages.pattern);
-				return false;
-			}
-			return true;
-		}
 	};
 
 	VanillaValidator.prototype.addValidationView = function(field, message){
@@ -417,8 +445,8 @@ var VanillaValidator = (function(){
 	};
 
 	VanillaValidator.prototype.callCallbackFunction = function(callback, ref, element){
-		if(typeof callback === 'function'){
-			callback.call(ref, element, this.config);
+		if(this.isFunction(callback)){
+			callback.call(ref, element);
 		}
 	};
 
