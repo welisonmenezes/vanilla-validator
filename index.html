@@ -29,13 +29,13 @@
 			<input type="text" class="required" data-message-error="Obrigatório" placeholder="name">
 		</div>
 		<div>
-			<input type="email" class="required email" placeholder="email">
+			<input type="email" class="email" placeholder="email">
 		</div>
 		<div>
-			<input type="tel" class="required phone" placeholder="phone">
+			<input type="tel" class="phone" placeholder="phone">
 		</div>
 		<div>
-			<input type="text" class="required integer" placeholder="integer">
+			<input type="text" class="integer" placeholder="integer">
 		</div>
 		<div>
 			<input type="text" class="required digit" placeholder="digit">
@@ -159,6 +159,12 @@
 				},
 				digitSuccess: function(element){
 					console.log('digitSuccess');
+				},
+				phoneError: function(element){
+					console.log('phoneError');
+				},
+				phoneSuccess: function(element){
+					console.log('phoneSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');

@@ -49,6 +49,8 @@ var VanillaValidator = (function(){
 				integerSuccess: null,
 				digitError: null,
 				digitSuccess: null,
+				phoneError: null,
+				phoneSuccess: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -241,6 +243,11 @@ var VanillaValidator = (function(){
 				if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess)) ret = false;
 			}
 
+			// PHONE
+			if(field.classList.contains(this.config.selectors.phone)){
+				if(!this.factoryValidate(field, this.isPhone, this.config.messages.phone, this.config.callbacks.phoneError, this.config.callbacks.phoneSuccess)) ret = false;
+			}
+
 			// PATTERN
 			if(field.classList.contains(this.config.selectors.pattern)){
 				if(!this.validatePattern(field)) ret = false;
@@ -286,7 +293,7 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn){
 		if(field){
-			if(!validationFn(field.value)){
+			if(!validationFn.call(this, field.value)){
 				this.addValidationView(field, message);
 				this.callCallbackFunction(callbackErrorFn, this, field);
 				return false;
