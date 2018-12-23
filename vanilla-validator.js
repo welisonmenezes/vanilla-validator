@@ -8,7 +8,7 @@ var VanillaValidator = (function(){
 		this.config = {
 			container: 'form',
 			button: null,
-			validationBy: 'onclick', // [onclick, onsubmit]
+			validationBy: 'onsubmit', // [onclick, onsubmit]
 			novalidateHTML5: true,
 			validateOnFieldChanges: true,
 			selectors: { // just css classes
@@ -32,7 +32,7 @@ var VanillaValidator = (function(){
 				integer: 'Needs to be a integer',
 				digit: 'Only letters and numbers',
 				pattern: 'Needs to matchs pattern',
-				phone: 'Invalid phone number'
+				phone: 'Invalid phone number' // brazilian format
 			},
 			patternValidation: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
@@ -56,11 +56,6 @@ var VanillaValidator = (function(){
 				error: null,
 				success: null
 			},
-			overrides: {
-				OV_Email: null,
-				OV_Required: null,
-				OV_Success: null
-			},
 			customValidates: {
 				'my-custom-validate' : { // must inform this key in html attribute 'data-validate-key'
 					message: 'Custom error message',
@@ -76,7 +71,9 @@ var VanillaValidator = (function(){
 			customViewErrors: {
 				add: null,
 				remove: null
-			}
+			},
+			noFormSuccess: null,
+			onFormSubmit: null
 		};
 
 		// merge with user configurations
@@ -110,7 +107,6 @@ var VanillaValidator = (function(){
 	// makes VanillaValidator inherit from VVChecks
 	_inherits(VanillaValidator, VVChecks);
 
-
 	VanillaValidator.prototype.loopThroughContainers = function(){
 		if(this.containers && this.containers.length){
 			var i, container,
@@ -134,10 +130,10 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.addFormSubmitEvent = function(container){
 		var self = this;
-		if(container.tagName === 'FORM'){
+		if(this.isHTMLForm(container)){
 			container.addEventListener('submit', function(event){
 				event.preventDefault();
-				self.formValidateFinal(container);
+				self.onSuccessFormValidate(container);
 			});
 		}
 	};
@@ -152,8 +148,24 @@ var VanillaValidator = (function(){
 		if(button){
 			button.addEventListener('click', function(event){
 				event.preventDefault();
-				self.formValidateFinal(container);
+				self.onSuccessFormValidate(container);
 			});
+		}
+	};
+
+	VanillaValidator.prototype.onSuccessFormValidate = function(container){
+		if(container && this.formValidateFinal(container)){
+			if(this.isHTMLForm(container)){
+				if(this.config.onFormSubmit && this.isFunction(this.config.onFormSubmit)){
+					this.config.onFormSubmit.call(this, container);
+				}else{
+					container.submit();
+				}
+			}else{
+				if(this.config.noFormSuccess && this.isFunction(this.config.noFormSuccess)){
+					this.config.noFormSuccess.call(this, container);
+				}
+			}
 		}
 	};
 
@@ -461,7 +473,7 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.setHTML5NoValidate = function(container){
 		if(this.config.novalidateHTML5 && container){
-			if(container.tagName && container.tagName === 'FORM'){
+			if(this.isHTMLForm(container)){
 				container.setAttribute('novalidate', true);
 			}
 		}

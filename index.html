@@ -91,12 +91,11 @@
 			</label>
 		</div>
 		<div>
-			<span class="enviar">Enviar</span>
-			<!-- <button type="submit">Enviar</button> -->
+			<button type="submit">Enviar</button>
 		</div>
 	</form>
 
-	<form action="#" class="form-2" id="form-2">
+	<div class="form-2" id="form-2">
 		<div>
 			<input type="text" class="required" required  placeholder="name">
 		</div>
@@ -104,9 +103,9 @@
 			<input type="text" class="custom-validate" data-validate-key="no-bad-words" placeholder="custom validate">
 		</div>
 		<div>
-			<button type="submit">Enviar</button>
+			<span class="enviar">Enviar</span>
 		</div>
-	</form>
+	</div>
 
 	<script src="vv-checks.js"></script>
 	<script src="vv-elements.js"></script>
@@ -116,7 +115,6 @@
 	<script type="text/javascript">
 		var config = {
 			container: '#form-1',
-			button: '.enviar',
 			selectors: {
 				required: 'required'
 			},
@@ -181,7 +179,8 @@
 
 		var config2 = {
 			container: '#form-2',
-			validationBy: 'onsubmit',
+			validationBy: 'onclick',
+			button: '.enviar',
 			selectors: {
 				required: 'required'
 			},
@@ -203,12 +202,22 @@
 					var messageContainer = document.createElement('SPAN');
 					messageContainer.innerHTML = message;
 					field.parentElement.insertBefore(messageContainer, field);
+					field.classList.add(this.config.selectors.error);
 				},
 				remove: function(field){
 					if(field.parentElement.querySelector('span')){
 						field.parentElement.querySelector('span').remove();
+						field.classList.remove(this.config.selectors.error);
 					}
 				}
+			},
+			noFormSuccess: function(container){
+				console.log('CONTAINER', container);
+				alert('do something here');
+			},
+			onFormSubmit: function(container){
+				console.log('FORM', container);
+				alert('submitin your data here');
 			}
 		};
 		var vv2 = new VanillaValidator(config2);

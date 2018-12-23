@@ -249,6 +249,10 @@ var VVChecks = (function(){
         return element instanceof Element || element instanceof HTMLDocument;
     };
 
+    VVChecks.prototype.isHTMLForm = function(element){
+        return (this.isHTMLElement(element) && element.tagName && element.tagName === 'FORM');
+    };
+
     VVChecks.prototype.isPattern = function(value, pattern, flags){
         return new RegExp(pattern, flags).test(value);
     };
