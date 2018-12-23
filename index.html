@@ -41,6 +41,9 @@
 			<input type="text" class="pattern" data-pattern="[x]" data-flags="ig" data-message-error="Precisa conter um x" placeholder="custom pattern">
 		</div>
 		<div>
+			<input type="text" class="custom-validate" data-validate-key="my-custom-validate" placeholder="custom validate">
+		</div>
+		<div>
 			<input type="file" class="required">
 		</div>
 		<div>
@@ -91,6 +94,9 @@
 			<input type="text" class="required"  placeholder="name">
 		</div>
 		<div>
+			<input type="text" class="custom-validate" data-validate-key="no-bad-words" placeholder="custom validate">
+		</div>
+		<div>
 			<button type="submit">Enviar</button>
 		</div>
 	</form>
@@ -128,7 +134,19 @@
 			selectors: {
 				required: 'required'
 			},
-			novalidateHTML5: false
+			novalidateHTML5: false,
+			customValidates: {
+				'no-bad-words' : {
+					message: 'Forbiden words detected',
+					fn: function(field, message, config){
+						if(field.value === 'java' || field.value === 'php'){
+							this.addValidationView(field, message);
+							return false;
+						}
+						return true;
+					}
+				}
+			}
 		};
 		var vv2 = new VanillaValidator(config2);
 

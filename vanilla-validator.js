@@ -19,6 +19,7 @@ var VanillaValidator = (function(){
 				pattern: 'pattern',
 				cpf: 'cpf',
 				cnpj: 'cnpj',
+				customValidate: 'custom-validate',
 				error: 'error',
 				formError: 'form-error',
 				messageError: 'msg-error'
@@ -53,6 +54,18 @@ var VanillaValidator = (function(){
 				OV_Email: null,
 				OV_Required: null,
 				OV_Success: null
+			},
+			customValidates: {
+				'my-custom-validate' : {
+					message: 'Custom error message',
+					fn: function(field, message, config){
+						if(field.value === 'foo'){
+							this.addValidationView(field, message);
+							return false;
+						}
+						return true;
+					}
+				}
 			}
 		};
 
@@ -157,6 +170,7 @@ var VanillaValidator = (function(){
 			for(i = 0; i < total; i++){
 				field = fields[i];
 				field.classList.add(this.config.selectors.control);
+				this.addCustomValidations(field);
 				if(this.config.validateOnFieldChanges){
 					this.addValidationsOnFieldsEvent(field, container);
 				}
@@ -208,6 +222,12 @@ var VanillaValidator = (function(){
 				if(!this.validatePattern(field)) ret = false;
 			}
 
+			// CUSTOM VALIDATE 
+			if(field.classList.contains(this.config.selectors.customValidate)){
+				//console.log(this.config.selectors.customValidate)
+				if(!this.validateCustom(field)) ret = false;
+			}
+
 			// REQUIRED
 			if(field.classList.contains(this.config.selectors.required)){
 				if(field.type === 'checkbox' || field.type === 'radio'){
@@ -241,8 +261,8 @@ var VanillaValidator = (function(){
 				this.addValidationView(field, this.config.messages.required);
 				return false;
 			}
-			return true;
 		}
+		return true;
 	};
 
 	VanillaValidator.prototype.validateRequiredCR = function(field, container){
@@ -262,6 +282,7 @@ var VanillaValidator = (function(){
 				}
 			}
 		}
+		return true;
 	};
 
 	VanillaValidator.prototype.validateEmail = function(field){
@@ -270,8 +291,8 @@ var VanillaValidator = (function(){
 				this.addValidationView(field, this.config.messages.email);
 				return false;
 			}
-			return true;
 		}
+		return true;
 	};
 
 	VanillaValidator.prototype.validateInteger = function(field){
@@ -280,8 +301,8 @@ var VanillaValidator = (function(){
 				this.addValidationView(field, this.config.messages.integer);
 				return false;
 			}
-			return true;
 		}
+		return true;
 	};
 
 	VanillaValidator.prototype.validateDigit = function(field){
@@ -290,10 +311,30 @@ var VanillaValidator = (function(){
 				this.addValidationView(field, this.config.messages.digit);
 				return false;
 			}
-			return true;
 		}
+		return true;
 	};
 
+	VanillaValidator.prototype.validateCustom = function(field){
+		if(field){
+			var customKey = field.getAttribute('data-validate-key');
+			if(customKey){
+				
+				var myCustom = this.config.customValidates[customKey];
+
+				if(myCustom && myCustom.message && myCustom.fn){
+					if(this.isFunction(myCustom.fn)){
+						return myCustom.fn.call(this, field, myCustom.message, this.config);
+					}else{
+						console.error('The fn of custom validation must be a function');
+					}
+				}else{
+					console.error('Check if your custom validation is correctly configured');
+				}
+			}
+		}
+		return true;
+	};
 	VanillaValidator.prototype.validatePattern = function(field){
 		if(field){
 			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.customPatternValidation.pattern;
@@ -363,6 +404,18 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	VanillaValidator.prototype.addCustomValidations = function(field){
+		if(field){
+			var customKey = field.getAttribute('data-validate-key');
+			if(customKey){
+				var myCustom = this.config.customValidates[customKey];
+				if(!myCustom){
+					this.config.customValidates[customKey] = this.userConfig.customValidates[customKey];
+				}
+			}
+		}
+	};
+
 	VanillaValidator.prototype.callCallbackFunction = function(callback, ref, element){
 		if(typeof callback === 'function'){
 			callback.call(ref, element, this.config);
@@ -376,6 +429,7 @@ var VanillaValidator = (function(){
 
 	// the constructor
 	function VanillaValidator(userConfig){
+		this.userConfig = userConfig;
 		// force call with new operator
 		if (!(this instanceof VanillaValidator)) { 
 			throw new TypeError('Cannot call a class as a function');
