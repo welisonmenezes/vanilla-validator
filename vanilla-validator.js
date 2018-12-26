@@ -19,6 +19,8 @@ var VanillaValidator = (function(){
 				digit: 'digit',
 				pattern: 'pattern',
 				phone: 'phone',
+				url: 'url',
+				maxLength: 'less-than',
 				cpf: 'cpf',
 				cnpj: 'cnpj',
 				customValidate: 'custom-validate',
@@ -32,11 +34,14 @@ var VanillaValidator = (function(){
 				integer: 'Needs to be a integer',
 				digit: 'Only letters and numbers',
 				pattern: 'Needs to matchs pattern',
-				phone: 'Invalid phone number' // brazilian format
+				phone: 'Invalid phone number', // brazilian format
+				url: 'Invalid url',
+				maxLength: 'The amount of characters is greater than allowed'
 			},
-			patternValidation: {
+			customValidationsConfig: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
-				flags: 'g' // or by html attribute 'data-flags'
+				flags: 'g', // or by html attribute 'data-flags'
+				maxLength: 5
 			},
 			callbacks: {
 				eachFieldError: null,
@@ -51,6 +56,8 @@ var VanillaValidator = (function(){
 				digitSuccess: null,
 				phoneError: null,
 				phoneSuccess: null,
+				urlError: null,
+				urlSuccess: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -183,6 +190,21 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	VanillaValidator.prototype.validateContainer = function(container){
+		var ret = true;
+		if(container){
+			var fields = $.getChildren('.' + this.config.selectors.control, container);
+			if(fields){
+				var i, total = fields.length, field;
+				for(i = 0; i < total; i++){
+					field = fields[i];
+					if(!this.validateFields(field, container)) ret = false;
+				}
+			}
+		}
+		return ret;
+	};
+
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
 		var field, key;
 		for (key in this.config.selectors) {
@@ -248,6 +270,17 @@ var VanillaValidator = (function(){
 				if(!this.factoryValidate(field, this.isPhone, this.config.messages.phone, this.config.callbacks.phoneError, this.config.callbacks.phoneSuccess)) ret = false;
 			}
 
+			// URL
+			if(field.classList.contains(this.config.selectors.url)){
+				if(!this.factoryValidate(field, this.isUrl, this.config.messages.url, this.config.callbacks.urlError, this.config.callbacks.urlSuccess)) ret = false;
+			}
+
+			// MAXLENGTH
+			if(field.classList.contains(this.config.selectors.maxLength)){
+				var maxLength = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.maxLength;
+				if(!this.factoryValidate(field, this.maxLength, this.config.messages.maxLength, this.config.callbacks.maxLengthError, this.config.callbacks.maxLengthSuccess, maxLength)) ret = false;
+			}
+
 			// PATTERN
 			if(field.classList.contains(this.config.selectors.pattern)){
 				if(!this.validatePattern(field)) ret = false;
@@ -276,24 +309,9 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
-	VanillaValidator.prototype.validateContainer = function(container){
-		var ret = true;
-		if(container){
-			var fields = $.getChildren('.' + this.config.selectors.control, container);
-			if(fields){
-				var i, total = fields.length, field;
-				for(i = 0; i < total; i++){
-					field = fields[i];
-					if(!this.validateFields(field, container)) ret = false;
-				}
-			}
-		}
-		return ret;
-	};
-
-	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn){
+	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn, otherParams){
 		if(field){
-			if(!validationFn.call(this, field.value)){
+			if(!validationFn.call(this, field.value, otherParams)){
 				this.addValidationView(field, message);
 				this.callCallbackFunction(callbackErrorFn, this, field);
 				return false;
@@ -326,8 +344,8 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.validatePattern = function(field){
 		if(field){
-			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.patternValidation.pattern;
-			var flags = (field.getAttribute('data-flags')) ? field.getAttribute('data-flags') : this.config.patternValidation.flags;
+			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.customValidationsConfig.pattern;
+			var flags = (field.getAttribute('data-flags')) ? field.getAttribute('data-flags') : this.config.customValidationsConfig.flags;
 			if(!this.isPattern(field.value, pattern, flags)){
 				this.addValidationView(field, this.config.messages.pattern);
 				this.callCallbackFunction(this.config.callbacks.patternError, this, field);
@@ -424,9 +442,9 @@ var VanillaValidator = (function(){
 		}
 	};
 
-	VanillaValidator.prototype.callCallbackFunction = function(callback, ref, element){
+	VanillaValidator.prototype.callCallbackFunction = function(callback, ref, element, otherParams){
 		if(this.isFunction(callback)){
-			callback.call(ref, element);
+			callback.call(ref, element, otherParams);
 		}
 	};
 
@@ -438,7 +456,7 @@ var VanillaValidator = (function(){
 		}
 	};
 
-	VanillaValidator.prototype._init = function(){
+	VanillaValidator.prototype.init = function(){
 		this.containers = $.getElements(this.config.container);
 		this.loopThroughContainers();
 	};
@@ -454,7 +472,7 @@ var VanillaValidator = (function(){
 		VVChecks.apply(this, arguments);
 		// set configurations for this instance
 		_setConfigurations.apply(this, [userConfig]);
-		this._init();
+		this.init();
 	}
 
 	return VanillaValidator;

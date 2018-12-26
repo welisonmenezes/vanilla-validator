@@ -41,6 +41,12 @@
 			<input type="text" class="required digit" placeholder="digit">
 		</div>
 		<div>
+			<input type="text" class="url" placeholder="url">
+		</div>
+		<div>
+			<input type="text" class="less-than" data-max-length="7" placeholder="less than">
+		</div>
+		<div>
 			<input type="text" class="pattern" placeholder="pattern">
 		</div>
 		<div>
@@ -165,6 +171,18 @@
 				},
 				phoneSuccess: function(element){
 					console.log('phoneSuccess');
+				},
+				urlError: function(element){
+					console.log('urlError');
+				},
+				urlSuccess: function(element){
+					console.log('urlSuccess');
+				},
+				maxLengthError: function(element){
+					console.log('maxLengthError');
+				},
+				maxLengthSuccess: function(element){
+					console.log('maxLengthSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');

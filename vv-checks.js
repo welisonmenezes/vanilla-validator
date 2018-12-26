@@ -22,7 +22,7 @@ var VVChecks = (function(){
         return (pattern.test(value)) || (! this.isNotEmpty(value));
 	};
 
-    VVChecks.prototype.hasLessThan = function(value, size){
+    VVChecks.prototype.maxLength = function(value, size){
         return (value.length < size) || (! this.isNotEmpty(value));
     };
 
