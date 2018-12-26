@@ -39,11 +39,11 @@ var VVChecks = (function(){
     };
 
     VVChecks.prototype.isMin = function(value, min){
-        return (value < min) || (! this.isNotEmpty(value));
+        return (value >= min) || (! this.isNotEmpty(value));
     };
 
     VVChecks.prototype.isMax = function(value, max){
-        return (value > max) || (! this.isNotEmpty(value));
+        return (value <= max) || (! this.isNotEmpty(value));
     };
 
     VVChecks.prototype.isRange = function(value, min, max){

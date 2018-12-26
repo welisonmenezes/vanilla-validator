@@ -24,6 +24,8 @@ var VanillaValidator = (function(){
 				minLength: 'min-length',
 				rangeLength: 'range-length',
 				sameLength: 'same-length',
+				max: 'max',
+				min: 'min',
 				cpf: 'cpf',
 				cnpj: 'cnpj',
 				customValidate: 'custom-validate',
@@ -42,7 +44,9 @@ var VanillaValidator = (function(){
 				maxLength: 'The amount of characters is greater than allowed',
 				minLength: 'The amount of characters is less than allowed',
 				rangeLength: 'The number of characters must be between 3 and 5',
-				sameLength: 'The value needs to have 5 characters'
+				sameLength: 'The value needs to have 5 characters',
+				max: 'The value needs to be less or equals to 5',
+				min: 'The value needs to be greater or equals to 3'
 			},
 			customValidationsConfig: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
@@ -53,7 +57,9 @@ var VanillaValidator = (function(){
 				rangeLength: {
 					min: 3,
 					max: 5
-				}
+				},
+				max: 5,
+				min: 3
 			},
 			callbacks: {
 				eachFieldError: null,
@@ -78,6 +84,10 @@ var VanillaValidator = (function(){
 				rangeLengthSuccess: null,
 				sameLengthError: null,
 				sameLengthSuccess: null,
+				maxError: null,
+				maxSuccess: null,
+				minError: null,
+				minSuccess: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -266,7 +276,7 @@ var VanillaValidator = (function(){
 	};
 
 	VanillaValidator.prototype.validateFields = function(field, container){
-		var ret = true, maxLength, minLength, rangeLength, sameLength;
+		var ret = true, min, max, range, equal;
 		if(field && container){
 			this.removeValidationView(field);
 
@@ -297,28 +307,40 @@ var VanillaValidator = (function(){
 
 			// MAXLENGTH
 			if(field.classList.contains(this.config.selectors.maxLength)){
-				maxLength = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.maxLength;
-				if(!this.factoryValidate(field, this.maxLength, this.config.messages.maxLength, this.config.callbacks.maxLengthError, this.config.callbacks.maxLengthSuccess, maxLength)) ret = false;
+				max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.maxLength;
+				if(!this.factoryValidate(field, this.maxLength, this.config.messages.maxLength, this.config.callbacks.maxLengthError, this.config.callbacks.maxLengthSuccess, max)) ret = false;
 			}
 
 			// MINLENGTH
 			if(field.classList.contains(this.config.selectors.minLength)){
-				minLength = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.minLength;
-				if(!this.factoryValidate(field, this.minLength, this.config.messages.minLength, this.config.callbacks.minLengthError, this.config.callbacks.minLengthSuccess, minLength)) ret = false;
+				min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.minLength;
+				if(!this.factoryValidate(field, this.minLength, this.config.messages.minLength, this.config.callbacks.minLengthError, this.config.callbacks.minLengthSuccess, min)) ret = false;
 			}
 
 			// RANGELENGTH
 			if(field.classList.contains(this.config.selectors.rangeLength)){
-				maxLength = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.rangeLength.max;
-				minLength = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.rangeLength.min;
-				rangeLength = [minLength, maxLength];
-				if(!this.factoryValidate(field, this.rangeLength, this.config.messages.rangeLength, this.config.callbacks.rangeLengthError, this.config.callbacks.rangeLengthSuccess, rangeLength)) ret = false;
+				max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.rangeLength.max;
+				min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.rangeLength.min;
+				range = [min, max];
+				if(!this.factoryValidate(field, this.rangeLength, this.config.messages.rangeLength, this.config.callbacks.rangeLengthError, this.config.callbacks.rangeLengthSuccess, range)) ret = false;
 			}
 
 			// SAMELENGTH
 			if(field.classList.contains(this.config.selectors.sameLength)){
-				sameLength = (field.getAttribute('data-same-length')) ? parseInt(field.getAttribute('data-same-length')) : this.config.customValidationsConfig.sameLength;
-				if(!this.factoryValidate(field, this.sameLength, this.config.messages.sameLength, this.config.callbacks.sameLengthError, this.config.callbacks.sameLengthSuccess, sameLength)) ret = false;
+				equal = (field.getAttribute('data-same-length')) ? parseInt(field.getAttribute('data-same-length')) : this.config.customValidationsConfig.sameLength;
+				if(!this.factoryValidate(field, this.sameLength, this.config.messages.sameLength, this.config.callbacks.sameLengthError, this.config.callbacks.sameLengthSuccess, equal)) ret = false;
+			}
+
+			// MAX
+			if(field.classList.contains(this.config.selectors.max)){
+				max = (field.getAttribute('data-max')) ? parseInt(field.getAttribute('data-max')) : this.config.customValidationsConfig.max;
+				if(!this.factoryValidate(field, this.isMax, this.config.messages.max, this.config.callbacks.maxError, this.config.callbacks.maxSuccess, max)) ret = false;
+			}
+
+			// MIN
+			if(field.classList.contains(this.config.selectors.min)){
+				min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.min;
+				if(!this.factoryValidate(field, this.isMin, this.config.messages.min, this.config.callbacks.minError, this.config.callbacks.minSuccess, min)) ret = false;
 			}
 
 			// PATTERN

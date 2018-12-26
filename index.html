@@ -56,6 +56,12 @@
 			<input type="text" class="same-length" data-same-length="5" placeholder="same length">
 		</div>
 		<div>
+			<input type="text" class="max" data-max="5" placeholder="max">
+		</div>
+		<div>
+			<input type="text" class="min" data-min="3" placeholder="min">
+		</div>
+		<div>
 			<input type="text" class="pattern" placeholder="pattern">
 		</div>
 		<div>
@@ -210,6 +216,18 @@
 				},
 				sameLengthSuccess: function(element){
 					console.log('sameLengthSuccess');
+				},
+				maxError: function(element){
+					console.log('maxError');
+				},
+				maxSuccess: function(element){
+					console.log('maxSuccess');
+				},
+				minError: function(element){
+					console.log('minError');
+				},
+				minSuccess: function(element){
+					console.log('minSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');
