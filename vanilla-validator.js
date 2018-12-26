@@ -23,6 +23,7 @@ var VanillaValidator = (function(){
 				maxLength: 'max-length',
 				minLength: 'min-length',
 				rangeLength: 'range-length',
+				sameLength: 'same-length',
 				cpf: 'cpf',
 				cnpj: 'cnpj',
 				customValidate: 'custom-validate',
@@ -40,13 +41,15 @@ var VanillaValidator = (function(){
 				url: 'Invalid url',
 				maxLength: 'The amount of characters is greater than allowed',
 				minLength: 'The amount of characters is less than allowed',
-				rangeLength: 'the number of characters must be between 3 and 5'
+				rangeLength: 'The number of characters must be between 3 and 5',
+				sameLength: 'The value needs to have 5 characters'
 			},
 			customValidationsConfig: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
 				flags: 'g', // or by html attribute 'data-flags'
 				maxLength: 5,
 				minLength: 5,
+				sameLength: 5,
 				rangeLength: {
 					min: 3,
 					max: 5
@@ -73,6 +76,8 @@ var VanillaValidator = (function(){
 				minLengthSuccess: null,
 				rangeLengthError: null,
 				rangeLengthSuccess: null,
+				sameLengthError: null,
+				sameLengthSuccess: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -261,7 +266,7 @@ var VanillaValidator = (function(){
 	};
 
 	VanillaValidator.prototype.validateFields = function(field, container){
-		var ret = true, maxLength, minLength, rangeLength;
+		var ret = true, maxLength, minLength, rangeLength, sameLength;
 		if(field && container){
 			this.removeValidationView(field);
 
@@ -308,6 +313,12 @@ var VanillaValidator = (function(){
 				minLength = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.rangeLength.min;
 				rangeLength = [minLength, maxLength];
 				if(!this.factoryValidate(field, this.rangeLength, this.config.messages.rangeLength, this.config.callbacks.rangeLengthError, this.config.callbacks.rangeLengthSuccess, rangeLength)) ret = false;
+			}
+
+			// SAMELENGTH
+			if(field.classList.contains(this.config.selectors.sameLength)){
+				sameLength = (field.getAttribute('data-same-length')) ? parseInt(field.getAttribute('data-same-length')) : this.config.customValidationsConfig.sameLength;
+				if(!this.factoryValidate(field, this.sameLength, this.config.messages.sameLength, this.config.callbacks.sameLengthError, this.config.callbacks.sameLengthSuccess, sameLength)) ret = false;
 			}
 
 			// PATTERN

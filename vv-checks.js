@@ -34,7 +34,7 @@ var VVChecks = (function(){
         return ( (value.length <= range[1]) && (value.length >= range[0]) ) || (! this.isNotEmpty(value));
     };
 
-    VVChecks.prototype.hasEqualLength = function(value, size){
+    VVChecks.prototype.sameLength = function(value, size){
         return (value.length == size) || (! this.isNotEmpty(value));
     };
 

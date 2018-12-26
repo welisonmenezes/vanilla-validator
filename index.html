@@ -53,6 +53,9 @@
 			<input type="text" class="range-length" data-min-length="2" data-max-length="3" data-message-error="the number of characters must be between 2 and 3" placeholder="range length">
 		</div>
 		<div>
+			<input type="text" class="same-length" data-same-length="5" placeholder="same length">
+		</div>
+		<div>
 			<input type="text" class="pattern" placeholder="pattern">
 		</div>
 		<div>
@@ -201,6 +204,12 @@
 				},
 				rangeLengthSuccess: function(element){
 					console.log('rangeLengthSuccess');
+				},
+				sameLengthError: function(element){
+					console.log('sameLengthError');
+				},
+				sameLengthSuccess: function(element){
+					console.log('sameLengthSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');
