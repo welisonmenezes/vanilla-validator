@@ -23,15 +23,15 @@ var VVChecks = (function(){
 	};
 
     VVChecks.prototype.maxLength = function(value, size){
-        return (value.length < size) || (! this.isNotEmpty(value));
+        return (value.length <= size) || (! this.isNotEmpty(value));
     };
 
-    VVChecks.prototype.hasMoreThan = function(value, size){
-        return (value.length > size) || (! this.isNotEmpty(value));
+    VVChecks.prototype.minLength = function(value, size){
+        return (value.length >= size) || (! this.isNotEmpty(value));
     };
 
-    VVChecks.prototype.hasRangeLength = function(value, min, max){
-        return ( (value.length <= max) && (value.length >= min) ) || (! this.isNotEmpty(value));
+    VVChecks.prototype.rangeLength = function(value, range){
+        return ( (value.length <= range[1]) && (value.length >= range[0]) ) || (! this.isNotEmpty(value));
     };
 
     VVChecks.prototype.hasEqualLength = function(value, size){

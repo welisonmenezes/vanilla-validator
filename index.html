@@ -44,7 +44,13 @@
 			<input type="text" class="url" placeholder="url">
 		</div>
 		<div>
-			<input type="text" class="less-than" data-max-length="7" placeholder="less than">
+			<input type="text" class="max-length" data-max-length="7" placeholder="max length">
+		</div>
+		<div>
+			<input type="text" class="min-length" data-min-length="7" placeholder="min length">
+		</div>
+		<div>
+			<input type="text" class="range-length" data-min-length="2" data-max-length="3" data-message-error="the number of characters must be between 2 and 3" placeholder="range length">
 		</div>
 		<div>
 			<input type="text" class="pattern" placeholder="pattern">
@@ -183,6 +189,18 @@
 				},
 				maxLengthSuccess: function(element){
 					console.log('maxLengthSuccess');
+				},
+				minLengthError: function(element){
+					console.log('minLengthError');
+				},
+				minLengthSuccess: function(element){
+					console.log('minLengthSuccess');
+				},
+				rangeLengthError: function(element){
+					console.log('rangeLengthError');
+				},
+				rangeLengthSuccess: function(element){
+					console.log('rangeLengthSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');
