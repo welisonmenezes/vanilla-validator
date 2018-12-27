@@ -26,6 +26,8 @@ var VanillaValidator = (function(){
 				sameLength: 'same-length',
 				max: 'max',
 				min: 'min',
+				range: 'range',
+				equalTo: 'equal-to',
 				cpf: 'cpf',
 				cnpj: 'cnpj',
 				customValidate: 'custom-validate',
@@ -46,7 +48,9 @@ var VanillaValidator = (function(){
 				rangeLength: 'The number of characters must be between 3 and 5',
 				sameLength: 'The value needs to have 5 characters',
 				max: 'The value needs to be less or equals to 5',
-				min: 'The value needs to be greater or equals to 3'
+				min: 'The value needs to be greater or equals to 3',
+				range: 'The value needs to be between 3 and 5',
+				equalTo: 'The value needs to be 10'
 			},
 			customValidationsConfig: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
@@ -59,7 +63,12 @@ var VanillaValidator = (function(){
 					max: 5
 				},
 				max: 5,
-				min: 3
+				min: 3,
+				range: {
+					max: 5,
+					min: 3
+				},
+				equalTo: 10
 			},
 			callbacks: {
 				eachFieldError: null,
@@ -88,6 +97,10 @@ var VanillaValidator = (function(){
 				maxSuccess: null,
 				minError: null,
 				minSuccess: null,
+				rangeError: null,
+				rangeSuccess: null,
+				equalToError: null,
+				equalToSuccess: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -319,8 +332,8 @@ var VanillaValidator = (function(){
 
 			// RANGELENGTH
 			if(field.classList.contains(this.config.selectors.rangeLength)){
-				max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.rangeLength.max;
 				min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.rangeLength.min;
+				max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.rangeLength.max;
 				range = [min, max];
 				if(!this.factoryValidate(field, this.rangeLength, this.config.messages.rangeLength, this.config.callbacks.rangeLengthError, this.config.callbacks.rangeLengthSuccess, range)) ret = false;
 			}
@@ -341,6 +354,20 @@ var VanillaValidator = (function(){
 			if(field.classList.contains(this.config.selectors.min)){
 				min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.min;
 				if(!this.factoryValidate(field, this.isMin, this.config.messages.min, this.config.callbacks.minError, this.config.callbacks.minSuccess, min)) ret = false;
+			}
+
+			// RANGE
+			if(field.classList.contains(this.config.selectors.range)){
+				min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.range.min;
+				max = (field.getAttribute('data-max')) ? parseInt(field.getAttribute('data-max')) : this.config.customValidationsConfig.range.max;
+				range = [min, max];
+				if(!this.factoryValidate(field, this.isRange, this.config.messages.range, this.config.callbacks.rangeError, this.config.callbacks.rangeSuccess, range)) ret = false;
+			}
+
+			// EQUALTO
+			if(field.classList.contains(this.config.selectors.equalTo)){
+				equal = (field.getAttribute('data-equal-to')) ? parseInt(field.getAttribute('data-equal-to')) : this.config.customValidationsConfig.equalTo;
+				if(!this.factoryValidate(field, this.equalTo, this.config.messages.equalTo, this.config.callbacks.equalToError, this.config.callbacks.equalToSuccess, equal)) ret = false;
 			}
 
 			// PATTERN

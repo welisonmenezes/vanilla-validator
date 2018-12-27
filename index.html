@@ -62,6 +62,12 @@
 			<input type="text" class="min" data-min="3" placeholder="min">
 		</div>
 		<div>
+			<input type="text" class="range" placeholder="range">
+		</div>
+		<div>
+			<input type="text" class="equal-to" xdata-min="3" placeholder="equal to">
+		</div>
+		<div>
 			<input type="text" class="pattern" placeholder="pattern">
 		</div>
 		<div>
@@ -228,6 +234,18 @@
 				},
 				minSuccess: function(element){
 					console.log('minSuccess');
+				},
+				rangeError: function(element){
+					console.log('rangeError');
+				},
+				rangeSuccess: function(element){
+					console.log('rangeSuccess');
+				},
+				equalToError: function(element){
+					console.log('equalToError');
+				},
+				equalToSuccess: function(element){
+					console.log('equalToSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');

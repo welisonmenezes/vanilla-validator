@@ -46,12 +46,12 @@ var VVChecks = (function(){
         return (value <= max) || (! this.isNotEmpty(value));
     };
 
-    VVChecks.prototype.isRange = function(value, min, max){
-        return ( (value <= max) && (value >= min) ) || (! this.isNotEmpty(value));
+    VVChecks.prototype.isRange = function(value, range){
+        return ( (value <= range[1]) && (value >= range[0]) ) || (! this.isNotEmpty(value));
     };
 
     VVChecks.prototype.equalTo = function(value, param){
-        return (value === param) || (! this.isNotEmpty(value));
+        return (value.toString() === param.toString()) || (! this.isNotEmpty(value));
     };
 
     VVChecks.prototype.isCpf = function(value){
