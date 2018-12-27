@@ -44,6 +44,12 @@
 			<input type="text" class="url" placeholder="url">
 		</div>
 		<div>
+			<input type="text" class="date" placeholder="date">
+		</div>
+		<div>
+			<input type="text" class="cep" placeholder="cep">
+		</div>
+		<div>
 			<input type="text" class="max-length" data-max-length="7" placeholder="max length">
 		</div>
 		<div>
@@ -198,6 +204,18 @@
 				},
 				urlSuccess: function(element){
 					console.log('urlSuccess');
+				},
+				dateError: function(element){
+					console.log('dateError');
+				},
+				dateSuccess: function(element){
+					console.log('dateSuccess');
+				},
+				cepError: function(element){
+					console.log('cepError');
+				},
+				cepSuccess: function(element){
+					console.log('cepSuccess');
 				},
 				maxLengthError: function(element){
 					console.log('maxLengthError');

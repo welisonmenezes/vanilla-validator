@@ -18,8 +18,10 @@ var VanillaValidator = (function(){
 				integer: 'integer',
 				digit: 'digit',
 				pattern: 'pattern',
-				phone: 'phone',
+				phone: 'phone', // brazilian format
 				url: 'url',
+				date: 'date', // brazilian format
+				cep: 'cep', // brazilian format
 				maxLength: 'max-length',
 				minLength: 'min-length',
 				rangeLength: 'range-length',
@@ -41,8 +43,10 @@ var VanillaValidator = (function(){
 				integer: 'Needs to be a integer',
 				digit: 'Only letters and numbers',
 				pattern: 'Needs to matchs pattern',
-				phone: 'Invalid phone number', // brazilian format
+				phone: 'Invalid phone number',
 				url: 'Invalid url',
+				date: 'Invalid date',
+				cep: 'Invalid cep',
 				maxLength: 'The amount of characters is greater than allowed',
 				minLength: 'The amount of characters is less than allowed',
 				rangeLength: 'The number of characters must be between 3 and 5',
@@ -85,6 +89,10 @@ var VanillaValidator = (function(){
 				phoneSuccess: null,
 				urlError: null,
 				urlSuccess: null,
+				dateError: null,
+				dateSuccess: null,
+				cepError: null,
+				cepSuccess: null,
 				maxLengthError: null,
 				maxLengthSuccess: null,
 				minLengthError: null,
@@ -298,16 +306,6 @@ var VanillaValidator = (function(){
 				if(!this.factoryValidate(field, this.isEmail, this.config.messages.email, this.config.callbacks.emailError, this.config.callbacks.emailSuccess)) ret = false;
 			}
 
-			// INTEGER
-			if(field.classList.contains(this.config.selectors.integer)){
-				if(!this.factoryValidate(field, this.isInteger, this.config.messages.integer, this.config.callbacks.integerError, this.config.callbacks.integerSuccess)) ret = false;
-			}
-
-			// DIGIT
-			if(field.classList.contains(this.config.selectors.digit)){
-				if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess)) ret = false;
-			}
-
 			// PHONE
 			if(field.classList.contains(this.config.selectors.phone)){
 				if(!this.factoryValidate(field, this.isPhone, this.config.messages.phone, this.config.callbacks.phoneError, this.config.callbacks.phoneSuccess)) ret = false;
@@ -316,6 +314,26 @@ var VanillaValidator = (function(){
 			// URL
 			if(field.classList.contains(this.config.selectors.url)){
 				if(!this.factoryValidate(field, this.isUrl, this.config.messages.url, this.config.callbacks.urlError, this.config.callbacks.urlSuccess)) ret = false;
+			}
+
+			// DATE
+			if(field.classList.contains(this.config.selectors.date)){
+				if(!this.factoryValidate(field, this.isDate, this.config.messages.date, this.config.callbacks.dateError, this.config.callbacks.dateSuccess)) ret = false;
+			}
+
+			// CEP
+			if(field.classList.contains(this.config.selectors.cep)){
+				if(!this.factoryValidate(field, this.isCep, this.config.messages.cep, this.config.callbacks.cepError, this.config.callbacks.cepSuccess)) ret = false;
+			}
+
+			// INTEGER
+			if(field.classList.contains(this.config.selectors.integer)){
+				if(!this.factoryValidate(field, this.isInteger, this.config.messages.integer, this.config.callbacks.integerError, this.config.callbacks.integerSuccess)) ret = false;
+			}
+
+			// DIGIT
+			if(field.classList.contains(this.config.selectors.digit)){
+				if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess)) ret = false;
 			}
 
 			// MAXLENGTH
