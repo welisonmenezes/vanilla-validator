@@ -135,9 +135,8 @@ var VanillaValidator = (function(){
 			customValidates: {
 				'my-custom-validate' : { // must inform this key in html attribute 'data-validate-key'
 					message: 'Custom error message',
-					fn: function(field, message){
+					fn: function(field){
 						if(field.value === 'foo'){
-							this.addValidationView(field, message);
 							return false;
 						}
 						return true;
@@ -145,6 +144,10 @@ var VanillaValidator = (function(){
 				}
 			},
 			customViewErrors: {
+				add: null,
+				remove: null
+			},
+			customListErrors: {
 				add: null,
 				remove: null
 			},
@@ -433,7 +436,7 @@ var VanillaValidator = (function(){
 
 			// CUSTOM VALIDATE 
 			if(field.classList.contains(this.config.selectors.customValidate)){
-				if(!this.validateCustom(field)) ret = false;
+				if(!this.validateCustom(field, container, onSubmit)) ret = false;
 			}
 
 			// REQUIRED
@@ -507,14 +510,20 @@ var VanillaValidator = (function(){
 		}
 	};
 
-	VanillaValidator.prototype.validateCustom = function(field){
+	VanillaValidator.prototype.validateCustom = function(field, container, onSubmit){
+		var ret = true;
 		if(field){
 			var customKey = field.getAttribute('data-validate-key');
 			if(customKey){
 				var myCustom = this.config.customValidates[customKey];
 				if(myCustom && myCustom.message && myCustom.fn){
 					if(this.isFunction(myCustom.fn)){
-						return myCustom.fn.call(this, field, myCustom.message);
+						if(!myCustom.fn.call(this, field, myCustom.message, container, onSubmit)){
+							this.addValidationView(field,  myCustom.message);
+							if(onSubmit && this.config.showListOfValidations)
+								this.addListOfValidations(field,  myCustom.message, container);
+							ret = false;
+						}
 					}else{
 						throw new TypeError('The fn of custom validation must be a function');
 					}
@@ -523,26 +532,35 @@ var VanillaValidator = (function(){
 				}
 			}
 		}
-		return true;
+		return ret;
 	};
 
 	VanillaValidator.prototype.addListOfValidations = function(field, message, container){
 		if(field && container){
-			var errorsWrap = $.getChild('.' + this.config.selectors.wrapErrors, container);
-			if(errorsWrap){
-				message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
-				var liWrap = document.createElement('LI');
-				$.inner(liWrap, message);
-
-				errorsWrap.appendChild(liWrap);
+			message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
+			if(this.config.customListErrors && this.isFunction(this.config.customListErrors.add)){
+				this.config.customListErrors.add.call(this, field, message);
+			}else{
+				var errorsWrap = $.getChild('.' + this.config.selectors.wrapErrors, container);
+				if(errorsWrap){
+					
+					var liWrap = document.createElement('LI');
+					$.inner(liWrap, message);
+					errorsWrap.appendChild(liWrap);
+				}
 			}
+			
 		}
 	};
 
 	VanillaValidator.prototype.removeListOfValidations = function(container){
 		if(container){
-			var errorsWrap = $.getChild('.' + this.config.selectors.wrapErrors, container);
-			$.inner(errorsWrap);
+			if(this.config.customListErrors && this.isFunction(this.config.customListErrors.remove)){
+				this.config.customListErrors.remove.call(this, container);
+			}else{
+				var errorsWrap = $.getChild('.' + this.config.selectors.wrapErrors, container);
+				$.inner(errorsWrap);
+			}
 		}
 	};
 
@@ -556,7 +574,7 @@ var VanillaValidator = (function(){
 				if(parentEl){
 					var messageContainer = document.createElement('SPAN');
 					var messageClass = document.createAttribute('class');
-					messageContainer.innerHTML = message;
+					$.inner(messageContainer,message);
 					messageClass.value = this.config.selectors.messageError;
 					messageContainer.setAttributeNode(messageClass);
 					if(this.isArray(field)){

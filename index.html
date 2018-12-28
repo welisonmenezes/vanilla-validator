@@ -333,9 +333,8 @@
 			customValidates: {
 				'no-bad-words' : {
 					message: 'Forbiden words detected',
-					fn: function(field, message, config){
+					fn: function(field){
 						if(field.value === 'java' || field.value === 'php'){
-							this.addValidationView(field, message);
 							return false;
 						}
 						return true;
@@ -354,6 +353,14 @@
 						field.parentElement.querySelector('span').remove();
 						field.classList.remove(this.config.selectors.error);
 					}
+				}
+			},
+			customListErrors: {
+				add: function(field, message){
+					console.log('message', message);
+				},
+				remove: function(container){
+					console.log('removing errors from container: ', container);
 				}
 			},
 			noFormSuccess: function(container){
