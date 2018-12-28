@@ -74,6 +74,9 @@
 			<input type="text" class="equal-to" xdata-min="3" placeholder="equal to">
 		</div>
 		<div>
+			<input type="text" class="cpf" placeholder="cpf">
+		</div>
+		<div>
 			<input type="text" class="pattern" placeholder="pattern">
 		</div>
 		<div>
@@ -264,6 +267,12 @@
 				},
 				equalToSuccess: function(element){
 					console.log('equalToSuccess');
+				},
+				cpfToError: function(element){
+					console.log('cpfToError');
+				},
+				cpfToSuccess: function(element){
+					console.log('cpfToSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');

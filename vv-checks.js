@@ -54,55 +54,32 @@ var VVChecks = (function(){
         return (value.toString() === param.toString()) || (! this.isNotEmpty(value));
     };
 
-    VVChecks.prototype.isCpf = function(value){
-        var CPF = value, cpfv, x;  
-        if(!CPF)
-            return false || (! this.isNotEmpty(value));
-        cpfv  = CPF;
-        if(cpfv.length == 14 || cpfv.length == 11) {
-            cpfv = cpfv.replace('.', '');
-            cpfv = cpfv.replace('.', '');
-            cpfv = cpfv.replace('-', '');
-            var nonNumbers = /\D/;
-            if(nonNumbers.test(cpfv)){
-                return false || (! this.isNotEmpty(value));
-            } else{
-                if (cpfv == '00000000000' ||
-                    cpfv == '11111111111' ||
-                    cpfv == '22222222222' ||
-                    cpfv == '33333333333' ||
-                    cpfv == '44444444444' ||
-                    cpfv == '55555555555' ||
-                    cpfv == '66666666666' ||
-                    cpfv == '77777777777' ||
-                    cpfv == '88888888888' ||
-                    cpfv == '99999999999') return false || (! this.isNotEmpty(value));
-                var a = [], b = 0, c = 11, i;
-                for(i=0; i<11; i++){
-                    a[i] = cpfv.charAt(i);
-                    if (i < 9) b += (a[i] * --c);
-                }
-                if((x = b % 11) < 2){
-                    a[9] = 0;
-                } else{
-                    a[9] = 11-x;
-                }
-                b = 0;
-                c = 11;
-                var y;
-                for (y=0; y<10; y++) b += (a[y] * c--);
-                if((x = b % 11) < 2){
-                    a[10] = 0;
-                } else{
-                    a[10] = 11-x;
-                }
-                if((cpfv.charAt(9) != a[9]) || (cpfv.charAt(10) != a[10])) 
-                    return false || (! this.isNotEmpty(value));
+    VVChecks.prototype.isCpf = function(cpf){
+        var numeros, digitos, soma, i, resultado, digitos_iguais;
+        digitos_iguais = 1;
+        cpf = cpf.replace('.', '');
+        cpf = cpf.replace('.', '');
+        cpf = cpf.replace('-', '');
+        if (cpf.length != 11) return false || (! this.isNotEmpty(cpf));
+        for (i = 0; i < cpf.length - 1; i++)
+            if (cpf.charAt(i) != cpf.charAt(i + 1)){
+                digitos_iguais = 0;
+                break;
             }
-        } else{
-            return (!(cpfv.length === 0)) || (! this.isNotEmpty(value));
-        }
-        return true || (! this.isNotEmpty(value));
+        if (!digitos_iguais){
+            numeros = cpf.substring(0,9);
+            digitos = cpf.substring(9);
+            soma = 0;
+            for (i = 10; i > 1; i--) soma += numeros.charAt(10 - i) * i;
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(0)) return false || (! this.isNotEmpty(cpf));
+            numeros = cpf.substring(0,10);
+            soma = 0;
+            for (i = 11; i > 1; i--)  soma += numeros.charAt(11 - i) * i;
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(1)) return false || (! this.isNotEmpty(cpf));
+            return true || (! this.isNotEmpty(cpf));
+        }else return false || (! this.isNotEmpty(cpf));
     };
 
 	VVChecks.prototype.isCnpj = function(value){

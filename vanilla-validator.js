@@ -30,8 +30,8 @@ var VanillaValidator = (function(){
 				min: 'min',
 				range: 'range',
 				equalTo: 'equal-to',
-				cpf: 'cpf',
-				cnpj: 'cnpj',
+				cpf: 'cpf', // brazilian document
+				cnpj: 'cnpj',  // brazilian document
 				customValidate: 'custom-validate',
 				error: 'error',
 				formError: 'form-error',
@@ -54,7 +54,8 @@ var VanillaValidator = (function(){
 				max: 'The value needs to be less or equals to 5',
 				min: 'The value needs to be greater or equals to 3',
 				range: 'The value needs to be between 3 and 5',
-				equalTo: 'The value needs to be 10'
+				equalTo: 'The value needs to be 10',
+				cpf: 'Ivalid cpf'
 			},
 			customValidationsConfig: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
@@ -109,6 +110,8 @@ var VanillaValidator = (function(){
 				rangeSuccess: null,
 				equalToError: null,
 				equalToSuccess: null,
+				cpfToError: null,
+				cpfToSuccess: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -386,6 +389,11 @@ var VanillaValidator = (function(){
 			if(field.classList.contains(this.config.selectors.equalTo)){
 				equal = (field.getAttribute('data-equal-to')) ? parseInt(field.getAttribute('data-equal-to')) : this.config.customValidationsConfig.equalTo;
 				if(!this.factoryValidate(field, this.equalTo, this.config.messages.equalTo, this.config.callbacks.equalToError, this.config.callbacks.equalToSuccess, equal)) ret = false;
+			}
+
+			// CPF
+			if(field.classList.contains(this.config.selectors.cpf)){
+				if(!this.factoryValidate(field, this.isCpf, this.config.messages.cpf, this.config.callbacks.cpfError, this.config.callbacks.cpfSuccess)) ret = false;
 			}
 
 			// PATTERN
