@@ -35,6 +35,7 @@ var VanillaValidator = (function(){
 				cnpj: 'cnpj',  // brazilian document
 				cnh: 'cnh', // brazilian document
 				creditCard: 'credit-card',
+				hasExtension: 'has-extension',
 				customValidate: 'custom-validate',
 				error: 'error',
 				formError: 'form-error',
@@ -62,7 +63,8 @@ var VanillaValidator = (function(){
 				cpf: 'Invalid cpf',
 				cnpj: 'Invalid cnpj',
 				cnh: 'Invalid cnh',
-				creditCard: 'Invalid credit card number'
+				creditCard: 'Invalid credit card number',
+				hasExtension: 'Invalid extension detected'
 			},
 			customValidationsConfig: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
@@ -80,7 +82,8 @@ var VanillaValidator = (function(){
 					max: 5,
 					min: 3
 				},
-				equalTo: 10
+				equalTo: 10,
+				extensions: ['jpg', 'png'] // or by html attribute 'data-extensions' without spaces and separated by commas
 			},
 			callbacks: {
 				eachFieldError: null,
@@ -125,6 +128,8 @@ var VanillaValidator = (function(){
 				cnhSuccess: null,
 				creditCardSuccess: null,
 				creditCardError: null,
+				hasExtensionSuccess: null,
+				hasExtensionError: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -151,7 +156,7 @@ var VanillaValidator = (function(){
 				add: null,
 				remove: null
 			},
-			noFormSuccess: null,
+			onContainerSuccess: null,
 			onFormSubmit: null
 		};
 
@@ -240,8 +245,8 @@ var VanillaValidator = (function(){
 					container.submit();
 				}
 			}else{
-				if(this.config.noFormSuccess && this.isFunction(this.config.noFormSuccess)){
-					this.config.noFormSuccess.call(this, container);
+				if(this.config.onContainerSuccess && this.isFunction(this.config.onContainerSuccess)){
+					this.config.onContainerSuccess.call(this, container);
 				}
 			}
 		}
@@ -318,7 +323,7 @@ var VanillaValidator = (function(){
 	};
 
 	VanillaValidator.prototype.validateFields = function(field, container, onSubmit){
-		var ret = true, min, max, range, equal;
+		var ret = true, min, max, range, equal, extensions;
 		if(field && container){
 			this.removeValidationView(field);
 
@@ -429,6 +434,12 @@ var VanillaValidator = (function(){
 				if(!this.factoryValidate(field, this.isCreditCard, this.config.messages.creditCard, this.config.callbacks.creditCardError, this.config.callbacks.creditCardSuccess, null, container, onSubmit)) ret = false;
 			}
 
+			// HAS EXTENSION
+			if(field.classList.contains(this.config.selectors.hasExtension)){
+				extensions = (field.getAttribute('data-extensions')) ? field.getAttribute('data-extensions').split(',') : this.config.customValidationsConfig.extensions;
+				if(!this.factoryValidate(field, this.hasExtension, this.config.messages.hasExtension, this.config.callbacks.hasExtension, this.config.callbacks.hasExtension, extensions, container, onSubmit)) ret = false;
+			}
+
 			// PATTERN
 			if(field.classList.contains(this.config.selectors.pattern)){
 				if(!this.validatePattern(field, container, onSubmit)) ret = false;
@@ -444,7 +455,6 @@ var VanillaValidator = (function(){
 				if(field.type === 'checkbox' || field.type === 'radio'){
 					if(!this.validateRequiredCR(field, container)) ret = false;
 				}else{
-					//if(!this.validateRequired(field)) ret = false;
 					if(!this.factoryValidate(field, this.isNotEmpty, this.config.messages.required, this.config.callbacks.requiredError, this.config.callbacks.requiredSuccess, null, container, onSubmit)) ret = false;
 				}
 			}
@@ -539,7 +549,7 @@ var VanillaValidator = (function(){
 		if(field && container){
 			message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
 			if(this.config.customListErrors && this.isFunction(this.config.customListErrors.add)){
-				this.config.customListErrors.add.call(this, field, message);
+				this.config.customListErrors.add.call(this, field, message, container);
 			}else{
 				var errorsWrap = $.getChild('.' + this.config.selectors.wrapErrors, container);
 				if(errorsWrap){

@@ -96,7 +96,7 @@
 			<input type="text" class="custom-validate" data-validate-key="my-custom-validate" placeholder="custom validate">
 		</div>
 		<div>
-			<input type="file" class="required">
+			<input type="file" class="required has-extension" data-extensions="svg,png">
 		</div>
 		<div>
 			<textarea class="required" placeholder="message"></textarea>
@@ -305,6 +305,12 @@
 				creditCardSuccess: function(element){
 					console.log('creditCardSuccess');
 				},
+				hasExtensionError: function(element){
+					console.log('hasExtensionError');
+				},
+				hasExtensionSuccess: function(element){
+					console.log('hasExtensionSuccess');
+				},
 				patternError: function(element){
 					console.log('patternError');
 				},
@@ -356,14 +362,14 @@
 				}
 			},
 			customListErrors: {
-				add: function(field, message){
-					console.log('message', message);
+				add: function(field, message, container){
+					console.log('customListErrors ADD', field, message, container);
 				},
 				remove: function(container){
-					console.log('removing errors from container: ', container);
+					console.log('customListErrors REMOVE: ', container);
 				}
 			},
-			noFormSuccess: function(container){
+			onContainerSuccess: function(container){
 				console.log('CONTAINER', container);
 				alert('do something here');
 			},
