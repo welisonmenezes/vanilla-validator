@@ -284,8 +284,9 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
 		var field, key;
+		var invalidSelectors = ['vv-control', 'error', 'formError', 'messageError', 'wrapErrors'];
 		for (key in this.config.selectors) {
-			if(this.config.selectors.hasOwnProperty(key)){
+			if(this.config.selectors.hasOwnProperty(key) && !this.includes(invalidSelectors, key)){
 				if(key != this.config.selectors.control){
 					field = $.getChildren('.' + this.config.selectors[key] + ':not(.' + this.config.selectors.control + ')', container);
 					this.loopThroughFieldsToAddControls(field, container);
@@ -322,10 +323,25 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	VanillaValidator.prototype.validateAnchorFields = function(field, container, onSubmit){
+		if(field && container){
+			var queryAnchor = field.getAttribute('data-anchor');
+			if(queryAnchor){
+				var anchor = $.getChild(queryAnchor, container);
+				if(anchor){
+					this.validateFields(anchor, container, onSubmit);
+				}
+			}
+		}
+	};
+
 	VanillaValidator.prototype.validateFields = function(field, container, onSubmit){
 		var ret = true, min, max, range, equal, extensions;
 		if(field && container){
 			this.removeValidationView(field);
+
+			// working here
+			//this.validateAnchorFields(field, container, onSubmit);
 
 			// EMAIL
 			if(field.classList.contains(this.config.selectors.email)){
@@ -610,6 +626,7 @@ var VanillaValidator = (function(){
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.remove)){
 				this.config.customViewErrors.remove.call(this, field);
 			}else{
+				//console.log(field.parentElement)
 				var parentEl = (this.isArray(field)) ? field[field.length-1].parentElement : field.parentElement;
 				if(parentEl){
 					if(this.isArray(field)){
@@ -620,7 +637,8 @@ var VanillaValidator = (function(){
 					}else{
 						field.classList.remove(this.config.selectors.error);
 					}
-					var oldMessage = parentEl.querySelector('.' + this.config.selectors.messageError);
+					var oldMessage = $.getChild('.' + this.config.selectors.messageError, parentEl); //parentEl.querySelector('.' + this.config.selectors.messageError);
+					//console.log(oldMessage)
 					if(oldMessage){
 						oldMessage.remove();
 					}
