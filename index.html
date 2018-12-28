@@ -8,7 +8,7 @@
 			color: red;
 			border-color: red;
 		}
-		.msg-error{
+		.msg-error, .wrap-errors{
 			font-size: 12px;
 			color: red;
 		}
@@ -25,6 +25,7 @@
 	<div id="teste"></div>
 	
 	<form action="#" id="form-1" class="xx">
+		
 		<div>
 			<input type="text" class="required" data-message-error="Obrigatório" placeholder="name">
 		</div>
@@ -135,10 +136,13 @@
 				teste 2
 			</label>
 		</div>
+		<ul class="wrap-errors"></ul>
 		<div>
 			<button type="submit">Enviar</button>
 		</div>
 	</form>
+
+	<hr>
 
 	<div class="form-2" id="form-2">
 		<div>
@@ -167,7 +171,7 @@
 				required: 'Custom message required',
 				email: 'Custom message email'
 			},
-			novalidateHTML5: false,
+			novalidateHTML5: true,
 			callbacks: {
 				beforeValidate: function(element){
 					console.log('beforeValidateError')

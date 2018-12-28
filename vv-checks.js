@@ -54,32 +54,32 @@ var VVChecks = (function(){
         return (value.toString() === param.toString()) || (! this.isNotEmpty(value));
     };
 
-    VVChecks.prototype.isCpf = function(cpf){
+    VVChecks.prototype.isCpf = function(value){
         var numeros, digitos, soma, i, resultado, digitos_iguais;
         digitos_iguais = 1;
-        cpf = cpf.replace('.', '');
-        cpf = cpf.replace('.', '');
-        cpf = cpf.replace('-', '');
-        if (cpf.length != 11) return false || (! this.isNotEmpty(cpf));
-        for (i = 0; i < cpf.length - 1; i++)
-            if (cpf.charAt(i) != cpf.charAt(i + 1)){
+        value = value.replace('.', '');
+        value = value.replace('.', '');
+        value = value.replace('-', '');
+        if (value.length != 11) return false || (! this.isNotEmpty(value));
+        for (i = 0; i < value.length - 1; i++)
+            if (value.charAt(i) != value.charAt(i + 1)){
                 digitos_iguais = 0;
                 break;
             }
         if (!digitos_iguais){
-            numeros = cpf.substring(0,9);
-            digitos = cpf.substring(9);
+            numeros = value.substring(0,9);
+            digitos = value.substring(9);
             soma = 0;
             for (i = 10; i > 1; i--) soma += numeros.charAt(10 - i) * i;
             resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(0)) return false || (! this.isNotEmpty(cpf));
-            numeros = cpf.substring(0,10);
+            if (resultado != digitos.charAt(0)) return false || (! this.isNotEmpty(value));
+            numeros = value.substring(0,10);
             soma = 0;
             for (i = 11; i > 1; i--)  soma += numeros.charAt(11 - i) * i;
             resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(1)) return false || (! this.isNotEmpty(cpf));
-            return true || (! this.isNotEmpty(cpf));
-        }else return false || (! this.isNotEmpty(cpf));
+            if (resultado != digitos.charAt(1)) return false || (! this.isNotEmpty(value));
+            return true || (! this.isNotEmpty(value));
+        }else return false || (! this.isNotEmpty(value));
     };
 
 	VVChecks.prototype.isCnpj = function(value){

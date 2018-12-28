@@ -11,6 +11,7 @@ var VanillaValidator = (function(){
 			validationBy: 'onsubmit', // [onclick, onsubmit]
 			novalidateHTML5: true,
 			validateOnFieldChanges: true,
+			showListOfValidations: true,
 			selectors: { // just css classes
 				control: 'vv-control',
 				required: 'required',
@@ -37,7 +38,8 @@ var VanillaValidator = (function(){
 				customValidate: 'custom-validate',
 				error: 'error',
 				formError: 'form-error',
-				messageError: 'msg-error'
+				messageError: 'msg-error',
+				wrapErrors: 'wrap-errors' // must be a UL element
 			},
 			messages: { // or by html attribute 'data-message-error'
 				required: 'Required field',
@@ -258,12 +260,14 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.validateContainer = function(container){
 		var ret = true;
 		if(container){
+			if(this.config.showListOfValidations)
+				this.removeListOfValidations(container);
 			var fields = $.getChildren('.' + this.config.selectors.control, container);
 			if(fields){
 				var i, total = fields.length, field;
 				for(i = 0; i < total; i++){
 					field = fields[i];
-					if(!this.validateFields(field, container)) ret = false;
+					if(!this.validateFields(field, container, true)) ret = false;
 				}
 			}
 		}
@@ -301,65 +305,65 @@ var VanillaValidator = (function(){
 			var self = this;
 			field.addEventListener('change', function(event){
 				event.preventDefault();
-				self.validateFields(field, container);
+				self.validateFields(field, container, false);
 			});
 			field.addEventListener('keyup', function(event){
 				event.preventDefault();
-				self.validateFields(field, container);
+				self.validateFields(field, container, false);
 			});
 		}
 	};
 
-	VanillaValidator.prototype.validateFields = function(field, container){
+	VanillaValidator.prototype.validateFields = function(field, container, onSubmit){
 		var ret = true, min, max, range, equal;
 		if(field && container){
 			this.removeValidationView(field);
 
 			// EMAIL
 			if(field.classList.contains(this.config.selectors.email)){
-				if(!this.factoryValidate(field, this.isEmail, this.config.messages.email, this.config.callbacks.emailError, this.config.callbacks.emailSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isEmail, this.config.messages.email, this.config.callbacks.emailError, this.config.callbacks.emailSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// PHONE
 			if(field.classList.contains(this.config.selectors.phone)){
-				if(!this.factoryValidate(field, this.isPhone, this.config.messages.phone, this.config.callbacks.phoneError, this.config.callbacks.phoneSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isPhone, this.config.messages.phone, this.config.callbacks.phoneError, this.config.callbacks.phoneSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// URL
 			if(field.classList.contains(this.config.selectors.url)){
-				if(!this.factoryValidate(field, this.isUrl, this.config.messages.url, this.config.callbacks.urlError, this.config.callbacks.urlSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isUrl, this.config.messages.url, this.config.callbacks.urlError, this.config.callbacks.urlSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// DATE
 			if(field.classList.contains(this.config.selectors.date)){
-				if(!this.factoryValidate(field, this.isDate, this.config.messages.date, this.config.callbacks.dateError, this.config.callbacks.dateSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isDate, this.config.messages.date, this.config.callbacks.dateError, this.config.callbacks.dateSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// CEP
 			if(field.classList.contains(this.config.selectors.cep)){
-				if(!this.factoryValidate(field, this.isCep, this.config.messages.cep, this.config.callbacks.cepError, this.config.callbacks.cepSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isCep, this.config.messages.cep, this.config.callbacks.cepError, this.config.callbacks.cepSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// INTEGER
 			if(field.classList.contains(this.config.selectors.integer)){
-				if(!this.factoryValidate(field, this.isInteger, this.config.messages.integer, this.config.callbacks.integerError, this.config.callbacks.integerSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isInteger, this.config.messages.integer, this.config.callbacks.integerError, this.config.callbacks.integerSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// DIGIT
 			if(field.classList.contains(this.config.selectors.digit)){
-				if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// MAXLENGTH
 			if(field.classList.contains(this.config.selectors.maxLength)){
 				max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.maxLength;
-				if(!this.factoryValidate(field, this.maxLength, this.config.messages.maxLength, this.config.callbacks.maxLengthError, this.config.callbacks.maxLengthSuccess, max)) ret = false;
+				if(!this.factoryValidate(field, this.maxLength, this.config.messages.maxLength, this.config.callbacks.maxLengthError, this.config.callbacks.maxLengthSuccess, max, container, onSubmit)) ret = false;
 			}
 
 			// MINLENGTH
 			if(field.classList.contains(this.config.selectors.minLength)){
 				min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.minLength;
-				if(!this.factoryValidate(field, this.minLength, this.config.messages.minLength, this.config.callbacks.minLengthError, this.config.callbacks.minLengthSuccess, min)) ret = false;
+				if(!this.factoryValidate(field, this.minLength, this.config.messages.minLength, this.config.callbacks.minLengthError, this.config.callbacks.minLengthSuccess, min, container, onSubmit)) ret = false;
 			}
 
 			// RANGELENGTH
@@ -367,25 +371,25 @@ var VanillaValidator = (function(){
 				min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.rangeLength.min;
 				max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.rangeLength.max;
 				range = [min, max];
-				if(!this.factoryValidate(field, this.rangeLength, this.config.messages.rangeLength, this.config.callbacks.rangeLengthError, this.config.callbacks.rangeLengthSuccess, range)) ret = false;
+				if(!this.factoryValidate(field, this.rangeLength, this.config.messages.rangeLength, this.config.callbacks.rangeLengthError, this.config.callbacks.rangeLengthSuccess, range, container, onSubmit)) ret = false;
 			}
 
 			// SAMELENGTH
 			if(field.classList.contains(this.config.selectors.sameLength)){
 				equal = (field.getAttribute('data-same-length')) ? parseInt(field.getAttribute('data-same-length')) : this.config.customValidationsConfig.sameLength;
-				if(!this.factoryValidate(field, this.sameLength, this.config.messages.sameLength, this.config.callbacks.sameLengthError, this.config.callbacks.sameLengthSuccess, equal)) ret = false;
+				if(!this.factoryValidate(field, this.sameLength, this.config.messages.sameLength, this.config.callbacks.sameLengthError, this.config.callbacks.sameLengthSuccess, equal, container, onSubmit)) ret = false;
 			}
 
 			// MAX
 			if(field.classList.contains(this.config.selectors.max)){
 				max = (field.getAttribute('data-max')) ? parseInt(field.getAttribute('data-max')) : this.config.customValidationsConfig.max;
-				if(!this.factoryValidate(field, this.isMax, this.config.messages.max, this.config.callbacks.maxError, this.config.callbacks.maxSuccess, max)) ret = false;
+				if(!this.factoryValidate(field, this.isMax, this.config.messages.max, this.config.callbacks.maxError, this.config.callbacks.maxSuccess, max, container, onSubmit)) ret = false;
 			}
 
 			// MIN
 			if(field.classList.contains(this.config.selectors.min)){
 				min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.min;
-				if(!this.factoryValidate(field, this.isMin, this.config.messages.min, this.config.callbacks.minError, this.config.callbacks.minSuccess, min)) ret = false;
+				if(!this.factoryValidate(field, this.isMin, this.config.messages.min, this.config.callbacks.minError, this.config.callbacks.minSuccess, min, container, onSubmit)) ret = false;
 			}
 
 			// RANGE
@@ -393,38 +397,38 @@ var VanillaValidator = (function(){
 				min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.range.min;
 				max = (field.getAttribute('data-max')) ? parseInt(field.getAttribute('data-max')) : this.config.customValidationsConfig.range.max;
 				range = [min, max];
-				if(!this.factoryValidate(field, this.isRange, this.config.messages.range, this.config.callbacks.rangeError, this.config.callbacks.rangeSuccess, range)) ret = false;
+				if(!this.factoryValidate(field, this.isRange, this.config.messages.range, this.config.callbacks.rangeError, this.config.callbacks.rangeSuccess, range, container, onSubmit)) ret = false;
 			}
 
 			// EQUALTO
 			if(field.classList.contains(this.config.selectors.equalTo)){
 				equal = (field.getAttribute('data-equal-to')) ? parseInt(field.getAttribute('data-equal-to')) : this.config.customValidationsConfig.equalTo;
-				if(!this.factoryValidate(field, this.equalTo, this.config.messages.equalTo, this.config.callbacks.equalToError, this.config.callbacks.equalToSuccess, equal)) ret = false;
+				if(!this.factoryValidate(field, this.equalTo, this.config.messages.equalTo, this.config.callbacks.equalToError, this.config.callbacks.equalToSuccess, equal, container, onSubmit)) ret = false;
 			}
 
 			// CPF
 			if(field.classList.contains(this.config.selectors.cpf)){
-				if(!this.factoryValidate(field, this.isCpf, this.config.messages.cpf, this.config.callbacks.cpfError, this.config.callbacks.cpfSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isCpf, this.config.messages.cpf, this.config.callbacks.cpfError, this.config.callbacks.cpfSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// CNPJ
 			if(field.classList.contains(this.config.selectors.cnpj)){
-				if(!this.factoryValidate(field, this.isCnpj, this.config.messages.cnpj, this.config.callbacks.cnpjError, this.config.callbacks.cnpjSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isCnpj, this.config.messages.cnpj, this.config.callbacks.cnpjError, this.config.callbacks.cnpjSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// CNH
 			if(field.classList.contains(this.config.selectors.cnh)){
-				if(!this.factoryValidate(field, this.isCnh, this.config.messages.cnh, this.config.callbacks.cnhError, this.config.callbacks.cnhSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isCnh, this.config.messages.cnh, this.config.callbacks.cnhError, this.config.callbacks.cnhSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// CREDIT CARD
 			if(field.classList.contains(this.config.selectors.creditCard)){
-				if(!this.factoryValidate(field, this.isCreditCard, this.config.messages.creditCard, this.config.callbacks.creditCardError, this.config.callbacks.creditCardSuccess)) ret = false;
+				if(!this.factoryValidate(field, this.isCreditCard, this.config.messages.creditCard, this.config.callbacks.creditCardError, this.config.callbacks.creditCardSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// PATTERN
 			if(field.classList.contains(this.config.selectors.pattern)){
-				if(!this.validatePattern(field)) ret = false;
+				if(!this.validatePattern(field, container, onSubmit)) ret = false;
 			}
 
 			// CUSTOM VALIDATE 
@@ -438,7 +442,7 @@ var VanillaValidator = (function(){
 					if(!this.validateRequiredCR(field, container)) ret = false;
 				}else{
 					//if(!this.validateRequired(field)) ret = false;
-					if(!this.factoryValidate(field, this.isNotEmpty, this.config.messages.required, this.config.callbacks.requiredError, this.config.callbacks.requiredSuccess)) ret = false;
+					if(!this.factoryValidate(field, this.isNotEmpty, this.config.messages.required, this.config.callbacks.requiredError, this.config.callbacks.requiredSuccess, null, container, onSubmit)) ret = false;
 				}
 			}
 		}
@@ -450,10 +454,12 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
-	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn, otherParams){
+	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn, otherParams, container, onSubmit){
 		if(field){
 			if(!validationFn.call(this, field.value, otherParams)){
 				this.addValidationView(field, message);
+				if(onSubmit && this.config.showListOfValidations) 
+					this.addListOfValidations(field, message, container);
 				this.callCallbackFunction(callbackErrorFn, this, field);
 				return false;
 			}
@@ -462,7 +468,7 @@ var VanillaValidator = (function(){
 		return true;
 	};
 
-	VanillaValidator.prototype.validateRequiredCR = function(field, container){
+	VanillaValidator.prototype.validateRequiredCR = function(field, container, onSubmit){
 		if(field && container){
 			if(field.name){
 				var fieldsRC = $.getChildren('.' + this.config.selectors.required + '[name=' + field.name + ']', container);
@@ -471,6 +477,8 @@ var VanillaValidator = (function(){
 					var lastFieldRC = fieldsRC[fieldsRC.length-1];
 					if(!fieldChecked){
 						this.addValidationView(lastFieldRC, this.config.messages.required);
+						if(onSubmit && this.config.showListOfValidations)
+							this.addListOfValidations(field, this.config.messages.required, container);
 						this.callCallbackFunction(this.config.callbacks.requiredError, this, field);
 						return false;
 					}else{
@@ -483,12 +491,14 @@ var VanillaValidator = (function(){
 		return true;
 	};
 
-	VanillaValidator.prototype.validatePattern = function(field){
+	VanillaValidator.prototype.validatePattern = function(field, container, onSubmit){
 		if(field){
 			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.customValidationsConfig.pattern;
 			var flags = (field.getAttribute('data-flags')) ? field.getAttribute('data-flags') : this.config.customValidationsConfig.flags;
 			if(!this.isPattern(field.value, pattern, flags)){
 				this.addValidationView(field, this.config.messages.pattern);
+				if(onSubmit && this.config.showListOfValidations)
+					this.addListOfValidations(field, this.config.messages.pattern, container);
 				this.callCallbackFunction(this.config.callbacks.patternError, this, field);
 				return false;
 			}
@@ -514,6 +524,26 @@ var VanillaValidator = (function(){
 			}
 		}
 		return true;
+	};
+
+	VanillaValidator.prototype.addListOfValidations = function(field, message, container){
+		if(field && container){
+			var errorsWrap = $.getChild('.' + this.config.selectors.wrapErrors, container);
+			if(errorsWrap){
+				message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
+				var liWrap = document.createElement('LI');
+				$.inner(liWrap, message);
+
+				errorsWrap.appendChild(liWrap);
+			}
+		}
+	};
+
+	VanillaValidator.prototype.removeListOfValidations = function(container){
+		if(container){
+			var errorsWrap = $.getChild('.' + this.config.selectors.wrapErrors, container);
+			$.inner(errorsWrap);
+		}
 	};
 
 	VanillaValidator.prototype.addValidationView = function(field, message){
