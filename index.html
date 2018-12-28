@@ -80,6 +80,12 @@
 			<input type="text" class="cnpj" placeholder="cnpj">
 		</div>
 		<div>
+			<input type="text" class="cnh" placeholder="cnh">
+		</div>
+		<div>
+			<input type="text" class="credit-card" placeholder="credit card">
+		</div>
+		<div>
 			<input type="text" class="pattern" placeholder="pattern">
 		</div>
 		<div>
@@ -282,6 +288,18 @@
 				},
 				cnpjSuccess: function(element){
 					console.log('cnpjSuccess');
+				},
+				cnhError: function(element){
+					console.log('cnhError');
+				},
+				cnhSuccess: function(element){
+					console.log('cnhSuccess');
+				},
+				creditCardError: function(element){
+					console.log('creditCardError');
+				},
+				creditCardSuccess: function(element){
+					console.log('creditCardSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');

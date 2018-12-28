@@ -32,6 +32,8 @@ var VanillaValidator = (function(){
 				equalTo: 'equal-to',
 				cpf: 'cpf', // brazilian document
 				cnpj: 'cnpj',  // brazilian document
+				cnh: 'cnh', // brazilian document
+				creditCard: 'credit-card',
 				customValidate: 'custom-validate',
 				error: 'error',
 				formError: 'form-error',
@@ -56,7 +58,9 @@ var VanillaValidator = (function(){
 				range: 'The value needs to be between 3 and 5',
 				equalTo: 'The value needs to be 10',
 				cpf: 'Invalid cpf',
-				cnpj: 'Invalid cnpj'
+				cnpj: 'Invalid cnpj',
+				cnh: 'Invalid cnh',
+				creditCard: 'Invalid credit card number'
 			},
 			customValidationsConfig: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
@@ -115,6 +119,10 @@ var VanillaValidator = (function(){
 				cpfSuccess: null,
 				cnpjError: null,
 				cnpjSuccess: null,
+				cnhError: null,
+				cnhSuccess: null,
+				creditCardSuccess: null,
+				creditCardError: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -402,6 +410,16 @@ var VanillaValidator = (function(){
 			// CNPJ
 			if(field.classList.contains(this.config.selectors.cnpj)){
 				if(!this.factoryValidate(field, this.isCnpj, this.config.messages.cnpj, this.config.callbacks.cnpjError, this.config.callbacks.cnpjSuccess)) ret = false;
+			}
+
+			// CNH
+			if(field.classList.contains(this.config.selectors.cnh)){
+				if(!this.factoryValidate(field, this.isCnh, this.config.messages.cnh, this.config.callbacks.cnhError, this.config.callbacks.cnhSuccess)) ret = false;
+			}
+
+			// CREDIT CARD
+			if(field.classList.contains(this.config.selectors.creditCard)){
+				if(!this.factoryValidate(field, this.isCreditCard, this.config.messages.creditCard, this.config.callbacks.creditCardError, this.config.callbacks.creditCardSuccess)) ret = false;
 			}
 
 			// PATTERN
