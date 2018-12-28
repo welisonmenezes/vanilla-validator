@@ -77,6 +77,9 @@
 			<input type="text" class="cpf" placeholder="cpf">
 		</div>
 		<div>
+			<input type="text" class="cnpj" placeholder="cnpj">
+		</div>
+		<div>
 			<input type="text" class="pattern" placeholder="pattern">
 		</div>
 		<div>
@@ -268,11 +271,17 @@
 				equalToSuccess: function(element){
 					console.log('equalToSuccess');
 				},
-				cpfToError: function(element){
-					console.log('cpfToError');
+				cpfError: function(element){
+					console.log('cpfError');
 				},
-				cpfToSuccess: function(element){
-					console.log('cpfToSuccess');
+				cpfSuccess: function(element){
+					console.log('cpfSuccess');
+				},
+				cnpjError: function(element){
+					console.log('cnpjError');
+				},
+				cnpjSuccess: function(element){
+					console.log('cnpjSuccess');
 				},
 				patternError: function(element){
 					console.log('patternError');

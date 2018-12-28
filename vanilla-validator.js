@@ -55,7 +55,8 @@ var VanillaValidator = (function(){
 				min: 'The value needs to be greater or equals to 3',
 				range: 'The value needs to be between 3 and 5',
 				equalTo: 'The value needs to be 10',
-				cpf: 'Ivalid cpf'
+				cpf: 'Invalid cpf',
+				cnpj: 'Invalid cnpj'
 			},
 			customValidationsConfig: {
 				pattern: '[0-9]', // or by html attribute 'data-pattern'
@@ -110,8 +111,10 @@ var VanillaValidator = (function(){
 				rangeSuccess: null,
 				equalToError: null,
 				equalToSuccess: null,
-				cpfToError: null,
-				cpfToSuccess: null,
+				cpfError: null,
+				cpfSuccess: null,
+				cnpjError: null,
+				cnpjSuccess: null,
 				patternError: null,
 				patternSuccess: null,
 				beforeValidate: null,
@@ -394,6 +397,11 @@ var VanillaValidator = (function(){
 			// CPF
 			if(field.classList.contains(this.config.selectors.cpf)){
 				if(!this.factoryValidate(field, this.isCpf, this.config.messages.cpf, this.config.callbacks.cpfError, this.config.callbacks.cpfSuccess)) ret = false;
+			}
+
+			// CNPJ
+			if(field.classList.contains(this.config.selectors.cnpj)){
+				if(!this.factoryValidate(field, this.isCnpj, this.config.messages.cnpj, this.config.callbacks.cnpjError, this.config.callbacks.cnpjSuccess)) ret = false;
 			}
 
 			// PATTERN
