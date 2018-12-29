@@ -30,7 +30,10 @@
 			<input type="text" class="required" id="igual" data-message-error="Obrigatório" placeholder="name">
 		</div>
 		<div>
-			<input type="text" class="custom-validate" placeholder="name" data-anchored-field="#igual" data-validate-key="equal-anchored-field">
+			<input type="text" class="custom-validate" placeholder="equal name" data-anchored-field="#igual" data-validate-key="equal-anchored-field">
+		</div>
+		<div>
+			<input type="text" class="custom-validate" placeholder="different name" data-anchored-field="#igual" data-validate-key="different-anchored-field">
 		</div>
 		<div>
 			<input type="email" class="email" placeholder="email">
@@ -49,6 +52,9 @@
 		</div>
 		<div>
 			<input type="text" class="date" placeholder="date">
+		</div>
+		<div>
+			<input type="text" class="currency" placeholder="currency">
 		</div>
 		<div>
 			<input type="text" class="cep" placeholder="cep">
@@ -94,9 +100,6 @@
 		</div>
 		<div>
 			<input type="text" class="pattern" data-pattern="[x]" data-flags="ig" data-message-error="Precisa conter um x" placeholder="custom pattern">
-		</div>
-		<div>
-			<input type="text" class="custom-validate" data-validate-key="my-custom-validate" placeholder="custom validate">
 		</div>
 		<div>
 			<input type="file" class="required has-extension" data-extensions="svg,png">
@@ -229,6 +232,12 @@
 				},
 				dateSuccess: function(element){
 					console.log('dateSuccess');
+				},
+				currencyError: function(element){
+					console.log('currencyError');
+				},
+				currencySuccess: function(element){
+					console.log('currencySuccess');
 				},
 				cepError: function(element){
 					console.log('cepError');

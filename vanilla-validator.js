@@ -22,6 +22,7 @@ var VanillaValidator = (function(){
 				phone: 'phone', // brazilian format
 				url: 'url',
 				date: 'date', // brazilian format
+				currency: 'currency', // brazilian format
 				cep: 'cep', // brazilian format
 				maxLength: 'max-length',
 				minLength: 'min-length',
@@ -51,6 +52,7 @@ var VanillaValidator = (function(){
 				phone: 'Invalid phone number',
 				url: 'Invalid url',
 				date: 'Invalid date',
+				currency: 'Invalid currency',
 				cep: 'Invalid cep',
 				maxLength: 'The amount of characters is greater than allowed',
 				minLength: 'The amount of characters is less than allowed',
@@ -102,6 +104,8 @@ var VanillaValidator = (function(){
 				urlSuccess: null,
 				dateError: null,
 				dateSuccess: null,
+				currencyError: null,
+				currencySuccess: null,
 				cepError: null,
 				cepSuccess: null,
 				maxLengthError: null,
@@ -151,15 +155,19 @@ var VanillaValidator = (function(){
 						return true;
 					}
 				},
-				'my-custom-validate' : { // must inform this key in html attribute 'data-validate-key'
-					message: 'Custom error message',
-					fn: function(field){
-						if(field.value === 'foo'){
-							return false;
+				'different-anchored-field': { // must inform this key in html attribute 'data-validate-key'
+					message: 'The value needs to be different',
+					fn: function(field, message, container){
+						var queryAnchor = field.getAttribute('data-anchored-field');
+						if(queryAnchor){
+							var anchor = $.getChild(queryAnchor, container);
+							if(anchor){
+								if(field.value === anchor.value) return false;
+							}
 						}
 						return true;
 					}
-				}
+				},
 			},
 			customViewErrors: {
 				add: null,
@@ -359,6 +367,11 @@ var VanillaValidator = (function(){
 			// DATE
 			if(field.classList.contains(this.config.selectors.date)){
 				if(!this.factoryValidate(field, this.isDate, this.config.messages.date, this.config.callbacks.dateError, this.config.callbacks.dateSuccess, null, container, onSubmit)) ret = false;
+			}
+
+			// CURRENCY
+			if(field.classList.contains(this.config.selectors.currency)){
+				if(!this.factoryValidate(field, this.isCurrency, this.config.messages.currency, this.config.callbacks.currencyError, this.config.callbacks.currencySuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// CEP
