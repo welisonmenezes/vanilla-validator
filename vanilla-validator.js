@@ -1,7 +1,6 @@
 var VanillaValidator = (function(){
 
 	var $ = new VVElements();
-	var utils = new VVUtils();
 
 	var _setConfigurations = function(userConfig) {
 		// default configurations
@@ -186,7 +185,7 @@ var VanillaValidator = (function(){
 		};
 
 		// merge with user configurations
-		this.config = utils.mergeObjectsDeeply({}, this.config, userConfig);
+		this.config = this.mergeObjectsDeeply({}, this.config, userConfig);
 	};
 
 	/**
@@ -689,6 +688,28 @@ var VanillaValidator = (function(){
 				container.setAttribute('novalidate', true);
 			}
 		}
+	};
+
+	VanillaValidator.prototype.mergeObjectsDeeply = function(target, objectDefault, objectUser){
+		if(this.isObject(objectDefault) && this.isObject(objectUser) && this.isObject(target)){
+			var t;
+			for(t in objectDefault){
+				if(objectDefault.hasOwnProperty(t)){
+					if(this.isObject(objectDefault[t]) && this.isObject(objectDefault[t])){
+						target[t] = objectDefault[t];
+						// applying recursion to copy deeply
+						this.mergeObjectsDeeply(target[t], objectDefault[t], objectUser[t]);
+					}else{
+						if(objectUser[t] !== undefined){
+							target[t] = objectUser[t];
+						}else{
+							target[t] = objectDefault[t];
+						}
+					}
+				}
+			}
+		}
+		return target;
 	};
 
 	VanillaValidator.prototype.init = function(){
