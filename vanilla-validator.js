@@ -18,6 +18,7 @@ var VanillaValidator = (function(){
 				email: 'email',
 				integer: 'integer',
 				digit: 'digit',
+				numeric: 'numeric',
 				pattern: 'pattern',
 				phone: 'phone', // brazilian format
 				url: 'url',
@@ -48,6 +49,7 @@ var VanillaValidator = (function(){
 				email: 'Invalid email',
 				integer: 'Needs to be a integer',
 				digit: 'Only letters and numbers',
+				numeric: 'Only  numbers',
 				pattern: 'Needs to matchs pattern',
 				phone: 'Invalid phone number',
 				url: 'Invalid url',
@@ -98,6 +100,8 @@ var VanillaValidator = (function(){
 				integerSuccess: null,
 				digitError: null,
 				digitSuccess: null,
+				numericError: null,
+				numericSuccess: null,
 				phoneError: null,
 				phoneSuccess: null,
 				urlError: null,
@@ -387,6 +391,11 @@ var VanillaValidator = (function(){
 			// DIGIT
 			if(field.classList.contains(this.config.selectors.digit)){
 				if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess, null, container, onSubmit)) ret = false;
+			}
+
+			// NUMERIC
+			if(field.classList.contains(this.config.selectors.numeric)){
+				if(!this.factoryValidate(field, this.isNumeric, this.config.messages.numeric, this.config.callbacks.numericError, this.config.callbacks.numericSuccess, null, container, onSubmit)) ret = false;
 			}
 
 			// MAXLENGTH

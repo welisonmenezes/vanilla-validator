@@ -48,6 +48,9 @@
 			<input type="text" class="required digit" placeholder="digit">
 		</div>
 		<div>
+			<input type="text" class="numeric" placeholder="numeric">
+		</div>
+		<div>
 			<input type="text" class="url" placeholder="url">
 		</div>
 		<div>
@@ -214,6 +217,12 @@
 				},
 				digitSuccess: function(element){
 					console.log('digitSuccess');
+				},
+				numericError: function(element){
+					console.log('numericError');
+				},
+				numericSuccess: function(element){
+					console.log('numericSuccess');
 				},
 				phoneError: function(element){
 					console.log('phoneError');
