@@ -137,7 +137,20 @@ var VanillaValidator = (function(){
 				error: null,
 				success: null
 			},
-			customValidates: {
+			customValidates: { // will react to the selector 'customValidate'
+				'equal-anchored-field': { // must inform this key in html attribute 'data-validate-key'
+					message: 'The value needs to be equal',
+					fn: function(field, message, container){
+						var queryAnchor = field.getAttribute('data-anchored-field');
+						if(queryAnchor){
+							var anchor = $.getChild(queryAnchor, container);
+							if(anchor){
+								if(field.value !== anchor.value) return false;
+							}
+						}
+						return true;
+					}
+				},
 				'my-custom-validate' : { // must inform this key in html attribute 'data-validate-key'
 					message: 'Custom error message',
 					fn: function(field){
@@ -323,25 +336,10 @@ var VanillaValidator = (function(){
 		}
 	};
 
-	VanillaValidator.prototype.validateAnchorFields = function(field, container, onSubmit){
-		if(field && container){
-			var queryAnchor = field.getAttribute('data-anchor');
-			if(queryAnchor){
-				var anchor = $.getChild(queryAnchor, container);
-				if(anchor){
-					this.validateFields(anchor, container, onSubmit);
-				}
-			}
-		}
-	};
-
 	VanillaValidator.prototype.validateFields = function(field, container, onSubmit){
 		var ret = true, min, max, range, equal, extensions;
 		if(field && container){
 			this.removeValidationView(field);
-
-			// working here
-			//this.validateAnchorFields(field, container, onSubmit);
 
 			// EMAIL
 			if(field.classList.contains(this.config.selectors.email)){
@@ -611,7 +609,7 @@ var VanillaValidator = (function(){
 					}else{
 						field.classList.add(this.config.selectors.error);
 					}
-					var oldMessage = parentEl.querySelector('.' + this.config.selectors.messageError);
+					var oldMessage = $.getChild('.' + this.config.selectors.messageError, parentEl);
 					if(oldMessage){
 						oldMessage.remove();
 					}
@@ -626,7 +624,6 @@ var VanillaValidator = (function(){
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.remove)){
 				this.config.customViewErrors.remove.call(this, field);
 			}else{
-				//console.log(field.parentElement)
 				var parentEl = (this.isArray(field)) ? field[field.length-1].parentElement : field.parentElement;
 				if(parentEl){
 					if(this.isArray(field)){
@@ -637,8 +634,7 @@ var VanillaValidator = (function(){
 					}else{
 						field.classList.remove(this.config.selectors.error);
 					}
-					var oldMessage = $.getChild('.' + this.config.selectors.messageError, parentEl); //parentEl.querySelector('.' + this.config.selectors.messageError);
-					//console.log(oldMessage)
+					var oldMessage = $.getChild('.' + this.config.selectors.messageError, parentEl);
 					if(oldMessage){
 						oldMessage.remove();
 					}
