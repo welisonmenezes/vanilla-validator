@@ -2,6 +2,41 @@ var VanillaValidator = (function(){
 
 	var $ = new VVElements();
 
+	/**
+	 * Simulates inheritance in javascript. Propagates only the prototypes.
+	 *
+	 * @method _inherits
+	 * @param {Object} object that will be a subClass
+	 * @param {Object} object that will be a superClass
+	 * 
+	 */
+	var _inherits = function(subClass, superClass) {
+		// superClass need to be a function or null
+		if (typeof superClass !== 'function' && superClass !== null) { 
+			throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); 
+		} 
+		subClass.prototype = Object.create(superClass && superClass.prototype, { 
+			constructor: { 
+				value: subClass, 
+				enumerable: false, 
+				writable: true, 
+				configurable: true 
+			} 
+		}); 
+		if (superClass){
+			Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+		}
+	};
+	// makes VanillaValidator inherit from VVChecks
+	_inherits(VanillaValidator, VVChecks);
+
+	/**
+	 * Sets configurations by merging user configurations with default configurations
+	 *
+	 * @method _setConfigurations
+	 * @param {Object} object the user configurations
+	 * 
+	 */
 	var _setConfigurations = function(userConfig) {
 		// default configurations
 		this.config = {
@@ -189,32 +224,11 @@ var VanillaValidator = (function(){
 	};
 
 	/**
-	 * Simulates inheritance in javascript. Propagates only the prototypes.
+	 * In each container sets configurations to make it validatable
 	 *
-	 * @method _inherits
-	 * @param {Object} object that will be a subClass
-	 * @param {Object} object that will be a superClass
+	 * @method loopThroughContainers
+	 * 
 	 */
-	var _inherits = function(subClass, superClass) {
-		// superClass need to be a function or null
-		if (typeof superClass !== 'function' && superClass !== null) { 
-			throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); 
-		} 
-		subClass.prototype = Object.create(superClass && superClass.prototype, { 
-			constructor: { 
-				value: subClass, 
-				enumerable: false, 
-				writable: true, 
-				configurable: true 
-			} 
-		}); 
-		if (superClass){
-			Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-		}
-	};
-	// makes VanillaValidator inherit from VVChecks
-	_inherits(VanillaValidator, VVChecks);
-
 	VanillaValidator.prototype.loopThroughContainers = function(){
 		if(this.containers && this.containers.length){
 			var i, container, total = this.containers.length;
@@ -227,6 +241,13 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Defines the 'submission' type of the container
+	 *
+	 * @method defineSubmitionType
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.defineSubmitionType = function(container){
 		if(this.config.validationBy === 'onclick'){
 			this.addButtonClickEvent(container);
@@ -235,6 +256,13 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Sets the 'submission' by submit event and call validations
+	 *
+	 * @method addFormSubmitEvent
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.addFormSubmitEvent = function(container){
 		var self = this;
 		if(this.isHTMLForm(container)){
@@ -245,6 +273,13 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Sets the 'submission' by click event and call validations
+	 *
+	 * @method addFormSubmitEvent
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.addButtonClickEvent = function(container){
 		var self = this, button;
 		if(this.config.button && $.getChild(this.config.button, container)){
@@ -260,6 +295,13 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Executed when the container is valid. Here we can submit the form data
+	 *
+	 * @method onSuccessFormValidate
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.onSuccessFormValidate = function(container){
 		if(container && this.formValidateFinal(container)){
 			if(this.isHTMLForm(container)){
@@ -276,6 +318,14 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Call the validate container and related callbacks
+	 *
+	 * @method formValidateFinal
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * @return { Boolean }
+	 * 
+	 */
 	VanillaValidator.prototype.formValidateFinal = function(container){
 		var ret = true;
 		this.callCallbackFunction(this.config.callbacks.beforeValidate, this, container);
@@ -289,6 +339,14 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	/**
+	 * Validate the container by call validation to each child field
+	 *
+	 * @method validateContainer
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * @return { Boolean }
+	 * 
+	 */
 	VanillaValidator.prototype.validateContainer = function(container){
 		var ret = true;
 		if(container){
