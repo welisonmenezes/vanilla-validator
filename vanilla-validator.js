@@ -4,11 +4,8 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Simulates inheritance in javascript. Propagates only the prototypes.
-	 *
-	 * @method _inherits
-	 * @param {Object} object that will be a subClass
-	 * @param {Object} object that will be a superClass
-	 * 
+	 * @param {Object} subClass The object that will be a subClass
+	 * @param {Object} superClass The object that will be a superClass
 	 */
 	var _inherits = function(subClass, superClass) {
 		// superClass need to be a function or null
@@ -32,10 +29,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Sets configurations by merging user configurations with default configurations
-	 *
-	 * @method _setConfigurations
-	 * @param {Object} object the user configurations
-	 * 
+	 * @param {Object} userConfig The user configurations
 	 */
 	var _setConfigurations = function(userConfig) {
 		// default configurations
@@ -242,9 +236,6 @@ var VanillaValidator = (function(){
 
 	/**
 	 * In each container sets configurations to make it validatable
-	 *
-	 * @method loopThroughContainers
-	 * 
 	 */
 	VanillaValidator.prototype.loopThroughContainers = function(){
 		if(this.containers && this.containers.length){
@@ -260,10 +251,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Defines the 'submission' type of the container
-	 *
-	 * @method defineSubmitionType
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.defineSubmitionType = function(container){
 		if(this.config.validationBy === 'onclick'){
@@ -275,10 +263,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Sets the 'submission' by submit event and call validations
-	 *
-	 * @method addFormSubmitEvent
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.addFormSubmitEvent = function(container){
 		var self = this;
@@ -292,10 +277,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Sets the 'submission' by click event and call validations
-	 *
-	 * @method addFormSubmitEvent
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.addButtonClickEvent = function(container){
 		var self = this, button;
@@ -314,10 +296,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Executed when the container is valid. Here we can submit the form data
-	 *
-	 * @method onSuccessFormValidate
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.onSuccessFormValidate = function(container){
 		if(container && this.formValidateFinal(container)){
@@ -337,11 +316,8 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Call the validate container and related callbacks
-	 *
-	 * @method formValidateFinal
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * @return { Boolean }
-	 * 
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @returns { Boolean } true if is valid
 	 */
 	VanillaValidator.prototype.formValidateFinal = function(container){
 		var ret = true;
@@ -358,11 +334,8 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Validate the container by call validation to each child field
-	 *
-	 * @method validateContainer
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * @return { Boolean }
-	 * 
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @returns { Boolean }
 	 */
 	VanillaValidator.prototype.validateContainer = function(container){
 		var ret = true;
@@ -389,10 +362,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * To each selector, get each container child field that does not have 'vv-control' class yet.
-	 *
-	 * @method addControlClassesOnFields
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
 		var fields, key;
@@ -409,11 +379,8 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Sets 'vv-control' class to each container child field and add events on them
-	 *
-	 * @method loopThroughFieldsToAddControls
-	 * @param { HTMLCollection || NodeList } the fields that will be validated
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLCollection || NodeList } fields The fields that will be validated
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.loopThroughFieldsToAddControls = function(fields, container){
 		if(fields){ 
@@ -432,11 +399,8 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Add 'change' and 'keyup' events to make field validatable
-	 *
-	 * @method addValidationsOnFieldsEvent
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.addValidationsOnFieldsEvent = function(field, container){
 		if(field){ 
@@ -455,13 +419,10 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Validate each field
-	 *
-	 * @method validateFields
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * @param { Boolean } if is called from submission (true) or from field event (false)
-	 * @return { Boolean } true if all fields are valid
-	 * 
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @param { Boolean } onSubmit If is called from submission (true) or from field event (false)
+	 * @returns { Boolean } true if all fields are valid
 	 */
 	VanillaValidator.prototype.validateFields = function(field, container, onSubmit){
 		var ret = true, min, max, range, equal, extensions;
@@ -627,17 +588,15 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Build validations and validates by params
-	 *
-	 * @method factoryValidate
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * @param { Function } the method that will validates the field (this must return a boolean)
-	 * @param { String } the message error
-	 * @param { Function } callback of error
-	 * @param { Function } callback of success
-	 * @return { String || Number || Array } params that cam be used by 'validationFn' method
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * @param { Boolean } if is called from submission (true) or from field event (false)
-	 * @return { Boolean } true if field is valid
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { Function } ValidationFn The method that will validates the field (this must return a boolean)
+	 * @param { String } message The message error
+	 * @param { Function } callbackErrorFn The callback of error
+	 * @param { Function } callbackSuccessFn The callback of success
+	 * @param { String || Number || Array } otherParams Params that cam be used by 'validationFn' method
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @param { Boolean } onSubmit If is called from submission (true) or from field event (false)
+	 * @returns { Boolean } true if field is valid
 	 */
 	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn, otherParams, container, onSubmit){
 		if(field){ 
@@ -655,12 +614,10 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Validates required fields type radio and checkbox
-	 *
-	 * @method validateRequiredCR
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * @param { Boolean } if is called from submission (true) or from field event (false)
-	 * @return { Boolean } true if field is valid
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @param { Boolean } onSubmit If is called from submission (true) or from field event (false)
+	 * @returns { Boolean } true if field is valid
 	 */
 	VanillaValidator.prototype.validateRequiredCR = function(field, container, onSubmit){
 		if(field && container){
@@ -686,14 +643,11 @@ var VanillaValidator = (function(){
 	};
 
 	/**
-	 * Validates fields by given pattern
-	 * (pattern and flags given by 'data-pattern' and 'data-flags' html attribute)
-	 *
-	 * @method validatePattern
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * @param { Boolean } if is called from submission (true) or from field event (false)
-	 * @return { Boolean } true if field is valid
+	 * Validates fields by given pattern (pattern and flags given by 'data-pattern' and 'data-flags' html attribute)
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @param { Boolean } onSubmit If is called from submission (true) or from field event (false)
+	 * @returns { Boolean } true if field is valid
 	 */
 	VanillaValidator.prototype.validatePattern = function(field, container, onSubmit){
 		if(field){
@@ -712,14 +666,11 @@ var VanillaValidator = (function(){
 	};
 
 	/**
-	 * Validates fields with custom validations
-	 * (Custom validate given by 'data-validate-key' html attribute)
-	 *
-	 * @method validateCustom
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * @param { Boolean } if is called from submission (true) or from field event (false)
-	 * @return { Boolean } true if field is valid
+	 * Validates fields with custom validations (Custom validate given by 'data-validate-key' html attribute)
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @param { Boolean } onSubmit If is called from submission (true) or from field event (false)
+	 * @returns { Boolean } true if field is valid
 	 */
 	VanillaValidator.prototype.validateCustom = function(field, container, onSubmit){
 		var ret = true;
@@ -746,6 +697,12 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	/**
+	 * Validates fields with async validations (Custom validate given by 'data-async-key' html attribute)
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @param { Boolean } onSubmit If is called from submission (true) or from field event (false)
+	 */
 	VanillaValidator.prototype.validateAsync = function(field, container, onSubmit){
 		if(field && field.classList.contains(this.config.selectors.async) && container){
 			if(!field.getAttribute('data-validation-status') || ! onSubmit || this.config.validateOnFieldChanges !== true){
@@ -768,12 +725,9 @@ var VanillaValidator = (function(){
 
 	/**
 	 * List on view, all messages errors of container fields
-	 *
-	 * @method addListOfValidations
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * @param { String } the error message
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { String } message The error message
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.addListOfValidations = function(field, message, container){
 		if(field && container){
@@ -795,10 +749,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Remove all messages errors of container fields
-	 *
-	 * @method removeListOfValidations
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
 	 */
 	VanillaValidator.prototype.removeListOfValidations = function(container){
 		if(container){
@@ -813,12 +764,9 @@ var VanillaValidator = (function(){
 
 	/**
 	 * For each field, adds messages errors view
-	 *
-	 * @method addValidationView
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * @param { String } the error message
-	 * @param { String } the optional class to message error
-	 * 
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { String } message The error message
+	 * @param { String } cls The optional class to message error
 	 */
 	VanillaValidator.prototype.addValidationView = function(field, message, cls){
 		if(field){
@@ -853,10 +801,8 @@ var VanillaValidator = (function(){
 
 	/**
 	 * For each field, removes messages errors view
-	 *
-	 * @method addValidationView
-	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { String } cls The optional class to message error
 	 */
 	VanillaValidator.prototype.removeValidationView = function(field, cls){
 		if(field){
@@ -884,12 +830,8 @@ var VanillaValidator = (function(){
 	};
 
 	/**
-	 * Add custom method on 'this.config.customValidates' that will be used in 'validateCustom'
-	 * (the method must be given by user config object and informed by 'data-validation-key' html attribute)
-	 *
-	 * @method addCustomValidations
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * Add custom method on 'this.config.customValidates' that will be used in 'validateCustom'; (the method must be given by user config object and informed by 'data-validation-key' html attribute)
+	 * @param { HTMLElement || HTMLFormElement } field The container that will be validated
 	 */
 	VanillaValidator.prototype.addCustomValidations = function(field){
 		if(field){
@@ -904,12 +846,8 @@ var VanillaValidator = (function(){
 	};
 
 	/**
-	 * Add custom async method on 'this.config.asyncValidates' that will be used in 'validateAsync'
-	 * (the method must be given by user config object and informed by 'data-async-key' html attribute)
-	 *
-	 * @method addAsyncValidations
-	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * 
+	 * Add custom async method on 'this.config.asyncValidates' that will be used in 'validateAsync'; (the method must be given by user config object and informed by 'data-async-key' html attribute)
+	 * @param { HTMLElement || HTMLFormElement } field The container that will be validated
 	 */
 	VanillaValidator.prototype.addAsyncValidations = function(field){
 		if(field){
@@ -923,6 +861,12 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Must be called whan a async validation starts
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { String } message The message error
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 */
 	VanillaValidator.prototype.asyncValidationStart = function(field, message, container){
 		if(field && container){
 			container.setAttribute('data-validation-status', 'waiting');
@@ -932,6 +876,13 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Must be called whan a async validation finishes
+	 * @param { HTMLElement || HTMLInputElement } field The field that will be validated
+	 * @param { String } message The message error
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @param { Boolean } isValid If is valid (true)
+	 */
 	VanillaValidator.prototype.asyncValidationFinish = function(field, message, container, isValid){
 		if(field){
 			var status = (isValid) ? 'valid' : 'invalid';
@@ -949,6 +900,11 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Checs if container has some field with errors
+	 * @param { HTMLElement || HTMLFormElement } container The container that will be validated
+	 * @returns { Boolean } If has erros (true)
+	 */
 	VanillaValidator.prototype.asyncContainerHasErrors = function(container){
 		if(container){
 			var asyncFields = $.getChildren('.' + this.config.selectors.async + '.' + this.config.selectors.error, container);
@@ -959,13 +915,10 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Calls de callback functions
-	 * 
-	 * @method callCallbackFunction
-	 * @param { Function } the callback method
-	 * @param { Object } the new reference
-	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } the container or field that will be validated
-	 * @param { String || Number || Array } the params that can be used by callback
-	 * 
+	 * @param { Function } callback The callback method
+	 * @param { Object } ref The new reference
+	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } element The container or field that will be validated
+	 * @param { String || Number || Array } otherParams The params that can be used by callback
 	 */
 	VanillaValidator.prototype.callCallbackFunction = function(callback, ref, element, otherParams){
 		if(this.isFunction(callback)){
@@ -975,10 +928,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Sets html attribute 'novalidate' as true to disabled default validations of html5
-	 * 
-	 * @method setHTML5NoValidate
-	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } the container or field that will be validated
-	 * 
+	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } container The container or field that will be validated
 	 */
 	VanillaValidator.prototype.setHTML5NoValidate = function(container){
 		if(this.config.novalidateHTML5 && container){
@@ -990,13 +940,10 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Merge objects deeply
-	 * 
-	 * @method mergeObjectsDeeply
-	 * @param { Object }  A new empty object
-	 * @param { Object } A object that will be merged
-	 * @param { Object } A object that will be merged
-	 * @return { Object } A new object merged
-	 * 
+	 * @param { Object } target A new empty object
+	 * @param { Object } objectDefault A object that will be merged
+	 * @param { Object } objectUser A object that will be merged
+	 * @returns { Object } A new object merged
 	 */
 	VanillaValidator.prototype.mergeObjectsDeeply = function(target, objectDefault, objectUser){
 		if(this.isObject(objectDefault) && this.isObject(objectUser) && this.isObject(target)){
@@ -1022,9 +969,6 @@ var VanillaValidator = (function(){
 
 	/**
 	 * Initializes the plugin
-	 * 
-	 * @method init
-	 * 
 	 */
 	VanillaValidator.prototype.init = function(){
 		this.containers = $.getElements(this.config.container);
@@ -1033,10 +977,7 @@ var VanillaValidator = (function(){
 
 	/**
 	 * The constructor
-	 * 
-	 * @method VanillaValidator
-	 * @param { Object } user configurations
-	 * 
+	 * @constructor
 	 */
 	function VanillaValidator(userConfig){
 		this.userConfig = userConfig;

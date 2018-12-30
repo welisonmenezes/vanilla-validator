@@ -2,11 +2,8 @@ var VVElements = (function(){
 
 	/**
 	 * Get elements by query selector
-	 *
-	 * @method getElements
-	 * @param { String } the query selector
-	 * @return { NodeList || null }
-	 * 
+	 * @param { String } qyery The query selector
+	 * @returns { NodeList || null }
 	 */
 	VVElements.prototype.getElements = function(query){
 		if(query){
@@ -18,11 +15,8 @@ var VVElements = (function(){
 
 	/**
 	 * Get element by query selector
-	 *
-	 * @method getElement
-	 * @param { String } the query selector
-	 * @return { HTMLElement || null }
-	 * 
+	 * @param { String } query The query selector
+	 * @returns { HTMLElement || null }
 	 */
 	VVElements.prototype.getElement = function(query){
 		if(query){ 
@@ -34,12 +28,9 @@ var VVElements = (function(){
 
 	/**
 	 * Get element child of given parent by query selector
-	 *
-	 * @method getChild
-	 * @param { String } the query selector
-	 * @param { HTMLElement } the parent
-	 * @return { HTMLElement || null }
-	 * 
+	 * @param { String } qyery The query selector
+	 * @param { HTMLElement } parent The parent
+	 * @returns { HTMLElement || null }
 	 */
 	VVElements.prototype.getChild = function(query, parent){
 		if(query && parent && (parent instanceof Element || parent instanceof HTMLDocument) ){
@@ -51,12 +42,9 @@ var VVElements = (function(){
 
 	/**
 	 * Get elements children of given parent by query selector
-	 *
-	 * @method getChildren
-	 * @param { String } the query selector
-	 * @param { HTMLElement } the parent
-	 * @return { NodeList || null }
-	 * 
+	 * @param { String } qyery The query selector
+	 * @param { HTMLElement } parent The parent
+	 * @returns { NodeList || null }
 	 */
 	VVElements.prototype.getChildren = function(query, parent){
 		if(query && parent && (parent instanceof Element || parent instanceof HTMLDocument) ){
@@ -68,27 +56,20 @@ var VVElements = (function(){
 
 	/**
 	 * Get submit button of given parent
-	 *
-	 * @method getButtonSubmit
-	 * @param { HTMLElement } the parent
-	 * @return { HTMLElement || null }
-	 * 
+	 * @param { HTMLElement } parent The parent
+	 * @returns { HTMLElement || null }
 	 */
 	VVElements.prototype.getButtonSubmit = function(parent){
 		return (this.getChild('button', parent)) ? this.getChild('button', parent) : this.getChild('input[type="submit"]', parent);
 	};
 
 	/**
-	 * Get radio buttons by name of given parent 
-	 * (can get it by class and checked attribute also)
-	 *
-	 * @method getRadiosByName
-	 * @param { String } the name of input
-	 * @param { HTMLElement } the parent
-	 * @param { String } the class attribute
-	 * @param { Boolean } if is checked
-	 * @return { HTMLElement || null }
-	 * 
+	 * Get radio buttons by name of given parent; (can get it by class and checked attribute also)
+	 * @param { String } name The name of input
+	 * @param { HTMLElement } parent The parent
+	 * @param { String } cls The class attribute
+	 * @param { Boolean } isChecked If is checked
+	 * @returns { HTMLElement || null }
 	 */
 	VVElements.prototype.getRadiosByName = function(name, parent, cls, isChecked){
 		if(name && parent){
@@ -100,16 +81,12 @@ var VVElements = (function(){
 	};
 
 	/**
-	 * Get checkbox buttons by name of given parent 
-	 * (can get it by class and checked attribute also)
-	 *
-	 * @method getCheckboxesByName
-	 * @param { String } the name of input
-	 * @param { HTMLElement } the parent
-	 * @param { String } the class attribute
-	 * @param { Boolean } if is checked
-	 * @return { HTMLElement || null }
-	 * 
+	 * Get checkbox buttons by name of given parent; (can get it by class and checked attribute also)
+	 * @param { String } name The name of input
+	 * @param { HTMLElement } parent The parent
+	 * @param { String } cls The class attribute
+	 * @param { Boolean } isChecked If is checked
+	 * @returns { HTMLElement || null }
 	 */
 	VVElements.prototype.getCheckboxesByName = function(name, parent, cls, isChecked){
 		if(name && parent){
@@ -122,11 +99,8 @@ var VVElements = (function(){
 
 	/**
 	 * Adds a given class in element
-	 *
-	 * @method addClass
-	 * @param { HTMLElement } the element that will receive the class
-	 * @param { String } the class attribute
-	 * 
+	 * @param { HTMLElement } element The element that will receive the class
+	 * @param { String } cls The class attribute
 	 */
 	VVElements.prototype.addClass = function(element, cls){
 		if(element && cls){
@@ -143,11 +117,8 @@ var VVElements = (function(){
 
 	/**
 	 * Removes a given class in element
-	 *
-	 * @method removeClass
-	 * @param { HTMLElement } the element that class will be removed
-	 * @param { String } the class attribute
-	 * 
+	 * @param { HTMLElement } element The element that class will be removed
+	 * @param { String } cls The class attribute
 	 */
 	VVElements.prototype.removeClass = function(element, cls){
 		if(element && cls){
@@ -164,11 +135,8 @@ var VVElements = (function(){
 
 	/**
 	 * Adds innerHTML content
-	 *
-	 * @method inner
-	 * @param { HTMLElement } the element that will be receive the content
-	 * @param { HTMLElement || String } the content
-	 * 
+	 * @param { HTMLElement } element The element that will be receive the content
+	 * @param { HTMLElement || String } content The content
 	 */
 	VVElements.prototype.inner = function(element, content){
 		if(element){
@@ -182,9 +150,7 @@ var VVElements = (function(){
 
 	/**
 	 * The constructor
-	 *
-	 * @method VVElements
-	 * 
+	 * @constructor
 	 */
     function VVElements(){}
 
