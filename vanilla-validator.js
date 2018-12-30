@@ -73,6 +73,8 @@ var VanillaValidator = (function(){
 				creditCard: 'credit-card',
 				hasExtension: 'has-extension',
 				customValidate: 'custom-validate',
+				async: 'async',
+				asyncWaiting: 'vv-async-waiting',
 				error: 'error',
 				formError: 'form-error',
 				messageError: 'msg-error',
@@ -206,6 +208,20 @@ var VanillaValidator = (function(){
 						return true;
 					}
 				},
+			},
+			asyncValidates: {
+				'async-validation-example': { // must inform this key in html attribute 'data-async-key'
+					message: 'The async validation message',
+					fn: function(field, message, container){
+						var self = this;
+						this.asyncValidationStart(field, 'validando', container);
+						setTimeout(function(){
+							if(field){
+								self.asyncValidationFinish(field, message, container, true);
+							}
+						}, 2000);
+					}
+				}
 			},
 			customViewErrors: {
 				add: null,
@@ -357,10 +373,16 @@ var VanillaValidator = (function(){
 				var i, total = fields.length, field;
 				for(i = 0; i < total; i++){
 					field = fields[i];
+					this.validateAsync(field, container, true);
 					if(!this.validateFields(field, container, true)) ret = false;
 				}
 			}
 		}
+
+		if(container.getAttribute('data-validation-status') && container.getAttribute('data-validation-status') !== 'valid'){
+			ret = false;
+		}
+
 		return ret;
 	};
 
@@ -373,7 +395,7 @@ var VanillaValidator = (function(){
 	 */
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
 		var fields, key;
-		var invalidSelectors = ['vv-control', 'error', 'formError', 'messageError', 'wrapErrors'];
+		var invalidSelectors = ['vv-control', 'error', 'formError', 'messageError', 'wrapErrors', 'asyncWaiting'];
 		for (key in this.config.selectors) {
 			if(this.config.selectors.hasOwnProperty(key) && !this.includes(invalidSelectors, key)){
 				if(key != this.config.selectors.control){
@@ -419,6 +441,7 @@ var VanillaValidator = (function(){
 			var self = this;
 			field.addEventListener('change', function(event){
 				event.preventDefault();
+				self.validateAsync(field, container, false);
 				self.validateFields(field, container, false);
 			});
 			field.addEventListener('keyup', function(event){
@@ -441,148 +464,154 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.validateFields = function(field, container, onSubmit){
 		var ret = true, min, max, range, equal, extensions;
 		if(field && container){
-			this.removeValidationView(field);
 
-			// EMAIL
-			if(field.classList.contains(this.config.selectors.email)){
-				if(!this.factoryValidate(field, this.isEmail, this.config.messages.email, this.config.callbacks.emailError, this.config.callbacks.emailSuccess, null, container, onSubmit)) ret = false;
-			}
+			// IF NOT ASYNC VALIDATE 
+			if(!field.classList.contains(this.config.selectors.async)){
 
-			// PHONE
-			if(field.classList.contains(this.config.selectors.phone)){
-				if(!this.factoryValidate(field, this.isPhone, this.config.messages.phone, this.config.callbacks.phoneError, this.config.callbacks.phoneSuccess, null, container, onSubmit)) ret = false;
-			}
+				this.removeValidationView(field);
 
-			// URL
-			if(field.classList.contains(this.config.selectors.url)){
-				if(!this.factoryValidate(field, this.isUrl, this.config.messages.url, this.config.callbacks.urlError, this.config.callbacks.urlSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// DATE
-			if(field.classList.contains(this.config.selectors.date)){
-				if(!this.factoryValidate(field, this.isDate, this.config.messages.date, this.config.callbacks.dateError, this.config.callbacks.dateSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// CURRENCY
-			if(field.classList.contains(this.config.selectors.currency)){
-				if(!this.factoryValidate(field, this.isCurrency, this.config.messages.currency, this.config.callbacks.currencyError, this.config.callbacks.currencySuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// CEP
-			if(field.classList.contains(this.config.selectors.cep)){
-				if(!this.factoryValidate(field, this.isCep, this.config.messages.cep, this.config.callbacks.cepError, this.config.callbacks.cepSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// INTEGER
-			if(field.classList.contains(this.config.selectors.integer)){
-				if(!this.factoryValidate(field, this.isInteger, this.config.messages.integer, this.config.callbacks.integerError, this.config.callbacks.integerSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// DIGIT
-			if(field.classList.contains(this.config.selectors.digit)){
-				if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// NUMERIC
-			if(field.classList.contains(this.config.selectors.numeric)){
-				if(!this.factoryValidate(field, this.isNumeric, this.config.messages.numeric, this.config.callbacks.numericError, this.config.callbacks.numericSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// MAXLENGTH
-			if(field.classList.contains(this.config.selectors.maxLength)){
-				max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.maxLength;
-				if(!this.factoryValidate(field, this.maxLength, this.config.messages.maxLength, this.config.callbacks.maxLengthError, this.config.callbacks.maxLengthSuccess, max, container, onSubmit)) ret = false;
-			}
-
-			// MINLENGTH
-			if(field.classList.contains(this.config.selectors.minLength)){
-				min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.minLength;
-				if(!this.factoryValidate(field, this.minLength, this.config.messages.minLength, this.config.callbacks.minLengthError, this.config.callbacks.minLengthSuccess, min, container, onSubmit)) ret = false;
-			}
-
-			// RANGELENGTH
-			if(field.classList.contains(this.config.selectors.rangeLength)){
-				min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.rangeLength.min;
-				max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.rangeLength.max;
-				range = [min, max];
-				if(!this.factoryValidate(field, this.rangeLength, this.config.messages.rangeLength, this.config.callbacks.rangeLengthError, this.config.callbacks.rangeLengthSuccess, range, container, onSubmit)) ret = false;
-			}
-
-			// SAMELENGTH
-			if(field.classList.contains(this.config.selectors.sameLength)){
-				equal = (field.getAttribute('data-same-length')) ? parseInt(field.getAttribute('data-same-length')) : this.config.customValidationsConfig.sameLength;
-				if(!this.factoryValidate(field, this.sameLength, this.config.messages.sameLength, this.config.callbacks.sameLengthError, this.config.callbacks.sameLengthSuccess, equal, container, onSubmit)) ret = false;
-			}
-
-			// MAX
-			if(field.classList.contains(this.config.selectors.max)){
-				max = (field.getAttribute('data-max')) ? parseInt(field.getAttribute('data-max')) : this.config.customValidationsConfig.max;
-				if(!this.factoryValidate(field, this.isMax, this.config.messages.max, this.config.callbacks.maxError, this.config.callbacks.maxSuccess, max, container, onSubmit)) ret = false;
-			}
-
-			// MIN
-			if(field.classList.contains(this.config.selectors.min)){
-				min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.min;
-				if(!this.factoryValidate(field, this.isMin, this.config.messages.min, this.config.callbacks.minError, this.config.callbacks.minSuccess, min, container, onSubmit)) ret = false;
-			}
-
-			// RANGE
-			if(field.classList.contains(this.config.selectors.range)){
-				min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.range.min;
-				max = (field.getAttribute('data-max')) ? parseInt(field.getAttribute('data-max')) : this.config.customValidationsConfig.range.max;
-				range = [min, max];
-				if(!this.factoryValidate(field, this.isRange, this.config.messages.range, this.config.callbacks.rangeError, this.config.callbacks.rangeSuccess, range, container, onSubmit)) ret = false;
-			}
-
-			// EQUALTO
-			if(field.classList.contains(this.config.selectors.equalTo)){
-				equal = (field.getAttribute('data-equal-to')) ? parseInt(field.getAttribute('data-equal-to')) : this.config.customValidationsConfig.equalTo;
-				if(!this.factoryValidate(field, this.equalTo, this.config.messages.equalTo, this.config.callbacks.equalToError, this.config.callbacks.equalToSuccess, equal, container, onSubmit)) ret = false;
-			}
-
-			// CPF
-			if(field.classList.contains(this.config.selectors.cpf)){
-				if(!this.factoryValidate(field, this.isCpf, this.config.messages.cpf, this.config.callbacks.cpfError, this.config.callbacks.cpfSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// CNPJ
-			if(field.classList.contains(this.config.selectors.cnpj)){
-				if(!this.factoryValidate(field, this.isCnpj, this.config.messages.cnpj, this.config.callbacks.cnpjError, this.config.callbacks.cnpjSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// CNH
-			if(field.classList.contains(this.config.selectors.cnh)){
-				if(!this.factoryValidate(field, this.isCnh, this.config.messages.cnh, this.config.callbacks.cnhError, this.config.callbacks.cnhSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// CREDIT CARD
-			if(field.classList.contains(this.config.selectors.creditCard)){
-				if(!this.factoryValidate(field, this.isCreditCard, this.config.messages.creditCard, this.config.callbacks.creditCardError, this.config.callbacks.creditCardSuccess, null, container, onSubmit)) ret = false;
-			}
-
-			// HAS EXTENSION
-			if(field.classList.contains(this.config.selectors.hasExtension)){
-				extensions = (field.getAttribute('data-extensions')) ? field.getAttribute('data-extensions').split(',') : this.config.customValidationsConfig.extensions;
-				if(!this.factoryValidate(field, this.hasExtension, this.config.messages.hasExtension, this.config.callbacks.hasExtension, this.config.callbacks.hasExtension, extensions, container, onSubmit)) ret = false;
-			}
-
-			// PATTERN
-			if(field.classList.contains(this.config.selectors.pattern)){
-				if(!this.validatePattern(field, container, onSubmit)) ret = false;
-			}
-
-			// CUSTOM VALIDATE 
-			if(field.classList.contains(this.config.selectors.customValidate)){
-				if(!this.validateCustom(field, container, onSubmit)) ret = false;
-			}
-
-			// REQUIRED
-			if(field.classList.contains(this.config.selectors.required)){
-				if(field.type === 'checkbox' || field.type === 'radio'){
-					if(!this.validateRequiredCR(field, container)) ret = false;
-				}else{
-					if(!this.factoryValidate(field, this.isNotEmpty, this.config.messages.required, this.config.callbacks.requiredError, this.config.callbacks.requiredSuccess, null, container, onSubmit)) ret = false;
+				// EMAIL
+				if(field.classList.contains(this.config.selectors.email)){
+					if(!this.factoryValidate(field, this.isEmail, this.config.messages.email, this.config.callbacks.emailError, this.config.callbacks.emailSuccess, null, container, onSubmit)) ret = false;
 				}
+
+				// PHONE
+				if(field.classList.contains(this.config.selectors.phone)){
+					if(!this.factoryValidate(field, this.isPhone, this.config.messages.phone, this.config.callbacks.phoneError, this.config.callbacks.phoneSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// URL
+				if(field.classList.contains(this.config.selectors.url)){
+					if(!this.factoryValidate(field, this.isUrl, this.config.messages.url, this.config.callbacks.urlError, this.config.callbacks.urlSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// DATE
+				if(field.classList.contains(this.config.selectors.date)){
+					if(!this.factoryValidate(field, this.isDate, this.config.messages.date, this.config.callbacks.dateError, this.config.callbacks.dateSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// CURRENCY
+				if(field.classList.contains(this.config.selectors.currency)){
+					if(!this.factoryValidate(field, this.isCurrency, this.config.messages.currency, this.config.callbacks.currencyError, this.config.callbacks.currencySuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// CEP
+				if(field.classList.contains(this.config.selectors.cep)){
+					if(!this.factoryValidate(field, this.isCep, this.config.messages.cep, this.config.callbacks.cepError, this.config.callbacks.cepSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// INTEGER
+				if(field.classList.contains(this.config.selectors.integer)){
+					if(!this.factoryValidate(field, this.isInteger, this.config.messages.integer, this.config.callbacks.integerError, this.config.callbacks.integerSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// DIGIT
+				if(field.classList.contains(this.config.selectors.digit)){
+					if(!this.factoryValidate(field, this.isDigit, this.config.messages.digit, this.config.callbacks.digitError, this.config.callbacks.digitSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// NUMERIC
+				if(field.classList.contains(this.config.selectors.numeric)){
+					if(!this.factoryValidate(field, this.isNumeric, this.config.messages.numeric, this.config.callbacks.numericError, this.config.callbacks.numericSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// MAXLENGTH
+				if(field.classList.contains(this.config.selectors.maxLength)){
+					max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.maxLength;
+					if(!this.factoryValidate(field, this.maxLength, this.config.messages.maxLength, this.config.callbacks.maxLengthError, this.config.callbacks.maxLengthSuccess, max, container, onSubmit)) ret = false;
+				}
+
+				// MINLENGTH
+				if(field.classList.contains(this.config.selectors.minLength)){
+					min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.minLength;
+					if(!this.factoryValidate(field, this.minLength, this.config.messages.minLength, this.config.callbacks.minLengthError, this.config.callbacks.minLengthSuccess, min, container, onSubmit)) ret = false;
+				}
+
+				// RANGELENGTH
+				if(field.classList.contains(this.config.selectors.rangeLength)){
+					min = (field.getAttribute('data-min-length')) ? parseInt(field.getAttribute('data-min-length')) : this.config.customValidationsConfig.rangeLength.min;
+					max = (field.getAttribute('data-max-length')) ? parseInt(field.getAttribute('data-max-length')) : this.config.customValidationsConfig.rangeLength.max;
+					range = [min, max];
+					if(!this.factoryValidate(field, this.rangeLength, this.config.messages.rangeLength, this.config.callbacks.rangeLengthError, this.config.callbacks.rangeLengthSuccess, range, container, onSubmit)) ret = false;
+				}
+
+				// SAMELENGTH
+				if(field.classList.contains(this.config.selectors.sameLength)){
+					equal = (field.getAttribute('data-same-length')) ? parseInt(field.getAttribute('data-same-length')) : this.config.customValidationsConfig.sameLength;
+					if(!this.factoryValidate(field, this.sameLength, this.config.messages.sameLength, this.config.callbacks.sameLengthError, this.config.callbacks.sameLengthSuccess, equal, container, onSubmit)) ret = false;
+				}
+
+				// MAX
+				if(field.classList.contains(this.config.selectors.max)){
+					max = (field.getAttribute('data-max')) ? parseInt(field.getAttribute('data-max')) : this.config.customValidationsConfig.max;
+					if(!this.factoryValidate(field, this.isMax, this.config.messages.max, this.config.callbacks.maxError, this.config.callbacks.maxSuccess, max, container, onSubmit)) ret = false;
+				}
+
+				// MIN
+				if(field.classList.contains(this.config.selectors.min)){
+					min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.min;
+					if(!this.factoryValidate(field, this.isMin, this.config.messages.min, this.config.callbacks.minError, this.config.callbacks.minSuccess, min, container, onSubmit)) ret = false;
+				}
+
+				// RANGE
+				if(field.classList.contains(this.config.selectors.range)){
+					min = (field.getAttribute('data-min')) ? parseInt(field.getAttribute('data-min')) : this.config.customValidationsConfig.range.min;
+					max = (field.getAttribute('data-max')) ? parseInt(field.getAttribute('data-max')) : this.config.customValidationsConfig.range.max;
+					range = [min, max];
+					if(!this.factoryValidate(field, this.isRange, this.config.messages.range, this.config.callbacks.rangeError, this.config.callbacks.rangeSuccess, range, container, onSubmit)) ret = false;
+				}
+
+				// EQUALTO
+				if(field.classList.contains(this.config.selectors.equalTo)){
+					equal = (field.getAttribute('data-equal-to')) ? parseInt(field.getAttribute('data-equal-to')) : this.config.customValidationsConfig.equalTo;
+					if(!this.factoryValidate(field, this.equalTo, this.config.messages.equalTo, this.config.callbacks.equalToError, this.config.callbacks.equalToSuccess, equal, container, onSubmit)) ret = false;
+				}
+
+				// CPF
+				if(field.classList.contains(this.config.selectors.cpf)){
+					if(!this.factoryValidate(field, this.isCpf, this.config.messages.cpf, this.config.callbacks.cpfError, this.config.callbacks.cpfSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// CNPJ
+				if(field.classList.contains(this.config.selectors.cnpj)){
+					if(!this.factoryValidate(field, this.isCnpj, this.config.messages.cnpj, this.config.callbacks.cnpjError, this.config.callbacks.cnpjSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// CNH
+				if(field.classList.contains(this.config.selectors.cnh)){
+					if(!this.factoryValidate(field, this.isCnh, this.config.messages.cnh, this.config.callbacks.cnhError, this.config.callbacks.cnhSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// CREDIT CARD
+				if(field.classList.contains(this.config.selectors.creditCard)){
+					if(!this.factoryValidate(field, this.isCreditCard, this.config.messages.creditCard, this.config.callbacks.creditCardError, this.config.callbacks.creditCardSuccess, null, container, onSubmit)) ret = false;
+				}
+
+				// HAS EXTENSION
+				if(field.classList.contains(this.config.selectors.hasExtension)){
+					extensions = (field.getAttribute('data-extensions')) ? field.getAttribute('data-extensions').split(',') : this.config.customValidationsConfig.extensions;
+					if(!this.factoryValidate(field, this.hasExtension, this.config.messages.hasExtension, this.config.callbacks.hasExtension, this.config.callbacks.hasExtension, extensions, container, onSubmit)) ret = false;
+				}
+
+				// PATTERN
+				if(field.classList.contains(this.config.selectors.pattern)){
+					if(!this.validatePattern(field, container, onSubmit)) ret = false;
+				}
+
+				// CUSTOM VALIDATE 
+				if(field.classList.contains(this.config.selectors.customValidate)){
+					if(!this.validateCustom(field, container, onSubmit)) ret = false;
+				}
+
+				// REQUIRED
+				if(field.classList.contains(this.config.selectors.required)){
+					if(field.type === 'checkbox' || field.type === 'radio'){
+						if(!this.validateRequiredCR(field, container)) ret = false;
+					}else{
+						if(!this.factoryValidate(field, this.isNotEmpty, this.config.messages.required, this.config.callbacks.requiredError, this.config.callbacks.requiredSuccess, null, container, onSubmit)) ret = false;
+					}
+				}
+
 			}
 		}
 		// callbacks
@@ -715,6 +744,28 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	VanillaValidator.prototype.validateAsync = function(field, container, onSubmit){
+		if(field && field.classList.contains(this.config.selectors.async) && container){
+			if(container.getAttribute('data-validation-status') && onSubmit && this.config.validateOnFieldChanges === true){
+				//console.log('formasync', container.getAttribute('data-validation-status'), onSubmit, this.config.validateOnFieldChanges)
+			}else{
+				var asyncKey = field.getAttribute('data-async-key');
+				if(asyncKey){
+					var myAsync = this.config.asyncValidates[asyncKey];
+					if(myAsync && myAsync.message && myAsync.fn){
+						if(this.isFunction(myAsync.fn)){
+							myAsync.fn.call(this, field, myAsync.message, container, onSubmit);
+						}else{
+							throw new TypeError('The fn of custom async validation must be a function');
+						}
+					}else{
+						throw new TypeError('Check if your custom async validation is correctly configured');
+					}
+				}
+			}
+		}
+	};
+
 	/**
 	 * List on view, all messages errors of container fields
 	 *
@@ -766,20 +817,21 @@ var VanillaValidator = (function(){
 	 * @method addValidationView
 	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
 	 * @param { String } the error message
+	 * @param { String } the optional class to message error
 	 * 
 	 */
-	VanillaValidator.prototype.addValidationView = function(field, message){
+	VanillaValidator.prototype.addValidationView = function(field, message, cls){
 		if(field){
 			message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.add)){
-				this.config.customViewErrors.add.call(this, field, message);
+				this.config.customViewErrors.add.call(this, field, message, cls);
 			}else{
 				var parentEl = (this.isArray(field)) ? field[field.length-1].parentElement : field.parentElement;
 				if(parentEl){
 					var messageContainer = document.createElement('SPAN');
 					var messageClass = document.createAttribute('class');
 					$.inner(messageContainer,message);
-					messageClass.value = this.config.selectors.messageError;
+					messageClass.value = cls || this.config.selectors.messageError;
 					messageContainer.setAttributeNode(messageClass);
 					if(this.isArray(field)){
 						var i, totalEl = field.length;
@@ -806,7 +858,7 @@ var VanillaValidator = (function(){
 	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
 	 * 
 	 */
-	VanillaValidator.prototype.removeValidationView = function(field){
+	VanillaValidator.prototype.removeValidationView = function(field, cls){
 		if(field){
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.remove)){
 				this.config.customViewErrors.remove.call(this, field);
@@ -821,7 +873,8 @@ var VanillaValidator = (function(){
 					}else{
 						field.classList.remove(this.config.selectors.error);
 					}
-					var oldMessage = $.getChild('.' + this.config.selectors.messageError, parentEl);
+					var messageErrorClass = cls || this.config.selectors.messageError;
+					var oldMessage = $.getChild('.' + messageErrorClass, parentEl);
 					if(oldMessage){
 						oldMessage.remove();
 					}
@@ -846,6 +899,45 @@ var VanillaValidator = (function(){
 				if(!myCustom){
 					this.config.customValidates[customKey] = this.userConfig.customValidates[customKey];
 				}
+			}
+		}
+	};
+
+	/**
+	 * Add custom async method on 'this.config.asyncValidates' that will be used in 'validateAsync'
+	 * (the method must be given by user config object and informed by 'data-async-key' html attribute)
+	 *
+	 * @method addAsyncValidations
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
+	VanillaValidator.prototype.addAsyncValidations = function(field){
+		if(field){
+			var asyncKey = field.getAttribute('data-validate-key');
+			if(asyncKey){
+				var myAsync = this.config.asyncValidates[asyncKey];
+				if(!myAsync){
+					this.config.asyncValidates[asyncKey] = this.userConfig.asyncValidates[asyncKey];
+				}
+			}
+		}
+	};
+
+	VanillaValidator.prototype.asyncValidationStart = function(field, message, container){
+		if(field && container){
+			container.setAttribute('data-validation-status', 'waiting');
+			this.removeValidationView(field, this.config.selectors.asyncWaiting);
+			this.addValidationView(field, message, this.config.selectors.asyncWaiting);
+		}
+	};
+
+	VanillaValidator.prototype.asyncValidationFinish = function(field, message, container, isValid){
+		if(field){
+			var status = (isValid) ? 'valid' : 'invalid';
+			container.setAttribute('data-validation-status', status);
+			this.removeValidationView(field, this.config.selectors.asyncWaiting);
+			if(!isValid){
+				this.addValidationView(field, message);
 			}
 		}
 	};

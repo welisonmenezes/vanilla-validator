@@ -158,6 +158,9 @@
 			<input type="text" class="required" required  placeholder="name">
 		</div>
 		<div>
+			<input type="text" class="async"  placeholder="async" data-async-key="async-validation-example">
+		</div>
+		<div>
 			<input type="text" class="custom-validate" data-validate-key="no-bad-words" placeholder="custom validate">
 		</div>
 		<div>
@@ -352,6 +355,7 @@
 			container: '#form-2',
 			validationBy: 'onclick',
 			button: '.enviar',
+			validateOnFieldChanges: true,
 			selectors: {
 				required: 'required'
 			},
@@ -368,9 +372,11 @@
 				}
 			},
 			customViewErrors: {
-				add: function(field, message){
+				add: function(field, message, cls){
 					var messageContainer = document.createElement('SPAN');
+					var cls = cls || this.config.selectors.error;
 					messageContainer.innerHTML = message;
+					messageContainer.classList.add(cls);
 					field.parentElement.insertBefore(messageContainer, field);
 					field.classList.add(this.config.selectors.error);
 				},
