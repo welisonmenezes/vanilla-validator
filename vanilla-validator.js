@@ -595,7 +595,7 @@ var VanillaValidator = (function(){
 	};
 
 	/**
-	 * Build validations by params
+	 * Build validations and validates by params
 	 *
 	 * @method factoryValidate
 	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
@@ -605,7 +605,8 @@ var VanillaValidator = (function(){
 	 * @param { Function } callback of success
 	 * @return { String || Number || Array } params that cam be used by 'validationFn' method
 	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
-	 * @return { Boolean } true if all fields are valid
+	 * @param { Boolean } if is called from submission (true) or from field event (false)
+	 * @return { Boolean } true if field is valid
 	 */
 	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn, otherParams, container, onSubmit){
 		if(field){ 
@@ -621,6 +622,15 @@ var VanillaValidator = (function(){
 		return true;
 	};
 
+	/**
+	 * Validates required fields type radio and checkbox
+	 *
+	 * @method validateRequiredCR
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * @param { Boolean } if is called from submission (true) or from field event (false)
+	 * @return { Boolean } true if field is valid
+	 */
 	VanillaValidator.prototype.validateRequiredCR = function(field, container, onSubmit){
 		if(field && container){
 			if(field.name){
@@ -644,6 +654,16 @@ var VanillaValidator = (function(){
 		return true;
 	};
 
+	/**
+	 * Validates fields by given pattern
+	 * (pattern and flags given by 'data-pattern' and 'data-flags' html attribute)
+	 *
+	 * @method validatePattern
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * @param { Boolean } if is called from submission (true) or from field event (false)
+	 * @return { Boolean } true if field is valid
+	 */
 	VanillaValidator.prototype.validatePattern = function(field, container, onSubmit){
 		if(field){
 			var pattern = (field.getAttribute('data-pattern')) ? field.getAttribute('data-pattern') : this.config.customValidationsConfig.pattern;
@@ -660,6 +680,16 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Validates fields with custom validations
+	 * (Custom validate given by 'data-validate-key' html attribute)
+	 *
+	 * @method validateCustom
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * @param { Boolean } if is called from submission (true) or from field event (false)
+	 * @return { Boolean } true if field is valid
+	 */
 	VanillaValidator.prototype.validateCustom = function(field, container, onSubmit){
 		var ret = true;
 		if(field){
@@ -685,6 +715,15 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	/**
+	 * List on view, all messages errors of container fields
+	 *
+	 * @method addListOfValidations
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * @param { String } the error message
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.addListOfValidations = function(field, message, container){
 		if(field && container){
 			message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
@@ -703,6 +742,13 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Remove all messages errors of container fields
+	 *
+	 * @method removeListOfValidations
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.removeListOfValidations = function(container){
 		if(container){
 			if(this.config.customListErrors && this.isFunction(this.config.customListErrors.remove)){
@@ -714,6 +760,14 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * For each field, adds messages errors view
+	 *
+	 * @method addValidationView
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * @param { String } the error message
+	 * 
+	 */
 	VanillaValidator.prototype.addValidationView = function(field, message){
 		if(field){
 			message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
@@ -745,6 +799,13 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * For each field, removes messages errors view
+	 *
+	 * @method addValidationView
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.removeValidationView = function(field){
 		if(field){
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.remove)){
@@ -769,6 +830,14 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Add custom method on 'this.config.customValidates' that will be used in 'validateCustom'
+	 * (the method must be given by user config object and informed by 'data-validation-key' html attribute)
+	 *
+	 * @method addCustomValidations
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.addCustomValidations = function(field){
 		if(field){
 			var customKey = field.getAttribute('data-validate-key');
@@ -781,12 +850,29 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Calls de callback functions
+	 * 
+	 * @method callCallbackFunction
+	 * @param { Function } the callback method
+	 * @param { Object } the new reference
+	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } the container or field that will be validated
+	 * @param { String || Number || Array } the params that can be used by callback
+	 * 
+	 */
 	VanillaValidator.prototype.callCallbackFunction = function(callback, ref, element, otherParams){
 		if(this.isFunction(callback)){
 			callback.call(ref, element, otherParams);
 		}
 	};
 
+	/**
+	 * Sets html attribute 'novalidate' as true to disabled default validations of html5
+	 * 
+	 * @method setHTML5NoValidate
+	 * @param { HTMLElement || HTMLFormElement || HTMLInputElement } the container or field that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.setHTML5NoValidate = function(container){
 		if(this.config.novalidateHTML5 && container){
 			if(this.isHTMLForm(container)){
@@ -795,6 +881,16 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Merge objects deeply
+	 * 
+	 * @method mergeObjectsDeeply
+	 * @param { Object }  A new empty object
+	 * @param { Object } A object that will be merged
+	 * @param { Object } A object that will be merged
+	 * @return { Object } A new object merged
+	 * 
+	 */
 	VanillaValidator.prototype.mergeObjectsDeeply = function(target, objectDefault, objectUser){
 		if(this.isObject(objectDefault) && this.isObject(objectUser) && this.isObject(target)){
 			var t;
@@ -817,12 +913,24 @@ var VanillaValidator = (function(){
 		return target;
 	};
 
+	/**
+	 * Initializes the plugin
+	 * 
+	 * @method init
+	 * 
+	 */
 	VanillaValidator.prototype.init = function(){
 		this.containers = $.getElements(this.config.container);
 		this.loopThroughContainers();
 	};
 
-	// the constructor
+	/**
+	 * The constructor
+	 * 
+	 * @method VanillaValidator
+	 * @param { Object } user configurations
+	 * 
+	 */
 	function VanillaValidator(userConfig){
 		this.userConfig = userConfig;
 		// force call with new operator
