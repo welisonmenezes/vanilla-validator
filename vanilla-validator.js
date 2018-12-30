@@ -217,7 +217,8 @@ var VanillaValidator = (function(){
 						this.asyncValidationStart(field, 'validando', container);
 						setTimeout(function(){
 							if(field){
-								self.asyncValidationFinish(field, message, container, true);
+								var ret = (field.value === 'foo');
+								self.asyncValidationFinish(field, message, container, ret);
 							}
 						}, 2000);
 					}
@@ -421,6 +422,7 @@ var VanillaValidator = (function(){
 				field = fields[i];
 				field.classList.add(this.config.selectors.control);
 				this.addCustomValidations(field);
+				this.addAsyncValidations(field);
 				if(this.config.validateOnFieldChanges){
 					this.addValidationsOnFieldsEvent(field, container);
 				}
@@ -746,9 +748,7 @@ var VanillaValidator = (function(){
 
 	VanillaValidator.prototype.validateAsync = function(field, container, onSubmit){
 		if(field && field.classList.contains(this.config.selectors.async) && container){
-			if(container.getAttribute('data-validation-status') && onSubmit && this.config.validateOnFieldChanges === true){
-				//console.log('formasync', container.getAttribute('data-validation-status'), onSubmit, this.config.validateOnFieldChanges)
-			}else{
+			if(!field.getAttribute('data-validation-status') || ! onSubmit || this.config.validateOnFieldChanges !== true){
 				var asyncKey = field.getAttribute('data-async-key');
 				if(asyncKey){
 					var myAsync = this.config.asyncValidates[asyncKey];
@@ -913,7 +913,7 @@ var VanillaValidator = (function(){
 	 */
 	VanillaValidator.prototype.addAsyncValidations = function(field){
 		if(field){
-			var asyncKey = field.getAttribute('data-validate-key');
+			var asyncKey = field.getAttribute('data-async-key');
 			if(asyncKey){
 				var myAsync = this.config.asyncValidates[asyncKey];
 				if(!myAsync){
@@ -926,6 +926,7 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.asyncValidationStart = function(field, message, container){
 		if(field && container){
 			container.setAttribute('data-validation-status', 'waiting');
+			field.setAttribute('data-validation-status', 'waiting');
 			this.removeValidationView(field, this.config.selectors.asyncWaiting);
 			this.addValidationView(field, message, this.config.selectors.asyncWaiting);
 		}
@@ -934,12 +935,26 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.asyncValidationFinish = function(field, message, container, isValid){
 		if(field){
 			var status = (isValid) ? 'valid' : 'invalid';
-			container.setAttribute('data-validation-status', status);
+			field.setAttribute('data-validation-status', status);
 			this.removeValidationView(field, this.config.selectors.asyncWaiting);
 			if(!isValid){
 				this.addValidationView(field, message);
 			}
+
+			if(!this.asyncContainerHasErrors(container)){
+				container.setAttribute('data-validation-status', 'valid');
+			}else{
+				container.setAttribute('data-validation-status', 'invalid');
+			}
 		}
+	};
+
+	VanillaValidator.prototype.asyncContainerHasErrors = function(container){
+		if(container){
+			var asyncFields = $.getChildren('.' + this.config.selectors.async + '.' + this.config.selectors.error, container);
+			if(asyncFields && asyncFields.length > 0) return true;
+		}
+		return false;
 	};
 
 	/**

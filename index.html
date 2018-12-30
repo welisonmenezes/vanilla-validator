@@ -158,11 +158,16 @@
 			<input type="text" class="required" required  placeholder="name">
 		</div>
 		<div>
-			<input type="text" class="async"  placeholder="async" data-async-key="async-validation-example">
+			<input type="text" class="async"  placeholder="async test" data-async-key="async-validation-test">
 		</div>
+		<div>
+			<input type="text" class="async"  placeholder="async (must be 'foo')" data-async-key="async-validation-example">
+		</div>
+		
 		<div>
 			<input type="text" class="custom-validate" data-validate-key="no-bad-words" placeholder="custom validate">
 		</div>
+		<ul class="wrap-errors"></ul>
 		<div>
 			<span class="enviar">Enviar</span>
 		</div>
@@ -368,6 +373,20 @@
 							return false;
 						}
 						return true;
+					}
+				}
+			},
+			asyncValidates: {
+				'async-validation-test': { // must inform this key in html attribute 'data-async-key'
+					message: 'error no async test',
+					fn: function(field, message, container){
+						var self = this;
+						this.asyncValidationStart(field, 'fazendo validação remota...', container);
+						setTimeout(function(){
+							if(field){
+								self.asyncValidationFinish(field, message, container, true);
+							}
+						}, 2000);
 					}
 				}
 			},
