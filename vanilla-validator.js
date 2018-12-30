@@ -364,21 +364,36 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	/**
+	 * To each selector, get each container child field that does not have 'vv-control' class yet.
+	 *
+	 * @method addControlClassesOnFields
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.addControlClassesOnFields = function(container){
-		var field, key;
+		var fields, key;
 		var invalidSelectors = ['vv-control', 'error', 'formError', 'messageError', 'wrapErrors'];
 		for (key in this.config.selectors) {
 			if(this.config.selectors.hasOwnProperty(key) && !this.includes(invalidSelectors, key)){
 				if(key != this.config.selectors.control){
-					field = $.getChildren('.' + this.config.selectors[key] + ':not(.' + this.config.selectors.control + ')', container);
-					this.loopThroughFieldsToAddControls(field, container);
+					fields = $.getChildren('.' + this.config.selectors[key] + ':not(.' + this.config.selectors.control + ')', container);
+					this.loopThroughFieldsToAddControls(fields, container);
 				}
 			}
 		}
 	};
 
+	/**
+	 * Sets 'vv-control' class to each container child field and add events on them
+	 *
+	 * @method loopThroughFieldsToAddControls
+	 * @param { HTMLCollection || NodeList } the fields that will be validated
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.loopThroughFieldsToAddControls = function(fields, container){
-		if(fields){
+		if(fields){ 
 			var i, field, total = fields.length;
 			for(i = 0; i < total; i++){
 				field = fields[i];
@@ -391,8 +406,16 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Add 'change' and 'keyup' events to make field validatable
+	 *
+	 * @method addValidationsOnFieldsEvent
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * 
+	 */
 	VanillaValidator.prototype.addValidationsOnFieldsEvent = function(field, container){
-		if(field){
+		if(field){ 
 			var self = this;
 			field.addEventListener('change', function(event){
 				event.preventDefault();
@@ -405,6 +428,16 @@ var VanillaValidator = (function(){
 		}
 	};
 
+	/**
+	 * Validate each field
+	 *
+	 * @method validateFields
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * @param { Boolean } if is called from submission (true) or from field event (false)
+	 * @return { Boolean } true if all fields are valid
+	 * 
+	 */
 	VanillaValidator.prototype.validateFields = function(field, container, onSubmit){
 		var ret = true, min, max, range, equal, extensions;
 		if(field && container){
@@ -552,6 +585,7 @@ var VanillaValidator = (function(){
 				}
 			}
 		}
+		// callbacks
 		if(ret){
 			this.callCallbackFunction(this.config.callbacks.eachFieldSuccess, this, field);
 		}else{
@@ -560,8 +594,21 @@ var VanillaValidator = (function(){
 		return ret;
 	};
 
+	/**
+	 * Build validations by params
+	 *
+	 * @method factoryValidate
+	 * @param { HTMLElement || HTMLInputElement } the field that will be validated
+	 * @param { Function } the method that will validates the field (this must return a boolean)
+	 * @param { String } the message error
+	 * @param { Function } callback of error
+	 * @param { Function } callback of success
+	 * @return { String || Number || Array } params that cam be used by 'validationFn' method
+	 * @param { HTMLElement || HTMLFormElement } the container that will be validated
+	 * @return { Boolean } true if all fields are valid
+	 */
 	VanillaValidator.prototype.factoryValidate = function(field, validationFn, message, callbackErrorFn, callbackSuccessFn, otherParams, container, onSubmit){
-		if(field){
+		if(field){ 
 			if(!validationFn.call(this, field.value, otherParams)){
 				this.addValidationView(field, message);
 				if(onSubmit && this.config.showListOfValidations) 
