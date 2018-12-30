@@ -1,59 +1,179 @@
 var VVChecks = (function(){
 
+    /**
+	 * Checks if value is empty
+	 *
+	 * @method isNotEmpty
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isNotEmpty = function(value){
 		return !(value === '' || value.length < 1);
 	};
 
+    /**
+	 * Checks if value is a valid email
+	 *
+	 * @method isEmail
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isEmail = function(value){
 		var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
         return (pattern.test(value)) || (! this.isNotEmpty(value));
 	};
 
+    /**
+	 * Checks if value is (or can be) a valid Integer
+	 *
+	 * @method isInteger
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isInteger = function(value){
         return (/^[0-9]+$/.test(value)) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid digit
+	 *
+	 * @method isDigit
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isDigit = function(value){
         return (/^[a-zA-Z0-9]+$/.test(value)) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid url
+	 *
+	 * @method isUrl
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isUrl = function(value){
         var pattern = new RegExp(/^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i);
         return (pattern.test(value)) || (! this.isNotEmpty(value));
 	};
 
+    /**
+	 * Checks if value length is less or equal than given size
+	 *
+	 * @method maxLength
+	 * @param { String } value that will be validated
+     * @param { Integer } the limit size
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.maxLength = function(value, size){
         return (value.length <= size) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value length is more or equal than given size
+	 *
+	 * @method minLength
+	 * @param { String } value that will be validated
+     * @param { Integer } the limit size
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.minLength = function(value, size){
         return (value.length >= size) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value length is beetwen given range size
+	 *
+	 * @method rangeLength
+	 * @param { String } value that will be validated
+     * @param { Array } whit min and max size
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.rangeLength = function(value, range){
         return ( (value.length <= range[1]) && (value.length >= range[0]) ) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value length is equals to given size
+	 *
+	 * @method isDigit
+	 * @param { String } value that will be validated
+     * @param { Integer } the limit size
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.sameLength = function(value, size){
         return (value.length == size) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is higher or equal than given value
+	 *
+	 * @method isMin
+	 * @param { String || Integer || Double } value that will be validated
+     * @param { Integer || Double } the limit size
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isMin = function(value, min){
         return (value >= min) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is lower or equal than given value
+	 *
+	 * @method isMax
+	 * @param { String || Integer || Double } value that will be validated
+     * @param { Integer || Double } the limit size
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isMax = function(value, max){
         return (value <= max) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is beetwen given range
+	 *
+	 * @method isRange
+	 * @param { String || Integer || Double } value that will be validated
+     * @param { Array } the min and max values
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isRange = function(value, range){
         return ( (value <= range[1]) && (value >= range[0]) ) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is equals to given param
+	 *
+	 * @method equalTo
+	 * @param { String } value that will be validated
+     * @param { String } the param that will be compared
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.equalTo = function(value, param){
         return (value.toString() === param.toString()) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid cpf (brazilian document)
+	 *
+	 * @method isCpf
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isCpf = function(value){
         var numeros, digitos, soma, i, resultado, digitos_iguais;
         digitos_iguais = 1;
@@ -82,6 +202,14 @@ var VVChecks = (function(){
         }else return false || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid cnpj (brazilian document)
+	 *
+	 * @method isCnpj
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isCnpj = function(value){
         var str = value, numeros, digitos, soma, i, resultado, pos, tamanho, digitos_iguais, cnpj;
         str = str.replace('.','');
@@ -128,6 +256,14 @@ var VVChecks = (function(){
         return false || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid cnh (brazilian document)
+	 *
+	 * @method isCnh
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isCnh = function(value) {
 		var cnh = value;
 		var char1 = cnh.charAt(0);
@@ -151,6 +287,14 @@ var VVChecks = (function(){
 		return (('' + vl1 + vl2) === cnh.substr(-2)) || (! this.isNotEmpty(value));
 	};
 
+    /**
+	 * Checks if value is a valid credit card number
+	 *
+	 * @method isCreditCard
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isCreditCard = function(value){
         if ( /[^0-9 -]+/.test( value ) )  
             return false || (! this.isNotEmpty(value));
@@ -170,15 +314,39 @@ var VVChecks = (function(){
         return (( nCheck % 10 ) === 0) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid cep (brazilian zip code)
+	 *
+	 * @method isCep
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isCep = function(value){
         return (/^\d{2}.\d{3}-\d{3}?$|^\d{5}-?\d{3}?$/.test(value)) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid phone number (brazilian format)
+	 *
+	 * @method isPhone
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isPhone = function(value){
         var phoneNum = value.replace(/[()\-_ +]/g,'');
         return (/^([0-9]{8,14})$/.test(phoneNum)) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid date (brazilian format)
+	 *
+	 * @method isDate
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isDate = function(value){
         var check = false,
         re = /^\d{1,2}\/\d{1,2}\/\d{4}$/,
@@ -200,42 +368,126 @@ var VVChecks = (function(){
         return check || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value has a given allowed extension
+	 *
+	 * @method hasExtension
+	 * @param { String } value that will be validated
+     * @param { Array } the allowed extensions
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.hasExtension = function(value, extensions){
         return ( (new RegExp('(' + extensions.join('|').replace(/\./g, '\\.') + ')$')).test(value) ) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a valid currency (brazilian currency)
+	 *
+	 * @method isCurrency
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isCurrency = function(value){
         return (/^(R\$ )?(\d{1,3}.)?(\d{1,3}.)?(\d{1,3}.)?\d{1,3},\d{2}$/.test(value)) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is a Numeric
+	 *
+	 * @method isNumeric
+	 * @param { String } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isNumeric = function(value){
         return (!isNaN(value)) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value is compatible with the given pattern
+	 *
+	 * @method isPattern
+	 * @param { String } value that will be validated
+     * @param { String } the regular expression
+     * @param { String } the flags
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isPattern = function(value, pattern, flags){
         return (new RegExp(pattern, flags).test(value)) || (! this.isNotEmpty(value));
     };
 
+    /**
+	 * Checks if value an Object
+	 *
+	 * @method isObject
+	 * @param { Any } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isObject = function(object){
 		return (object != false && typeof object === 'object' && object instanceof Object && (typeof object !== 'function'));
 	};
 
+    /**
+	 * Checks if value a Function
+	 *
+	 * @method isFunction
+	 * @param { Any } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isFunction = function(fn){
         return Object.prototype.toString.call(fn) == '[object Function]';
 	};
 
+    /**
+	 * Checks if value an Array
+	 *
+	 * @method isArray
+	 * @param { Any } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
 	VVChecks.prototype.isArray = function(array){
 		return Object.prototype.toString.call(array) === '[object Array]';
 	};
 
+    /**
+	 * Checks if value a Html Element
+	 *
+	 * @method isHTMLElement
+	 * @param { Any } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isHTMLElement = function(element){
         return element instanceof Element || element instanceof HTMLDocument;
     };
 
+    /**
+	 * Checks if value a Html Form Element
+	 *
+	 * @method isHTMLForm
+	 * @param { Any } value that will be validated
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.isHTMLForm = function(element){
         return (this.isHTMLElement(element) && element.tagName && element.tagName === 'FORM');
     };
 
+    /**
+	 * Checks if value is included in array
+	 *
+	 * @method includes
+	 * @param { Array } the array
+     * @param { String } the value will be searched
+     * @return { Boolean } if is valid (true)
+	 * 
+	 */
     VVChecks.prototype.includes = function(arr, searchElement) {
         var O = Object(arr);
         var len = parseInt(O.length) || 0;
@@ -259,7 +511,12 @@ var VVChecks = (function(){
         return false;
     };
 
-    // the constructor
+    /**
+	 * The constructor
+	 *
+	 * @method VVChecks
+	 * 
+	 */
     function VVChecks(){
 		// force call with new operator
 		if (!(this instanceof VVChecks)) { 
