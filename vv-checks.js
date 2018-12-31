@@ -138,26 +138,38 @@ var VVChecks = (function(){
         value = value.replace('.', '');
         value = value.replace('.', '');
         value = value.replace('-', '');
-        if (value.length != 11) return false || (! this.isNotEmpty(value));
-        for (i = 0; i < value.length - 1; i++)
-            if (value.charAt(i) != value.charAt(i + 1)){
+        if(value.length != 11){
+            return false || (! this.isNotEmpty(value));
+        }
+        for(i = 0; i < value.length - 1; i++)
+            if(value.charAt(i) != value.charAt(i + 1)){
                 digitos_iguais = 0;
                 break;
             }
-        if (!digitos_iguais){
+        if(!digitos_iguais){
             numeros = value.substring(0,9);
             digitos = value.substring(9);
             soma = 0;
-            for (i = 10; i > 1; i--) soma += numeros.charAt(10 - i) * i;
+            for(i = 10; i > 1; i--){
+                soma += numeros.charAt(10 - i) * i;
+            }
             resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(0)) return false || (! this.isNotEmpty(value));
+            if(resultado != digitos.charAt(0)){
+                return false || (! this.isNotEmpty(value));
+            }
             numeros = value.substring(0,10);
             soma = 0;
-            for (i = 11; i > 1; i--)  soma += numeros.charAt(11 - i) * i;
+            for(i = 11; i > 1; i--){
+                soma += numeros.charAt(11 - i) * i;
+            }
             resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(1)) return false || (! this.isNotEmpty(value));
+            if(resultado != digitos.charAt(1)){
+                return false || (! this.isNotEmpty(value));
+            }
             return true || (! this.isNotEmpty(value));
-        }else return false || (! this.isNotEmpty(value));
+        }else{
+            return false || (! this.isNotEmpty(value));
+        }
     };
 
     /**
@@ -174,38 +186,45 @@ var VVChecks = (function(){
         str = str.replace('/','');
         cnpj = str;
         digitos_iguais = 1;
-        if (cnpj.length < 14 && cnpj.length < 15)
+        if(cnpj.length < 14 && cnpj.length < 15){
             return false || (! this.isNotEmpty(value));
-        for (i = 0; i < cnpj.length - 1; i++) {
-            if (cnpj.charAt(i) != cnpj.charAt(i + 1)){
+        }
+        for(i = 0; i < cnpj.length - 1; i++) {
+            if(cnpj.charAt(i) != cnpj.charAt(i + 1)){
                 digitos_iguais = 0;
                 break;
             }
         }
-        if (!digitos_iguais) {
+        if(!digitos_iguais) {
             tamanho = cnpj.length - 2;
             numeros = cnpj.substring(0,tamanho);
             digitos = cnpj.substring(tamanho);
             soma = 0;
             pos = tamanho - 7;
-            for (i = tamanho; i >= 1; i--) {
+            for(i = tamanho; i >= 1; i--) {
                 soma += numeros.charAt(tamanho - i) * pos--;
-                if (pos < 2) pos = 9;
+                if(pos < 2){
+                    pos = 9;
+                }
             }
             resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(0)) 
+            if(resultado != digitos.charAt(0)){
                 return false || (! this.isNotEmpty(value));
+            }
             tamanho = tamanho + 1;
             numeros = cnpj.substring(0,tamanho);
             soma = 0;
             pos = tamanho - 7;
-            for (i = tamanho; i >= 1; i--) {
+            for(i = tamanho; i >= 1; i--) {
                 soma += numeros.charAt(tamanho - i) * pos--;
-                if (pos < 2) pos = 9;
+                if(pos < 2){
+                    pos = 9;
+                }
             }
             resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(1))
+            if(resultado != digitos.charAt(1)){
                 return false || (! this.isNotEmpty(value));
+            }
             return true || (! this.isNotEmpty(value));
         }
         return false || (! this.isNotEmpty(value));
@@ -219,19 +238,20 @@ var VVChecks = (function(){
 	VVChecks.prototype.isCnh = function(value) {
 		var cnh = value;
 		var char1 = cnh.charAt(0);
-        if (cnh.replace(/[^\d]/g, '').length !== 11 || char1.repeat(11) === cnh) 
+        if(cnh.replace(/[^\d]/g, '').length !== 11 || char1.repeat(11) === cnh){
             return false || (! this.isNotEmpty(value));
+        }
         var i, j, v;
-        for (i = 0, j = 9, v = 0; i < 9; ++i, --j) {
+        for (i = 0, j = 9, v = 0; i < 9; ++i, --j){
 			v += +(cnh.charAt(i) * j);
 		}
 		var dsc = 0,
 		vl1 = v % 11;
-		if (vl1 >= 10) {
+		if(vl1 >= 10) {
 			vl1 = 0;
 			dsc = 2;
 		}
-		for (i = 0, j = 1, v = 0; i < 9; ++i, ++j) {
+		for(i = 0, j = 1, v = 0; i < 9; ++i, ++j){
 			v += +(cnh.charAt(i) * j);
 		}
 		var x = v % 11;
@@ -245,17 +265,21 @@ var VVChecks = (function(){
      * @returns { Boolean } if is valid (true)
 	 */
 	VVChecks.prototype.isCreditCard = function(value){
-        if ( /[^0-9 -]+/.test( value ) )  
+        if( /[^0-9 -]+/.test( value ) ){
             return false || (! this.isNotEmpty(value));
+        }
         var nCheck = 0, nDigit = 0, bEven = false, n, cDigit;
         var cardNum = value.replace( /\D/g, '' );
-        if ( cardNum.length < 13 || cardNum.length > 19 )
+        if( cardNum.length < 13 || cardNum.length > 19 ){
             return false || (! this.isNotEmpty(value));
-        for ( n = cardNum.length - 1; n >= 0; n--) {
+        }
+        for( n = cardNum.length - 1; n >= 0; n--){
             cDigit = cardNum.charAt( n );
             nDigit = parseInt( cDigit, 10 );
-            if ( bEven ) {
-                if ( ( nDigit *= 2 ) > 9 )  nDigit -= 9;
+            if( bEven ){
+                if( ( nDigit *= 2 ) > 9 ){
+                    nDigit -= 9;
+                }
             }
             nCheck += nDigit;
             bEven = !bEven;
@@ -291,13 +315,13 @@ var VVChecks = (function(){
         var check = false,
         re = /^\d{1,2}\/\d{1,2}\/\d{4}$/,
         adata, gg, mm, aaaa, xdata;
-        if ( re.test(value)) {
+        if( re.test(value)){
             adata = value.split('/');
             gg = parseInt(adata[0], 10);
             mm = parseInt(adata[1], 10);
             aaaa = parseInt(adata[2], 10);
             xdata = new Date(aaaa, mm - 1, gg, 12, 0, 0, 0);
-            if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth () === mm - 1 ) && ( xdata.getUTCDate() === gg ) ){
+            if( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth () === mm - 1 ) && ( xdata.getUTCDate() === gg ) ){
                 check = true;
             }else{
                 check = false;
@@ -398,22 +422,24 @@ var VVChecks = (function(){
      * @param { String } searchElement The value will be searched
      * @returns { Boolean } if is valid (true)
 	 */
-    VVChecks.prototype.includes = function(arr, searchElement) {
+    VVChecks.prototype.includes = function(arr, searchElement){
         var O = Object(arr);
         var len = parseInt(O.length) || 0;
         if (len === 0) return false;
         var n = parseInt(arguments[1]) || 0;
         var k;
-        if (n >= 0) {
+        if(n >= 0){
             k = n;
-        } else {
+        }else{
             k = len + n;
-            if (k < 0) k = 0;
+            if(k < 0){
+                k = 0;
+            }
         }
         var currentElement;
-        while (k < len) {
+        while(k < len){
             currentElement = O[k];
-            if (searchElement === currentElement || (searchElement !== searchElement && currentElement !== currentElement)) {
+            if(searchElement === currentElement || (searchElement !== searchElement && currentElement !== currentElement)){
                 return true;
             }
             k++;
@@ -427,7 +453,7 @@ var VVChecks = (function(){
 	 */
     function VVChecks(){
 		// force call with new operator
-		if (!(this instanceof VVChecks)) { 
+		if(!(this instanceof VVChecks)){ 
 			throw new TypeError('Cannot call a class as a function');
 		}
 	}
