@@ -72,7 +72,7 @@ var VanillaValidator = (function(){
 				error: 'error',
 				formError: 'form-error',
 				messageError: 'msg-error',
-				wrapErrors: 'wrap-errors' // must be a UL element
+				wrapErrors: 'wrap-errors'
 			},
 			messages: { // or by html attribute 'data-message-error'
 				required: 'Required field',
@@ -767,12 +767,31 @@ var VanillaValidator = (function(){
 			}else{
 				var errorsWrap = $.getChild('.' + this.config.selectors.wrapErrors, container);
 				if(errorsWrap){
+					var ulWrap = this.getListOfValidationsContainer(errorsWrap);
 					var liWrap = document.createElement('LI');
 					$.inner(liWrap, message);
-					errorsWrap.appendChild(liWrap);
+					ulWrap.appendChild(liWrap);
 				}
 			}
 		}
+	};
+
+	/**
+	 * Creates a UL element int wrapErros if wrapErros is not a UL element
+	 * @param { HTMLElement } wrap The wrapErrors element
+	 * @returns { HTMLElement } A UL element where will receive a list of errors
+	 */
+	VanillaValidator.prototype.getListOfValidationsContainer = function(wrap){
+		if(wrap && wrap.tagName !== 'UL'){
+			var ul = $.getChild('ul', wrap);
+			if(!ul){
+				var tempUL = document.createElement('UL');
+				wrap.appendChild(tempUL);
+				ul = $.getChild('ul', wrap);
+			}
+			return ul;
+		}
+		return wrap;
 	};
 
 	/**
