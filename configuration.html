@@ -57,16 +57,45 @@
 										<a href="index.html">Basic Usage</a>
 									</li>
 									<li class="list-group-item">
-										<a href="blog-list.html">Development</a>
+										<a href="configuration.html">Configurations</a>
+										<ul>
+											<li>
+												<a href="#">Selectors</a>
+											</li>
+											<li>
+												<a href="#">Messages</a>
+											</li>
+											<li>
+												<a href="#">Custom validations behavior</a>
+											</li>
+											<li>
+												<a href="#">Callbacks</a>
+											</li>
+											<li>
+												<a href="#">Custom validations</a>
+											</li>
+											<li>
+												<a href="#">Async validators</a>
+											</li>
+											<li>
+												<a href="#">Custom view errors</a>
+											</li>
+											<li>
+												<a href="#">Custom view list errors</a>
+											</li>
+											<li>
+												<a href="#">Container successful</a>
+											</li>
+											<li>
+												<a href="#">Form successful</a>
+											</li>
+										</ul>
 									</li>
 									<li class="list-group-item">
-										<a href="blog-list.html">Design</a>
+										<a href="examples.html">Examples</a>
 									</li>
 									<li class="list-group-item">
-										<a href="blog-list.html">Frontend</a>
-									</li>
-									<li class="list-group-item">
-										<a href="blog-list.html">Companies</a>
+										<a href="download.html">Download</a>
 									</li>
 								</ul>
 							</div>
@@ -146,9 +175,54 @@
 			<td><p>If true will show list of all errors. That errors will appear on element that have class configured in <em>selectors.wrapErrors</em>.</p></td>
 		</tr>
 		<tr>
-			<th></th>
-			<td><em></em></td>
-			<td><p></p></td>
+			<th>selectors</th>
+			<td><em>Object</em></td>
+			<td><p>A object with selectors used by validator. See more in <a href="#">selectors</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>messages</th>
+			<td><em>Object</em></td>
+			<td><p>A object with messages erros shown by validator. See more in <a href="#">messages</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>customValidationsConfig</th>
+			<td><em>Object</em></td>
+			<td><p>A object with configurations to set custom validations behavior. See more in <a href="#">custom validations behavior</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>callbacks</th>
+			<td><em>Object</em></td>
+			<td><p>A object with custom callbacks methods. See more in <a href="#">callback</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>customValidates</th>
+			<td><em>Object</em></td>
+			<td><p>A object with your own custom validations. See more in <a href="#">custom validations</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>asyncValidates</th>
+			<td><em>Object</em></td>
+			<td><p>A object with your own custom async validators. See more in <a href="#">async validators</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>customViewErrors</th>
+			<td><em>Object</em></td>
+			<td><p>A object with an add and remove keys. Here you can customize your view errors. See more in <a href="#">custom view errors</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>customListErrors</th>
+			<td><em>Object</em></td>
+			<td><p>A object with an add and remove keys. Here you can customize your view list all errors. See more in <a href="#">custom view list errors</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>onContainerSuccess</th>
+			<td><em>Funciton</em></td>
+			<td><p>A function that will be called when your validation is successful. If your container is not a form element this configuration is required. See more in <a href="#">container successful</a> section.</p></td>
+		</tr>
+		<tr>
+			<th>onFormSubmit</th>
+			<td><em>Function</em></td>
+			<td><p>A function that will be called when your validation is successfull. Called only if the container is a form element. If not defined, the default behavior is a form.submit(). See more in <a href="#">form successful</a> section.</p></td>
 		</tr>
 	</tbody>
 </table>
