@@ -909,7 +909,7 @@ main.main{
 }
 .main-post .h1, .main-post .h2, .main-post .h3, .main-post .h4, .main-post .h5, .main-post .h6, 
 .main-post h1, .main-post h2, .main-post h3, .main-post h4, .main-post h5, .main-post h6{
-	padding-top: .8em;
+	/*padding-top: .8em;*/
 	margin-bottom: .5em;
 }
 .main-post h1,
@@ -917,8 +917,22 @@ main.main{
 	padding-top: 0;
 	margin-bottom: 0;
 }
+.main-post p{
+	margin-bottom: 0.5rem;
+}
+.main-post pre{
+	margin-top: 1rem;
+}
+.main-post header{
+	border-bottom: solid 1px #414656;
+	margin-bottom: 2rem;
+}
 
-
+.main-post hr{
+	border: none;
+	border-bottom: solid 1px #414656;
+	margin: 2rem 0;
+}
 
 .main-post blockquote{
 	font-style: italic;
@@ -1268,4 +1282,15 @@ main.main{
 	.modal-dialog{
 		max-width: 100%;
 	}
+}
+
+
+pre .close {
+     float: none; 
+     font-size: inherit; 
+     font-weight: normal; 
+     line-height: normal; 
+     color: #f0c674; 
+     text-shadow: none; 
+     opacity: 1; 
 }

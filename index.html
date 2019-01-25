@@ -49,11 +49,11 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="section-title">
-									<h4 class="title">Categories</h4>
+									<h4 class="title">Menu</h4>
 								</div>
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item">
-										<a href="blog-list.html">Technology</a>
+										<a href="index.html">Basic Usage</a>
 									</li>
 									<li class="list-group-item">
 										<a href="blog-list.html">Development</a>
@@ -78,14 +78,65 @@
 					
 					<!-- main-post -->
 					<article class="main-post">
-						<h1>Instalation</h1>
-						<pre>
-							<code data-language="html">&lt;script type="text/javascript"&gt;
-    function prettyCool() {
-        doSomeJQueryOrWhatever();
-    }
+
+
+<header>
+	<h2>Basic Usage</h2>
+</header>
+
+<h3>Instalation</h3>
+<pre>
+<code data-language="html">&lt;script src='dist/vanilla-validator.concat.min.js'&gt;&lt;/script&gt;</code>
+</pre>
+
+<hr>
+
+<h3>Initialization</h3>
+<pre>
+<code data-language="html">&lt;script&gt;
+  var validator = new VanillaValidator({});
 &lt;/script&gt;</code>
-						</pre>
+</pre>
+
+<hr>
+
+<h3>The HTML</h3>
+<p>To work correctly, you must use the plugin's configured classes on form elements.</p>
+<p>You can custom each class. See <a href="#">selectors</a> section.</p>
+<pre>
+<code data-language="html">&lt;form&gt;
+  &lt;div&gt;
+    &lt;input type='text' class='required' placeholder='Name'&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;input type='text' class='email' placeholder='Email'&gt;
+  &lt;/div&gt;
+  &lt;input type='submit'&gt;
+&lt;/form&gt;</code>
+</pre>
+
+<hr>
+
+<h3>The config object</h3>
+<p>You have to pass a configuration object as param when instantiating <em>VanillaValidator</em>.</p>
+<p>If you pass a empty object the <em>VanillaValidator</em> will use the default configurations.</p>
+<p>However, you can customize your validator. Example:</p>
+<pre>
+<code data-language="html">&lt;script&gt;
+var config = {
+  container: '#my-form-id',
+  validationBy: 'onclick',
+  button: '.my-button-class',
+  validateOnFieldChanges: true,
+  selectors: {
+    required: 'my-required-field-class'
+  }
+};
+var validator = new VanillaValidator(config);
+&lt;/script&gt;</code>
+</pre>
+<p>See more at <a href="#">configurations</a> section</p>
+
 					</article>
 					<!-- end main-post -->
 
@@ -125,6 +176,10 @@
 	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="assets/rainbow-master/dist/rainbow.min.js"></script>
+    <script src="assets/rainbow-master/src/language/generic.js"></script>
+    <script src="assets/rainbow-master/src/language/html.js"></script>
+    <script src="assets/rainbow-master/src/language/css.js"></script>
+    <script src="assets/rainbow-master/src/language/javascript.js"></script>
 	<script src="js/app.js"></script>
 </body>
 </html>
