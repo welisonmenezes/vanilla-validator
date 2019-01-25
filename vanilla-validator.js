@@ -1,5 +1,7 @@
 var VanillaValidator = (function(){
 
+	"use strict";
+
 	var $ = new VVElements();
 
 	/**

@@ -1,429 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
 	<meta charset="UTF-8">
-	<title>Vannila Validator</title>
+	<title>Vanilla Validator</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="assets/images/favicon.png">
+	<link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/rainbow-master/themes/css/tomorrow-night.css">
+	<link rel="stylesheet" href="css/fonts.css">
+	<link rel="stylesheet" href="css/styles.css">
 	<style>
-		.error{
-			color: red;
-			border-color: red;
-		}
-		.msg-error, .wrap-errors{
-			font-size: 12px;
-			color: red;
-		}
-		.enviar{
-			cursor: pointer;
-			display: inline-block;
-			background: #ccc;
-			padding: 6px;
+		body{
+			-moz-opacity: 0.00;
+			-khtml-opacity: 0.00;
+			opacity: 0.00;
 		}
 	</style>
 </head>
-<body>
-
-	<div id="teste"></div>
+<body class="page-about">
 	
-	<form action="#" id="form-1" class="xx">
+	<!-- header-main -->
+	<header class="header-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="navbar navbar-dark navbar-expand-md">
+						<a href="../" class="navbar-brand">
+							<img src="assets/images/mylogo.svg" alt="Logo">
+						</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- end header-main -->
+
+	<!-- main -->
+	<main class="main">
+		<div class="container">
 		
-		<div>
-			<input type="text" class="required" id="igual" data-message-error="Obrigatório" placeholder="name">
-		</div>
-		<div>
-			<input type="text" class="custom-validate" placeholder="equal name" data-anchored-field="#igual" data-validate-key="equal-anchored-field">
-		</div>
-		<div>
-			<input type="text" class="custom-validate" placeholder="different name" data-anchored-field="#igual" data-validate-key="different-anchored-field">
-		</div>
-		<div>
-			<input type="email" class="email" placeholder="email">
-		</div>
-		<div>
-			<input type="tel" class="phone" placeholder="phone">
-		</div>
-		<div>
-			<input type="text" class="integer" placeholder="integer">
-		</div>
-		<div>
-			<input type="text" class="required digit" placeholder="digit">
-		</div>
-		<div>
-			<input type="text" class="numeric" placeholder="numeric">
-		</div>
-		<div>
-			<input type="text" class="url" placeholder="url">
-		</div>
-		<div>
-			<input type="text" class="date" placeholder="date">
-		</div>
-		<div>
-			<input type="text" class="currency" placeholder="currency">
-		</div>
-		<div>
-			<input type="text" class="cep" placeholder="cep">
-		</div>
-		<div>
-			<input type="text" class="max-length" data-max-length="7" placeholder="max length">
-		</div>
-		<div>
-			<input type="text" class="min-length" data-min-length="7" placeholder="min length">
-		</div>
-		<div>
-			<input type="text" class="range-length" data-min-length="2" data-max-length="3" data-message-error="the number of characters must be between 2 and 3" placeholder="range length">
-		</div>
-		<div>
-			<input type="text" class="same-length" data-same-length="5" placeholder="same length">
-		</div>
-		<div>
-			<input type="text" class="max" data-max="5" placeholder="max">
-		</div>
-		<div>
-			<input type="text" class="min" data-min="3" placeholder="min">
-		</div>
-		<div>
-			<input type="text" class="range" placeholder="range">
-		</div>
-		<div>
-			<input type="text" class="equal-to" xdata-min="3" placeholder="equal to">
-		</div>
-		<div>
-			<input type="text" class="cpf" placeholder="cpf">
-		</div>
-		<div>
-			<input type="text" class="cnpj" placeholder="cnpj">
-		</div>
-		<div>
-			<input type="text" class="cnh" placeholder="cnh">
-		</div>
-		<div>
-			<input type="text" class="credit-card" placeholder="credit card">
-		</div>
-		<div>
-			<input type="text" class="pattern" placeholder="pattern">
-		</div>
-		<div>
-			<input type="text" class="pattern" data-pattern="[x]" data-flags="ig" data-message-error="Precisa conter um x" placeholder="custom pattern">
-		</div>
-		<div>
-			<input type="file" class="required has-extension" data-extensions="svg,png">
-		</div>
-		<div>
-			<textarea class="required" placeholder="message"></textarea>
-		</div>
-		<div>
-			<label>Time</label>
-			<input type="range" min="-10" max="10" value="0" class="required">
-		</div>
-		<div>
-			<select class="required">
-				<option value="">Selecione</option>
-				<option value="1">Teste 1</option>
-				<option value="2">Teste 2</option>
-			</select>
-		</div>
-		<div>
-			<label>
-				<input type="radio" name="teste-radio" class="required cls-radio" checked value="teste1">
-				teste 1
-			</label>
-			<label>
-				<input type="radio" name="teste-radio" class="required" value="teste2">
-				teste 2
-			</label>
-			<label>
-				<input type="radio" name="teste-radio" class="required" value="teste2">
-				teste 2
-			</label>
-		</div>
-		<div>
-			<label>
-				<input type="checkbox" name="teste-checkbox" class="required" value="teste1">
-				teste 1
-			</label>
-			<label>
-				<input type="checkbox" name="teste-checkbox" class="required" value="teste2">
-				teste 2
-			</label>
-		</div>
-		<ul class="wrap-errors"></ul>
-		<div>
-			<button type="submit">Enviar</button>
-		</div>
-	</form>
+			<div class="row">
+				
+				<div class="col-md-4">
+					<!-- sidebar -->
+					<div class="sidebar">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="section-title">
+									<h4 class="title">Categories</h4>
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<a href="blog-list.html">Technology</a>
+									</li>
+									<li class="list-group-item">
+										<a href="blog-list.html">Development</a>
+									</li>
+									<li class="list-group-item">
+										<a href="blog-list.html">Design</a>
+									</li>
+									<li class="list-group-item">
+										<a href="blog-list.html">Frontend</a>
+									</li>
+									<li class="list-group-item">
+										<a href="blog-list.html">Companies</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- end sidebar -->
+				</div>
 
-	<hr>
+				<div class="col-md-8">
+					
+					<!-- main-post -->
+					<article class="main-post">
+						<h1>Instalation</h1>
+						<pre>
+							<code data-language="html">&lt;script type="text/javascript"&gt;
+    function prettyCool() {
+        doSomeJQueryOrWhatever();
+    }
+&lt;/script&gt;</code>
+						</pre>
+					</article>
+					<!-- end main-post -->
 
-	<div class="form-2" id="form-2">
-		<div>
-			<input type="text" class="required" required  placeholder="name">
-		</div>
-		<div>
-			<input type="text" class="async"  placeholder="async test" data-async-key="async-validation-test">
-		</div>
-		<div>
-			<input type="text" class="async"  placeholder="async (must be 'foo')" data-async-key="async-validation-example">
-		</div>
-		
-		<div>
-			<input type="text" class="custom-validate" data-validate-key="no-bad-words" placeholder="custom validate">
-		</div>
-		<div class="wrap-errors"></div>
-		<div>
-			<span class="enviar">Enviar</span>
-		</div>
-	</div>
+				</div>
+			</div>
 
-	<script src="vv-checks.js"></script>
-	<script src="vv-elements.js"></script>
-	<script src="vanilla-validator.js"></script>
+		</div>
+	</main>
+	<!-- end main -->
+	
+	<!-- footer-main -->
+	<footer class="footer-main">
+		<div class="dark-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12">
+						<ul class="nav-footer text-right">
+							<li>
+								<a href="#">
+									<i class="fab fa-github"></i>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="fab fa-linkedin"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- end footer-main -->
 
-	<script type="text/javascript">
-		var config = {
-			container: '#form-1',
-			selectors: {
-				required: 'required'
-			},
-			messages: {
-				required: 'Custom message required',
-				email: 'Custom message email'
-			},
-			novalidateHTML5: true,
-			callbacks: {
-				beforeValidate: function(element){
-					console.log('beforeValidateError')
-				},
-				afterValidate: function(element){
-					console.log('afterValidateError')
-				},
-				eachFieldError: function(element){
-					console.log('eachFieldError');
-				},
-				eachFieldSuccess: function(element){
-					console.log('eachFieldSuccess');
-				},
-				requiredError: function(element){
-					console.log('requiredError');
-				},
-				requiredSuccess: function(element){
-					console.log('requiredSuccess');
-				},
-				emailError: function(element){
-					console.log('emailError');
-				},
-				emailSuccess: function(element){
-					console.log('emailSuccess');
-				},
-				integerError: function(element){
-					console.log('integerError');
-				},
-				integerSuccess: function(element){
-					console.log('integerSuccess');
-				},
-				digitError: function(element){
-					console.log('digitError');
-				},
-				digitSuccess: function(element){
-					console.log('digitSuccess');
-				},
-				numericError: function(element){
-					console.log('numericError');
-				},
-				numericSuccess: function(element){
-					console.log('numericSuccess');
-				},
-				phoneError: function(element){
-					console.log('phoneError');
-				},
-				phoneSuccess: function(element){
-					console.log('phoneSuccess');
-				},
-				urlError: function(element){
-					console.log('urlError');
-				},
-				urlSuccess: function(element){
-					console.log('urlSuccess');
-				},
-				dateError: function(element){
-					console.log('dateError');
-				},
-				dateSuccess: function(element){
-					console.log('dateSuccess');
-				},
-				currencyError: function(element){
-					console.log('currencyError');
-				},
-				currencySuccess: function(element){
-					console.log('currencySuccess');
-				},
-				cepError: function(element){
-					console.log('cepError');
-				},
-				cepSuccess: function(element){
-					console.log('cepSuccess');
-				},
-				maxLengthError: function(element){
-					console.log('maxLengthError');
-				},
-				maxLengthSuccess: function(element){
-					console.log('maxLengthSuccess');
-				},
-				minLengthError: function(element){
-					console.log('minLengthError');
-				},
-				minLengthSuccess: function(element){
-					console.log('minLengthSuccess');
-				},
-				rangeLengthError: function(element){
-					console.log('rangeLengthError');
-				},
-				rangeLengthSuccess: function(element){
-					console.log('rangeLengthSuccess');
-				},
-				sameLengthError: function(element){
-					console.log('sameLengthError');
-				},
-				sameLengthSuccess: function(element){
-					console.log('sameLengthSuccess');
-				},
-				maxError: function(element){
-					console.log('maxError');
-				},
-				maxSuccess: function(element){
-					console.log('maxSuccess');
-				},
-				minError: function(element){
-					console.log('minError');
-				},
-				minSuccess: function(element){
-					console.log('minSuccess');
-				},
-				rangeError: function(element){
-					console.log('rangeError');
-				},
-				rangeSuccess: function(element){
-					console.log('rangeSuccess');
-				},
-				equalToError: function(element){
-					console.log('equalToError');
-				},
-				equalToSuccess: function(element){
-					console.log('equalToSuccess');
-				},
-				cpfError: function(element){
-					console.log('cpfError');
-				},
-				cpfSuccess: function(element){
-					console.log('cpfSuccess');
-				},
-				cnpjError: function(element){
-					console.log('cnpjError');
-				},
-				cnpjSuccess: function(element){
-					console.log('cnpjSuccess');
-				},
-				cnhError: function(element){
-					console.log('cnhError');
-				},
-				cnhSuccess: function(element){
-					console.log('cnhSuccess');
-				},
-				creditCardError: function(element){
-					console.log('creditCardError');
-				},
-				creditCardSuccess: function(element){
-					console.log('creditCardSuccess');
-				},
-				hasExtensionError: function(element){
-					console.log('hasExtensionError');
-				},
-				hasExtensionSuccess: function(element){
-					console.log('hasExtensionSuccess');
-				},
-				patternError: function(element){
-					console.log('patternError');
-				},
-				patternSuccess: function(element){
-					console.log('patternSuccess');
-				},
-				error: function(element){
-					console.log('error');
-				},
-				success: function(element){
-					console.log('success');
-				}
-			}
-		};
-
-		var vv = new VanillaValidator(config);
-
-		var config2 = {
-			container: '#form-2',
-			validationBy: 'onclick',
-			button: '.enviar',
-			validateOnFieldChanges: true,
-			selectors: {
-				required: 'required'
-			},
-			novalidateHTML5: true,
-			customValidates: {
-				'no-bad-words' : {
-					message: 'Forbiden words detected',
-					fn: function(field){
-						if(field.value === 'java' || field.value === 'php'){
-							return false;
-						}
-						return true;
-					}
-				}
-			},
-			asyncValidates: {
-				'async-validation-test': { // must inform this key in html attribute 'data-async-key'
-					message: 'error no async test',
-					fn: function(field, message, container){
-						var self = this;
-						this.asyncValidationStart(field, 'fazendo validação remota...', container);
-						setTimeout(function(){
-							if(field){
-								self.asyncValidationFinish(field, message, container, true);
-							}
-						}, 2000);
-					}
-				}
-			},
-			customViewErrors: {
-				add: function(field, message, cls){
-					var messageContainer = document.createElement('SPAN');
-					var cls = cls || this.config.selectors.error;
-					messageContainer.innerHTML = message;
-					messageContainer.classList.add(cls);
-					field.parentElement.insertBefore(messageContainer, field);
-					field.classList.add(this.config.selectors.error);
-				},
-				remove: function(field){
-					if(field.parentElement.querySelector('span')){
-						field.parentElement.querySelector('span').remove();
-						field.classList.remove(this.config.selectors.error);
-					}
-				}
-			},
-			xcustomListErrors: {
-				add: function(field, message, container){
-					console.log('customListErrors ADD', field, message, container);
-				},
-				remove: function(container){
-					console.log('customListErrors REMOVE: ', container);
-				}
-			},
-			onContainerSuccess: function(container){
-				console.log('CONTAINER', container);
-				alert('do something here');
-			},
-			onFormSubmit: function(container){
-				console.log('FORM', container);
-				alert('submitin your data here');
-			}
-		};
-		var vv2 = new VanillaValidator(config2);
-	</script>
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="assets/rainbow-master/dist/rainbow.min.js"></script>
+	<script src="js/app.js"></script>
 </body>
 </html>
