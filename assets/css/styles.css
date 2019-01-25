@@ -47,6 +47,10 @@ textarea{
 .table td, .table th{
 	border-color: #1e202a !important;
 }
+.table.table-dark th{color: #fff;}
+.table tbody th{
+	font-weight: normal;
+}
 
 
 .alert{
@@ -1308,5 +1312,10 @@ pre .close {
      line-height: normal; 
      color: #f0c674; 
      text-shadow: none; 
-     opacity: 1; 
+     opacity: 1;
+     cursor: default !important;
+}
+pre .close:hover{
+	color: #f0c674; 
+	opacity: 1 !important;
 }

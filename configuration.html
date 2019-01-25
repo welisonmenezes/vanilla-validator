@@ -82,61 +82,77 @@
 
 
 <header>
-	<h2>Basic Usage</h2>
+	<h2>Configurations</h2>
 </header>
 
-<h3>Instalation</h3>
-<pre>
-<code data-language="html">&lt;script src='dist/vanilla-validator.concat.min.js'&gt;&lt;/script&gt;</code>
-</pre>
-
-<hr>
-
-<h3>Initialization</h3>
-<pre>
-<code data-language="html">&lt;script&gt;
-  var validator = new VanillaValidator({});
-&lt;/script&gt;</code>
-</pre>
-
-<hr>
-
-<h3>The HTML</h3>
-<p>To work correctly, you must use the plugin's configured classes on form elements.</p>
-<p>You can custom each class. See <a href="#">selectors</a> section.</p>
-<pre>
-<code data-language="html">&lt;form&gt;
-  &lt;div&gt;
-    &lt;input type='text' class='required' placeholder='Name'&gt;
-  &lt;/div&gt;
-  &lt;div&gt;
-    &lt;input type='text' class='email' placeholder='Email'&gt;
-  &lt;/div&gt;
-  &lt;input type='submit'&gt;
-&lt;/form&gt;</code>
-</pre>
-
-<hr>
-
 <h3>The config object</h3>
-<p>You have to pass a configuration object as parameter when to instantiate <em>VanillaValidator</em>.</p>
-<p>If you pass a empty object the <em>VanillaValidator</em> will use the default configurations.</p>
-<p>However, you can customize your validator. Example:</p>
 <pre>
-<code data-language="html">&lt;script&gt;
-var config = {
-  container: '#my-form-id',
-  validationBy: 'onclick',
-  button: '.my-button-class',
-  validateOnFieldChanges: true,
-  selectors: {
-    required: 'my-required-field-class'
-  }
-};
-var validator = new VanillaValidator(config);
-&lt;/script&gt;</code>
+<code data-language="javascript">{
+  container: 'form',  // [string (css selector)]
+  button: null, // [null, string (css selector)]
+  validationBy: 'onsubmit', // [onclick, onsubmit]
+  novalidateHTML5: true, // [true, false]
+  validateOnFieldChanges: true, // [true, false]
+  showListOfValidations: true, // [true, false]
+  selectors: {},
+  messages: {},
+  customValidationsConfig: {},
+  callbacks: {},
+  customValidates: {},
+  asyncValidates: {},
+  customViewErrors: {},
+  customListErrors: {},
+  onContainerSuccess: null, // [null, Function]
+  onFormSubmit: null // [null, Function]
+};</code>
 </pre>
-<p>See more at <a href="#">configurations</a> section</p>
+<table class="table table-dark">
+	<thead>
+		<tr>
+			<th>Key</th>
+			<th>Value</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th>container</th>
+			<td><em>string</em></td>
+			<td><p>Css selector of form or fields container.</p></td>
+		</tr>
+		<tr>
+			<th>button</th>
+			<td><em>null</em> or <em>string</em></td>
+			<td><p>Css selector of button that will validate the container.</p></td>
+		</tr>
+		<tr>
+			<th>validationBy</th>
+			<td><em>string</em> [onclick, onsubmit]</td>
+			<td><p>Sets how the validator will be call. 'onsubmit' only if container is a form element.</p></td>
+		</tr>
+		<tr>
+			<th>novalidateHTML5</th>
+			<td><em>boolean</em></td>
+			<td><p>enables or disables html5 validations.</p></td>
+		</tr>
+		<tr>
+			<th>validateOnFieldChanges</th>
+			<td><em>boolean</em></td>
+			<td><p>Enables or disables validations on field changes.</p></td>
+		</tr>
+		<tr>
+			<th>showListOfValidations</th>
+			<td><em>boolean</em></td>
+			<td><p>If true will show list of all errors. That errors will appear on element that have class configured in <em>selectors.wrapErrors</em>.</p></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><em></em></td>
+			<td><p></p></td>
+		</tr>
+	</tbody>
+</table>
+
 
 					</article>
 					<!-- end main-post -->
