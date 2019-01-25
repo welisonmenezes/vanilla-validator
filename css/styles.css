@@ -140,6 +140,14 @@ textarea{
 .header-main .form-control:focus{
 	width: 300px;
 }
+.header-main h1{
+	font-size: 1.2rem;
+	color: #fff;
+	padding-top: 8px;
+}
+.header-main h1 small{
+	color: #daede2;
+}
 
 @media (max-width: 768px){
 	.header-main form{
@@ -148,6 +156,14 @@ textarea{
 	.header-main .form-control{
 		width: 100% !important;
 		position: static;
+	}
+}
+@media (max-width: 430px){
+	.header-main h1{
+		width: 100%;
+	}
+	.header-main h1 small{
+		display: block;
 	}
 }
 
