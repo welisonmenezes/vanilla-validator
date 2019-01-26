@@ -315,10 +315,46 @@
 				<td><p>Class to check if the field has a valid file extension. The valid extensions must be given by the html attribute 'data-extensions' or by the 'customValidationsConfig.extensions'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>customValidate</th>
+				<td><em>string</em></td>
+				<td><em>custom-validate</em></td>
+				<td><p>Class to apply a custom validation on field. The custom validation must be created in 'customValidates' object and must be given by the html attribute 'data-validate-key'. See more in <a href="#">custom validations</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>async</th>
+				<td><em>string</em></td>
+				<td><em>async</em></td>
+				<td><p>Class to apply a custom async validation on field. The custom async validation must be created in 'asyncValidates' object and must be given by the html attribute 'data-async-key'. See more in <a href="#">async validations</a> section.</p></td>
+			</tr>
+			<tr>
+				<th>asyncWaiting</th>
+				<td><em>string</em></td>
+				<td><em>vv-async-waiting</em></td>
+				<td><p>Class applied in view feedback of async validation. This view will be shown while the async validation is being made.</p></td>
+			</tr>
+			<tr>
+				<th>error</th>
+				<td><em>string</em></td>
+				<td><em>error</em></td>
+				<td><p>Class applied in a field that has an error.</p></td>
+			</tr>
+			<tr>
+				<th>formError</th>
+				<td><em>string</em></td>
+				<td><em>form-error</em></td>
+				<td><p>Class applied in a container that has an error.</p></td>
+			</tr>
+			<tr>
+				<th>messageError</th>
+				<td><em>string</em></td>
+				<td><em>msg-error</em></td>
+				<td><p>Class applied in a field's view feedback error.</p></td>
+			</tr>
+			<tr>
+				<th>wrapErrors</th>
+				<td><em>string</em></td>
+				<td><em>wrap-errors</em></td>
+				<td><p>Class of the container that list all errors.</p></td>
 			</tr>
 		</tbody>
 	</table>

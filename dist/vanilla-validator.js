@@ -341,6 +341,7 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.validateContainer = function(container){
 		var ret = true;
 		if(container){
+			$.removeClass(container, this.config.selectors.formError);
 			if(this.config.showListOfValidations)
 				this.removeListOfValidations(container);
 			var fields = $.getChildren('.' + this.config.selectors.control, container);
@@ -350,12 +351,14 @@ var VanillaValidator = (function(){
 					field = fields[i];
 					this.validateAsync(field, container, true);
 					if(!this.validateFields(field, container, true)){
+						$.addClass(container, this.config.selectors.formError);
 						ret = false;
 					}
 				}
 			}
 		}
 		if(container.getAttribute('data-validation-status') && container.getAttribute('data-validation-status') !== 'valid'){
+			$.addClass(container, this.config.selectors.formError);
 			ret = false;
 		}
 		return ret;
