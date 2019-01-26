@@ -45,129 +45,43 @@
 		
 			<div class="row">
 				
-				<div class="col-md-4">
-					<!-- sidebar -->
-					<div class="sidebar">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="section-title">
-									<h4 class="title">Menu</h4>
-								</div>
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item">
-										<a href="index.html">Basic Usage</a>
-									</li>
-									<li class="list-group-item">
-										<a href="configuration.html">Configurations</a>
-										<ul>
-											<li>
-												<a href="#">Selectors</a>
-											</li>
-											<li>
-												<a href="#">Messages</a>
-											</li>
-											<li>
-												<a href="#">Custom validations behavior</a>
-											</li>
-											<li>
-												<a href="#">Callbacks</a>
-											</li>
-											<li>
-												<a href="#">Custom validations</a>
-											</li>
-											<li>
-												<a href="#">Async validators</a>
-											</li>
-											<li>
-												<a href="#">Custom view errors</a>
-											</li>
-											<li>
-												<a href="#">Custom view list errors</a>
-											</li>
-											<li>
-												<a href="#">Container successful</a>
-											</li>
-											<li>
-												<a href="#">Form successful</a>
-											</li>
-										</ul>
-									</li>
-									<li class="list-group-item">
-										<a href="examples.html">Examples</a>
-									</li>
-									<li class="list-group-item">
-										<a href="download.html">Download</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<!-- end sidebar -->
-				</div>
-
-				<div class="col-md-8">
+				<div class="col-md-12">
 					
 					<!-- main-post -->
 					<article class="main-post">
+						<h1>Vanilla Validator</h1>
+						<p>A pure Javascript form validator.</p>
 
+						<hr>
 
-<header>
-	<h2>Basic Usage</h2>
-</header>
+						<p>Links:</p>
+						<ul>
+							<li>
+								<a href="documentation/index.html" title="Basic usage">Basic usage</a>
+							</li>
+							<li>
+								<a href="documentation/configuration.html" title="Documentation">Documentation</a>
+							</li>
+							<li>
+								<a href="#" title="Examples">Examples</a>
+							</li>
+							<li>
+								<a href="#" title="Download">Download</a>
+							</li>
+						</ul>
 
-<h3>Instalation</h3>
-<pre>
-<code data-language="html">&lt;script src='dist/vanilla-validator.concat.min.js'&gt;&lt;/script&gt;</code>
-</pre>
+						<hr>
 
-<hr>
-
-<h3>Initialization</h3>
-<pre>
-<code data-language="html">&lt;script&gt;
-  var validator = new VanillaValidator({});
-&lt;/script&gt;</code>
-</pre>
-
-<hr>
-
-<h3>The HTML</h3>
-<p>To work correctly, you must use the plugin's configured classes on form elements.</p>
-<p>You can custom each class. See <a href="#">selectors</a> section.</p>
-<pre>
-<code data-language="html">&lt;form&gt;
-  &lt;div&gt;
-    &lt;input type='text' class='required' placeholder='Name'&gt;
-  &lt;/div&gt;
-  &lt;div&gt;
-    &lt;input type='text' class='email' placeholder='Email'&gt;
-  &lt;/div&gt;
-  &lt;input type='submit'&gt;
-&lt;/form&gt;</code>
-</pre>
-
-<hr>
-
-<h3>The config object</h3>
-<p>You have to pass a configuration object as parameter when to instantiate <em>VanillaValidator</em>.</p>
-<p>If you pass a empty object the <em>VanillaValidator</em> will use the default configurations.</p>
-<p>However, you can customize your validator. Example:</p>
-<pre>
-<code data-language="html">&lt;script&gt;
-var config = {
-  container: '#my-form-id',
-  validationBy: 'onclick',
-  button: '.my-button-class',
-  validateOnFieldChanges: true,
-  selectors: {
-    required: 'my-required-field-class'
-  }
-};
-var validator = new VanillaValidator(config);
-&lt;/script&gt;</code>
-</pre>
-<p>See more at <a href="#">configurations</a> section</p>
-
+						<p>
+							See plugin repository
+							<a href="https://github.com/welisonmenezes/VanillaValidator" target="_blank" title="Simple Blog Template Github">here</a>.
+						</p>
+						<p>
+							See my portfolio
+							<a href="https://welisonmenezes.github.io/" target="_blank" title="Portfolio Welison Menezes">
+								here
+							</a>.
+						</p>
 					</article>
 					<!-- end main-post -->
 

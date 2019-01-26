@@ -739,6 +739,19 @@ main.main{
 	background: #414656;
 	border-color: #747780;
 }
+.list-group-item a{
+	display: inline-block;
+	padding: 0 .5rem;
+}
+.list-group-item a:hover{
+	background: #333745;
+}
+.list-group-item a.active{
+	background: #272a36;
+}
+.list-group-item ul{
+	margin-top: .5rem;
+}
 
 .sidebar{
 	margin-bottom: 4em;
