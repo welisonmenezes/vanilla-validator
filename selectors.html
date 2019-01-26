@@ -204,7 +204,7 @@
 				<th>pattern</th>
 				<td><em>string</em></td>
 				<td><em>pattern</em></td>
-				<td><p>Class to test the field's value with given pattern. The pattern must be given by html attribute 'data-pattern' or by 'customValidationsConfig' object in key 'pattern'.</p></td>
+				<td><p>Class to test the field's value with given pattern. The pattern must be given by the html attribute 'data-pattern' or by the 'customValidationsConfig.pattern'.</p></td>
 			</tr>
 			<tr>
 				<th>phone</th>
@@ -237,46 +237,82 @@
 				<td><p>Class to validate the field's value as a postal code format. <b>Is used the brazilian format here.</b></p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>maxLength</th>
+				<td><em>string</em></td>
+				<td><em>max-length</em></td>
+				<td><p>Class to validate the field's value with max length limit. The max length  must be given by the html attribute 'data-max-length' or by the 'customValidationsConfig.maxLength'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>minLength</th>
+				<td><em>string</em></td>
+				<td><em>min-length</em></td>
+				<td><p>Class to validate the field's value with min length limit. The min length  must be given by the html attribute 'data-min-length' or by the 'customValidationsConfig.minLength'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>rangeLength</th>
+				<td><em>string</em></td>
+				<td><em>range-length</em></td>
+				<td><p>Class to validate the field's value with min and max length limit. The min and max length  must be given by the html attribute 'data-min-length' and 'data-max-length' respectively, or by the 'customValidationsConfig.rangeLength' object in keys 'min' and 'max' respectively.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>sameLength</th>
+				<td><em>string</em></td>
+				<td><em>same-length</em></td>
+				<td><p>Class to validate the field's value with exact length. The length  must be given by the html attribute 'data-same-length' or by the 'customValidationsConfig.sameLength'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>max</th>
+				<td><em>string</em></td>
+				<td><em>max</em></td>
+				<td><p>Class to validate the field's value with max value number. The max value must be given by the html attribute 'data-max' or by the 'customValidationsConfig.max'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>min</th>
+				<td><em>string</em></td>
+				<td><em>min</em></td>
+				<td><p>Class to validate the field's value with min value number. The min value  must be given by the html attribute 'data-min' or by the 'customValidationsConfig.min'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>range</th>
+				<td><em>string</em></td>
+				<td><em>range</em></td>
+				<td><p>Class to validate the field's value with min and max value number. The min and max value must be given by the html attribute 'data-min' and 'data-max' respectively, or by the 'customValidationsConfig.range' object in keys 'min' and 'max' respectively.</p></td>
+			</tr>
+			<tr>
+				<th>equalTo</th>
+				<td><em>string</em></td>
+				<td><em>equal-to</em></td>
+				<td><p>Class to validate the field's value with exact value number. The value  must be given by the html attribute 'data-equal-to' or by the 'customValidationsConfig.equalTo'.</p></td>
+			</tr>
+			<tr>
+				<th>cpf</th>
+				<td><em>string</em></td>
+				<td><em>cpf</em></td>
+				<td><p>Class to validate the field's value as a cpf format. <b>It's a brazilian document</b>.</p></td>
+			</tr>
+			<tr>
+				<th>cnpj</th>
+				<td><em>string</em></td>
+				<td><em>cnpj</em></td>
+				<td><p>Class to validate the field's value as a cnpj format. <b>It's a brazilian document</b>.</p></td>
+			</tr>
+			<tr>
+				<th>cnh</th>
+				<td><em>string</em></td>
+				<td><em>cnh</em></td>
+				<td><p>Class to validate the field's value as a cnh format. <b>It's a brazilian document</b>.</p></td>
+			</tr>
+			<tr>
+				<th>creditCard</th>
+				<td><em>string</em></td>
+				<td><em>credit-card</em></td>
+				<td><p>Class to validate the field's value as a credit card number.</p></td>
+			</tr>
+			<tr>
+				<th>hasExtension</th>
+				<td><em>string</em></td>
+				<td><em>has-extension</em></td>
+				<td><p>Class to check if the field has a valid file extension. The valid extensions must be given by the html attribute 'data-extensions' or by the 'customValidationsConfig.extensions'.</p></td>
 			</tr>
 			<tr>
 				<th></th>
