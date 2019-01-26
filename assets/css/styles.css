@@ -52,6 +52,13 @@ textarea{
 	font-weight: normal;
 }
 
+.table-wrap{
+	overflow-x: auto;
+}
+.table-wrap table{
+	min-width: 600px;
+}
+
 
 .alert{
 	color: #fff;

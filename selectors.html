@@ -112,29 +112,45 @@
 
 
 <header>
-	<h2>Configurations</h2>
+	<h2>Selectors</h2>
 </header>
 
-<h3>The config object</h3>
+<h3>The selectors config</h3>
 <pre>
-<code data-language="javascript">{
-  container: 'form',  // [string (css selector)]
-  button: null, // [null, string (css selector)]
-  validationBy: 'onsubmit', // [onclick, onsubmit]
-  novalidateHTML5: true, // [true, false]
-  validateOnFieldChanges: true, // [true, false]
-  showListOfValidations: true, // [true, false]
-  selectors: {...},
-  messages: {...},
-  customValidationsConfig: {...},
-  callbacks: {...},
-  customValidates: {...},
-  asyncValidates: {...},
-  customViewErrors: {...},
-  customListErrors: {...},
-  onContainerSuccess: null, // [null, Function]
-  onFormSubmit: null // [null, Function]
-};</code>
+<code data-language="javascript">selectors: { // just css classes
+  control: 'vv-control',
+  required: 'required',
+  email: 'email',
+  integer: 'integer',
+  digit: 'digit',
+  numeric: 'numeric',
+  pattern: 'pattern',
+  phone: 'phone', // brazilian format
+  url: 'url',
+  date: 'date', // brazilian format
+  currency: 'currency', // brazilian format
+  cep: 'cep', // brazilian format
+  maxLength: 'max-length',
+  minLength: 'min-length',
+  rangeLength: 'range-length',
+  sameLength: 'same-length',
+  max: 'max',
+  min: 'min',
+  range: 'range',
+  equalTo: 'equal-to',
+  cpf: 'cpf', // brazilian document
+  cnpj: 'cnpj',  // brazilian document
+  cnh: 'cnh', // brazilian document
+  creditCard: 'credit-card',
+  hasExtension: 'has-extension',
+  customValidate: 'custom-validate',
+  async: 'async',
+  asyncWaiting: 'vv-async-waiting',
+  error: 'error',
+  formError: 'form-error',
+  messageError: 'msg-error',
+  wrapErrors: 'wrap-errors'
+}</code>
 </pre>
 
 <div class="table-wrap">
@@ -149,100 +165,124 @@
 		</thead>
 		<tbody>
 			<tr>
-				<th>container</th>
+				<th>control</th>
 				<td><em>string</em></td>
-				<td><em>form</em></td>
-				<td><p>Css selector of form or fields container.</p></td>
+				<td><em>vv-control</em></td>
+				<td><p>Class that will be add in all form elements.</p></td>
 			</tr>
 			<tr>
-				<th>button</th>
-				<td><em>null</em> or <em>string</em></td>
-				<td><em>null</em></td>
-				<td><p>Css selector of button that will validate the container.</p></td>
+				<th>required</th>
+				<td><em>string</em></td>
+				<td><em>required</em></td>
+				<td><p>Class to make field required. No field will be required without this class.</p></td>
 			</tr>
 			<tr>
-				<th>validationBy</th>
-				<td><em>string</em> [onclick, onsubmit]</td>
-				<td><em>onsubmit</em></td>
-				<td><p>Sets how the validator will be call. 'onsubmit' only if container is a form element.</p></td>
+				<th>email</th>
+				<td><em>string</em></td>
+				<td><em>email</em></td>
+				<td><p>Class to validate the field's value as a email.</p></td>
 			</tr>
 			<tr>
-				<th>novalidateHTML5</th>
-				<td><em>boolean</em></td>
-				<td><em>true</em></td>
-				<td><p>enables or disables html5 validations.</p></td>
+				<th>integer</th>
+				<td><em>string</em></td>
+				<td><em>integer</em></td>
+				<td><p>Class to validate the field's value as a integer.</p></td>
 			</tr>
 			<tr>
-				<th>validateOnFieldChanges</th>
-				<td><em>boolean</em></td>
-				<td><em>true</em></td>
-				<td><p>Enables or disables validations on field changes.</p></td>
+				<th>digit</th>
+				<td><em>string</em></td>
+				<td><em>digit</em></td>
+				<td><p>Class to validate the field's value as a digit.</p></td>
 			</tr>
 			<tr>
-				<th>showListOfValidations</th>
-				<td><em>boolean</em></td>
-				<td><em>true</em></td>
-				<td><p>If true will show list of all errors. That errors will appear on element that have class configured in <em>selectors.wrapErrors</em>.</p></td>
+				<th>numeric</th>
+				<td><em>string</em></td>
+				<td><em>numeric</em></td>
+				<td><p>Class to validate the field's value as a number.</p></td>
 			</tr>
 			<tr>
-				<th>selectors</th>
-				<td><em>Object</em></td>
-				<td>{...}</td>
-				<td><p>A object with selectors used by validator. See more in <a href="#">selectors</a> section.</p></td>
+				<th>pattern</th>
+				<td><em>string</em></td>
+				<td><em>pattern</em></td>
+				<td><p>Class to test the field's value with given pattern. The pattern must be given by html attribute 'data-pattern' or by 'customValidationsConfig' object in key 'pattern'.</p></td>
 			</tr>
 			<tr>
-				<th>messages</th>
-				<td><em>Object</em></td>
-				<td>{...}</td>
-				<td><p>A object with messages erros shown by validator. See more in <a href="#">messages</a> section.</p></td>
+				<th>phone</th>
+				<td><em>string</em></td>
+				<td><em>phone</em></td>
+				<td><p>Class to validate the field's value as a phone number. <b>Is used the brazilian format here.</b></p></td>
 			</tr>
 			<tr>
-				<th>customValidationsConfig</th>
-				<td><em>Object</em></td>
-				<td>{...}</td>
-				<td><p>A object with configurations to set custom validations behavior. See more in <a href="#">custom validations behavior</a> section.</p></td>
+				<th>url</th>
+				<td><em>string</em></td>
+				<td><em>url</em></td>
+				<td><p>Class to validate the field's value as a url.</p></td>
 			</tr>
 			<tr>
-				<th>callbacks</th>
-				<td><em>Object</em></td>
-				<td>{...}</td>
-				<td><p>A object with custom callbacks methods. See more in <a href="#">callback</a> section.</p></td>
+				<th>date</th>
+				<td><em>string</em></td>
+				<td><em>date</em></td>
+				<td><p>Class to validate the field's value as a date.</p></td>
 			</tr>
 			<tr>
-				<th>customValidates</th>
-				<td><em>Object</em></td>
-				<td>{...}</td>
-				<td><p>A object with your own custom validations. See more in <a href="#">custom validations</a> section.</p></td>
+				<th>currency</th>
+				<td><em>string</em></td>
+				<td><em>currency</em></td>
+				<td><p>Class to validate the field's value as a currency format. <b>Is used the brazilian format here.</b></p></td>
 			</tr>
 			<tr>
-				<th>asyncValidates</th>
-				<td><em>Object</em></td>
-				<td>{...}</td>
-				<td><p>A object with your own custom async validators. See more in <a href="#">async validators</a> section.</p></td>
+				<th>cep</th>
+				<td><em>string</em></td>
+				<td><em>cep</em></td>
+				<td><p>Class to validate the field's value as a postal code format. <b>Is used the brazilian format here.</b></p></td>
 			</tr>
 			<tr>
-				<th>customViewErrors</th>
-				<td><em>Object</em></td>
-				<td>{...}</td>
-				<td><p>A object with an add and remove keys. Here you can customize your view errors. See more in <a href="#">custom view errors</a> section.</p></td>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
 			</tr>
 			<tr>
-				<th>customListErrors</th>
-				<td><em>Object</em></td>
-				<td>{...}</td>
-				<td><p>A object with an add and remove keys. Here you can customize your view list all errors. See more in <a href="#">custom view list errors</a> section.</p></td>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
 			</tr>
 			<tr>
-				<th>onContainerSuccess</th>
-				<td><em>Funciton</em></td>
-				<td>null</td>
-				<td><p>A function that will be called when your validation is successful. If your container is not a form element this configuration is required. See more in <a href="#">container successful</a> section.</p></td>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
 			</tr>
 			<tr>
-				<th>onFormSubmit</th>
-				<td><em>Function</em></td>
-				<td>null</td>
-				<td><p>A function that will be called when your validation is successfull. Called only if the container is a form element. If not defined, the default behavior is a form.submit(). See more in <a href="#">form successful</a> section.</p></td>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
+			</tr>
+			<tr>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
+			</tr>
+			<tr>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
+			</tr>
+			<tr>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
+			</tr>
+			<tr>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
 			</tr>
 		</tbody>
 	</table>
