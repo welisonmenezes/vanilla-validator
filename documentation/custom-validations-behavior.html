@@ -156,6 +156,9 @@
     &lt;input type="text" class="max-length" data-max-length="7"&gt;
   &lt;/div&gt;
   &lt;div&gt;
+    &lt;input type="file" class="has-extension" data-extensions="svg,png"&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
     &lt;input type="text" class="range-length" data-min-length="2" data-max-length="3"&gt;
   &lt;/div&gt;
   &lt;div&gt;
@@ -202,34 +205,46 @@
 				<td><p>Used to pass a custom min length limit to be used by minLength validator. Its matching html atribute is 'data-min-length'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>sameLength</th>
+				<td><em>integer</em></td>
+				<td><em>5</em></td>
+				<td><p>Used to pass a custom value to be used by sameLength validator. Its matching html attribute is 'data-same-length'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>rangeLength</th>
+				<td><em>Object</em></td>
+				<td><em>{min: 3, max: 5}</em></td>
+				<td><p>Used to pass custom values to be used by rangeLength validator. This object must have a key min and a key max, both receving a integer value. Its matching html attributes are 'data-min-length' and 'data-max-length'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>max</th>
+				<td><em>integer</em></td>
+				<td><em>5</em></td>
+				<td><p>Used to pass a custom max value to be used by max validator. Its matching html atribute is 'data-max'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>min</th>
+				<td><em>integer</em></td>
+				<td><em>3</em></td>
+				<td><p>Used to pass a custom min value to be used by min validator. Its matching html atribute is 'data-min'.</p></td>
 			</tr>
 			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
+				<th>range</th>
+				<td><em>Object</em></td>
+				<td><em>{min: 3, max: 5}</em></td>
+				<td><p>Used to pass custom values to be used by range validator. This object must have a key min and a key max, both receving a integer value. Its matching html attributes are 'data-min' and 'data-max'.</p></td>
+			</tr>
+			<tr>
+				<th>equalTo</th>
+				<td><em>integer</em></td>
+				<td><em>10</em></td>
+				<td><p>Used to pass a custom value to be used by equalTo validator. Its matching html attribute is 'data-equal-to'.</p></td>
+			</tr>
+			<tr>
+				<th>extensions</th>
+				<td><em>Array</em></td>
+				<td><em class="nowrap">['jpg', 'png']</em></td>
+				<td><p>Used to pass an array of strings with valid extensions to be used by hasExtension validator. Its matching html attribute is 'data-extensions'. In html attribute you must pass the valid extensions without spaces and separated by commas.</p></td>
 			</tr>
 		</tbody>
 	</table>
