@@ -115,51 +115,45 @@
 
 
 <header>
-	<h2>Custom validations behavior</h2>
+	<h2>Custom validations</h2>
 </header>
 
-<h3>The custom validations behavior object</h3>
-<p>In customValidationsConfig, you can set up the behavior some validations.</p>
+<h3>The custom validation object</h3>
 <pre>
-<code data-language="javascript">customValidationsConfig: {
-  pattern: '[0-9]', // or by html attribute 'data-pattern'
-  flags: 'g', // or by html attribute 'data-flags'
-  maxLength: 5, // or by html attribute 'data-max-length'
-  minLength: 5, // or by html attribute 'data-min-length'
-  sameLength: 5, // or by html attribute 'data-same-length'
-  rangeLength: {
-    min: 3, // or by html attribute 'data-max-length'
-    max: 5 // or by html attribute 'data-min-length'
-  },
-  max: 5, // or by html attribute 'data-max'
-  min: 3, // or by html attribute 'data-min'
-  range: {
-    max: 5, // or by html attribute 'data-max'
-    min: 3 // or by html attribute 'data-min'
-  },
-  equalTo: 10, // or by html attribute 'data-equal-to'
-  extensions: ['jpg', 'png'] // or by html attribute 'data-extensions'
+<code data-language="javascript">customValidates: { // will react to the selector 'customValidate'
+  'your-key': { // must inform this key in html attribute 'data-validate-key'
+    message: 'your message', // can pass by the html attribute 'data-message-error'
+    fn: function(field, container){
+      // your logic (must return true or false)
+      return true;
+    }
+  }
 }</code>
 </pre>
 
 <hr>
 
-<h3>Html attributes</h3>
-<p>You also can do that by html attributes. Html attributes are indicated for cases more specifics.</p>
-<p>Examples:</p>
+<h3>A simple example:</h3>
+<p>The javascript:</p>
+<pre>
+<code data-language="javascript">var config = {
+  customValidates: {
+    'block-word-java': {
+      message: 'The word "java" is forbidden.',
+      fn: function(field, container){
+        if(field.value === 'java') return false;
+        return true;
+      }
+    }
+  }
+};
+var validator = new VanillaValidator(config);</code>
+</pre>
+<p>The Html:</p>
 <pre>
 <code data-language="html">&lt;form&gt;
   &lt;div&gt;
-    &lt;input type="text" class="pattern" data-pattern="[a-z]" data-flags="ig"&gt;
-  &lt;/div&gt;
-  &lt;div&gt;
-    &lt;input type="text" class="max-length" data-max-length="7"&gt;
-  &lt;/div&gt;
-  &lt;div&gt;
-    &lt;input type="file" class="has-extension" data-extensions="svg,png"&gt;
-  &lt;/div&gt;
-  &lt;div&gt;
-    &lt;input type="text" class="range-length" data-min-length="2" data-max-length="3"&gt;
+    &lt;input type="text" class="custom-validate" data-validate-key="block-word-java"&gt;
   &lt;/div&gt;
   &lt;div&gt;
     &lt;button type="submit"&gt;Send&lt;/button&gt;
@@ -181,70 +175,10 @@
 		</thead>
 		<tbody>
 			<tr>
-				<th>pattern</th>
-				<td><em>string</em></td>
-				<td><em>[0-9]</em></td>
-				<td><p>Used to pass a custom regular expression to be used by pattern validator. Its matching html attribute is 'data-pattern'.</p></td>
-			</tr>
-			<tr>
-				<th>flags</th>
-				<td><em>string</em></td>
-				<td><em>g</em></td>
-				<td><p>Used to pass a custom flag to regular expression given by customValidationsConfig.pattern. Its matching html attribute is 'data-flags'.</p></td>
-			</tr>
-			<tr>
-				<th>maxLength</th>
-				<td><em>integer</em></td>
-				<td><em>5</em></td>
-				<td><p>Used to pass a custom max length limit to be used by maxLength validator. Its matching html atribute is 'data-max-length'.</p></td>
-			</tr>
-			<tr>
-				<th>minLength</th>
-				<td><em>integer</em></td>
-				<td><em>5</em></td>
-				<td><p>Used to pass a custom min length limit to be used by minLength validator. Its matching html atribute is 'data-min-length'.</p></td>
-			</tr>
-			<tr>
-				<th>sameLength</th>
-				<td><em>integer</em></td>
-				<td><em>5</em></td>
-				<td><p>Used to pass a custom value to be used by sameLength validator. Its matching html attribute is 'data-same-length'.</p></td>
-			</tr>
-			<tr>
-				<th>rangeLength</th>
-				<td><em>Object</em></td>
-				<td><em>{min: 3, max: 5}</em></td>
-				<td><p>Used to pass custom values to be used by rangeLength validator. This object must have a key min and a key max, both receving a integer value. Its matching html attributes are 'data-min-length' and 'data-max-length'.</p></td>
-			</tr>
-			<tr>
-				<th>max</th>
-				<td><em>integer</em></td>
-				<td><em>5</em></td>
-				<td><p>Used to pass a custom max value to be used by max validator. Its matching html atribute is 'data-max'.</p></td>
-			</tr>
-			<tr>
-				<th>min</th>
-				<td><em>integer</em></td>
-				<td><em>3</em></td>
-				<td><p>Used to pass a custom min value to be used by min validator. Its matching html atribute is 'data-min'.</p></td>
-			</tr>
-			<tr>
-				<th>range</th>
-				<td><em>Object</em></td>
-				<td><em>{min: 3, max: 5}</em></td>
-				<td><p>Used to pass custom values to be used by range validator. This object must have a key min and a key max, both receving a integer value. Its matching html attributes are 'data-min' and 'data-max'.</p></td>
-			</tr>
-			<tr>
-				<th>equalTo</th>
-				<td><em>integer</em></td>
-				<td><em>10</em></td>
-				<td><p>Used to pass a custom value to be used by equalTo validator. Its matching html attribute is 'data-equal-to'.</p></td>
-			</tr>
-			<tr>
-				<th>extensions</th>
-				<td><em>Array</em></td>
-				<td><em class="nowrap">['jpg', 'png']</em></td>
-				<td><p>Used to pass an array of strings with valid extensions to be used by hasExtension validator. Its matching html attribute is 'data-extensions'. In html attribute you must pass the valid extensions without spaces and separated by commas.</p></td>
+				<th></th>
+				<td><em></em></td>
+				<td><em></em></td>
+				<td><p></p></td>
 			</tr>
 		</tbody>
 	</table>

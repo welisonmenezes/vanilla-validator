@@ -180,7 +180,7 @@ var VanillaValidator = (function(){
 			customValidates: { // will react to the selector 'customValidate'
 				'equal-anchored-field': { // must inform this key in html attribute 'data-validate-key'
 					message: 'The value needs to be equal',
-					fn: function(field, message, container){
+					fn: function(field, container){
 						var queryAnchor = field.getAttribute('data-anchored-field');
 						if(queryAnchor){
 							var anchor = $.getChild(queryAnchor, container);
@@ -193,7 +193,7 @@ var VanillaValidator = (function(){
 				},
 				'different-anchored-field': { // must inform this key in html attribute 'data-validate-key'
 					message: 'The value needs to be different',
-					fn: function(field, message, container){
+					fn: function(field, container){
 						var queryAnchor = field.getAttribute('data-anchored-field');
 						if(queryAnchor){
 							var anchor = $.getChild(queryAnchor, container);
@@ -711,7 +711,7 @@ var VanillaValidator = (function(){
 				var myCustom = this.config.customValidates[customKey];
 				if(myCustom && myCustom.message && myCustom.fn){
 					if(this.isFunction(myCustom.fn)){
-						if(!myCustom.fn.call(this, field, myCustom.message, container, onSubmit)){
+						if(!myCustom.fn.call(this, field, container, onSubmit)){
 							this.addValidationView(field,  myCustom.message);
 							if(onSubmit && this.config.showListOfValidations){
 								this.addListOfValidations(field,  myCustom.message, container);
