@@ -131,6 +131,8 @@
 }</code>
 </pre>
 
+<p>Note you must have a message and a fn keys into your custom validate object. In message you configure your custom message (you can do that using the html attribute 'data-message-error'). In fn key you set your funciton that will validate your field. That function will receive the field and the container as parameters. You must return true or false, where true means succesfull.</p>
+
 <hr>
 
 <h3>A simple example:</h3>
@@ -149,6 +151,7 @@
 };
 var validator = new VanillaValidator(config);</code>
 </pre>
+
 <p>The Html:</p>
 <pre>
 <code data-language="html">&lt;form&gt;
@@ -163,26 +166,26 @@ var validator = new VanillaValidator(config);</code>
 
 <hr>
 
-<div class="table-wrap">
-	<table class="table table-dark">
-		<thead>
-			<tr>
-				<th>Key</th>
-				<th>Value</th>
-				<th>Default</th>
-				<th>Description</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th></th>
-				<td><em></em></td>
-				<td><em></em></td>
-				<td><p></p></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
+<h3>Pre existing custom validations</h3>
+<p>there is two pre existing custom validations configured in plugin. They are <em>'equal-anchored-field'</em>, that validates two fields with same values, and <em>'different-anchored-field'</em>, that validates two fields with different values.</p>
+<p>Usage example:</p>
+<pre>
+<code data-language="html">&lt;form&gt;
+  &lt;div&gt;
+    &lt;input type="text" class="required" id="target"&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;input type="text" class="custom-validate" data-anchored-field="#target" data-validate-key="equal-anchored-field"&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;input type="text" class="custom-validate" data-anchored-field="#target" data-validate-key="different-anchored-field"&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;button type="submit"&gt;Send&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code>
+</pre>
+<p>Here, we use the html attribute 'data-anchored-field' to refer to the target field id; and we use the html attribute 'data-validate-key' to refer to the custom validation we want to use.</p>
 
 
 					</article>
