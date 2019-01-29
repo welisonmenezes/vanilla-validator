@@ -402,16 +402,25 @@
 					//console.log('classe',cls)
 					if(field.parentElement.querySelector('span')){
 						field.parentElement.querySelector('span').remove();
-						field.classList.remove(cls);
+						field.classList.remove(this.config.selectors.error);
 					}
 				}
 			},
-			xcustomListErrors: {
+			customListErrors: {
 				add: function(field, message, container){
-					console.log('customListErrors ADD', field, message, container);
+					var wrap = container.querySelector('.' + this.config.selectors.wrapErrors);
+					if(wrap){
+						var node = document.createElement("P");
+						var textnode = document.createTextNode(message);
+						node.appendChild(textnode);
+						wrap.appendChild(node);
+					}
 				},
 				remove: function(container){
-					console.log('customListErrors REMOVE: ', container);
+					var wrap = container.querySelector('.' + this.config.selectors.wrapErrors);
+					if(wrap){
+						wrap.innerHTML = '';
+					}
 				}
 			},
 			onContainerSuccess: function(container){
