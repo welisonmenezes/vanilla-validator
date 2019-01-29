@@ -145,7 +145,7 @@
 		<thead>
 			<tr>
 				<th>Key</th>
-				<th>Value</th>
+				<th>Type</th>
 				<th>Default</th>
 				<th>Description</th>
 			</tr>
@@ -153,99 +153,99 @@
 		<tbody>
 			<tr>
 				<th>container</th>
-				<td><em>string</em></td>
+				<td><code>string</code></td>
 				<td><em>form</em></td>
 				<td><p>Css selector of form or fields container.</p></td>
 			</tr>
 			<tr>
 				<th>button</th>
-				<td><em>null</em> or <em>string</em></td>
+				<td><code>null</code> or <code>string</code></td>
 				<td><em>null</em></td>
 				<td><p>Css selector of button that will validate the container. If null, will get the a button or an input of type submit by default.</p></td>
 			</tr>
 			<tr>
 				<th>validationBy</th>
-				<td><em>string</em> [onclick, onsubmit]</td>
+				<td><code>string</code> <small>[onclick, onsubmit]</small></td>
 				<td><em>onsubmit</em></td>
 				<td><p>Sets how the validator will be call. 'onsubmit' only if container is a form element.</p></td>
 			</tr>
 			<tr>
 				<th>novalidateHTML5</th>
-				<td><em>boolean</em></td>
+				<td><code>boolean</code></td>
 				<td><em>true</em></td>
 				<td><p>enables or disables html5 validations.</p></td>
 			</tr>
 			<tr>
 				<th>validateOnFieldChanges</th>
-				<td><em>boolean</em></td>
+				<td><code>boolean</code></td>
 				<td><em>true</em></td>
 				<td><p>Enables or disables validations on field changes.</p></td>
 			</tr>
 			<tr>
 				<th>showListOfValidations</th>
-				<td><em>boolean</em></td>
+				<td><code>boolean</code></td>
 				<td><em>true</em></td>
 				<td><p>If true will show list of all errors. That errors will appear on element that have class configured in <em>selectors.wrapErrors</em>.</p></td>
 			</tr>
 			<tr>
 				<th>selectors</th>
-				<td><em>Object</em></td>
+				<td><code>Object</code></td>
 				<td>{...}</td>
 				<td><p>A object with selectors used by validator. See more in <a href="#">selectors</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>messages</th>
-				<td><em>Object</em></td>
+				<td><code>Object</code></td>
 				<td>{...}</td>
 				<td><p>A object with messages erros shown by validator. See more in <a href="#">messages</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>customValidationsConfig</th>
-				<td><em>Object</em></td>
+				<td><code>Object</code></td>
 				<td>{...}</td>
 				<td><p>A object with configurations to set custom validations behavior. See more in <a href="#">custom validations behavior</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>callbacks</th>
-				<td><em>Object</em></td>
+				<td><code>Object</code></td>
 				<td>{...}</td>
 				<td><p>A object with custom callbacks methods. See more in <a href="#">callback</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>customValidates</th>
-				<td><em>Object</em></td>
+				<td><code>Object</code></td>
 				<td>{...}</td>
 				<td><p>A object with your own custom validations. See more in <a href="#">custom validations</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>asyncValidates</th>
-				<td><em>Object</em></td>
+				<td><code>Object</code></td>
 				<td>{...}</td>
 				<td><p>A object with your own custom async validators. See more in <a href="#">async validators</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>customViewErrors</th>
-				<td><em>Object</em></td>
+				<td><code>Object</code></td>
 				<td>{...}</td>
 				<td><p>A object with an add and remove keys. Here you can customize your view errors. See more in <a href="#">custom view errors</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>customListErrors</th>
-				<td><em>Object</em></td>
+				<td><code>Object</code></td>
 				<td>{...}</td>
 				<td><p>A object with an add and remove keys. Here you can customize your view list all errors. See more in <a href="#">custom view list errors</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>onContainerSuccess</th>
-				<td><em>Funciton</em></td>
+				<td><code>Funciton</code></td>
 				<td>null</td>
 				<td><p>A function that will be called when your validation is successful. If your container is not a form element this configuration is required. See more in <a href="#">container successful</a> section.</p></td>
 			</tr>
 			<tr>
 				<th>onFormSubmit</th>
-				<td><em>Function</em></td>
+				<td><code>Function</code></td>
 				<td>null</td>
-				<td><p>A function that will be called when your validation is successfull. Called only if the container is a form element. If not defined, the default behavior is a form.submit(). See more in <a href="#">form successful</a> section.</p></td>
+				<td><p>A function that will be called when your validation is successfull. Called only if the container is a form element. If not defined, the default behavior is a <code>form.submit()</code>. See more in <a href="#">form successful</a> section.</p></td>
 			</tr>
 		</tbody>
 	</table>

@@ -115,16 +115,16 @@
 
 
 <header>
-	<h2>Custom view errors</h2>
+	<h2>Custom view list errors</h2>
 </header>
 
-<h3>The custom view errors object</h3>
+<h3>The custom view list errors object</h3>
 <pre>
-<code data-language="javascript">customViewErrors: {
-  add: function(field, message, cls){
+<code data-language="javascript">customListErrors: {
+  add: function(field, message, container){
     // your logic here
   },
-  remove: function(field, cls){
+  remove: function(container){
     // your logic here
   }
 }</code>
@@ -134,44 +134,20 @@
 
 <h3>Method <code>add()</code></h3>
 <p>
-	When occur an error, the add method will be called, overriding the default method. This method will receive 3 parameters: the field, the message and the error class.
+	When occur an error, the add method will be called, overriding the default method. This method will receive 3 parameters: the field, the message and the container.
 </p>
 
 <hr>
 
 <h3>Method <code>remove()</code></h3>
-<p>When the field clear the errors the method remove will be called, overriding the default method. This method receive two parameters: the field and the error class.</p>
+<p>When the container clear the errors the method remove will be called, overriding the default method. This method receive a parameter: the container.</p>
 
 <p>
-	If you want access other selectors you can use: <code>this.config.selectors</code> object.
+	If you want access all selectors you can use: <code>this.config.selectors</code> object.
 </p>
 
 <hr>
 
-<h3>Usage example</h3>
-<p>The javascript:</p>
-<pre>
-<code data-language="javascript">var config = {
-  customViewErrors: {
-    add: function(field, message, cls){
-      var messageContainer = document.createElement('SPAN');
-      var cls = cls || this.config.selectors.error;
-      messageContainer.innerHTML = message;
-      messageContainer.classList.add(cls);
-      field.parentElement.insertBefore(messageContainer, field);
-      field.classList.add(this.config.selectors.error);
-    },
-    remove: function(field, cls){
-      if(field.parentElement.querySelector('span')){
-        field.parentElement.querySelector('span').remove();
-        field.classList.remove(cls);
-      }
-    }
-  }	
-};
-var validator = new VanillaValidator(config);</code>
-</pre>
-<p>The functionality above will overriding the default errors view methods.</p>
 
 					</article>
 					<!-- end main-post -->

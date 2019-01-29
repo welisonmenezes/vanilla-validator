@@ -145,16 +145,16 @@
 }</code>
 </pre>
 
-<p>Note you must have a message and a fn keys into your async validators object. In message you configure your custom message error (you can do that using the html attribute 'data-message-error'). In fn key you set your funciton that will validate your field asynchronously. That function will receive the field, the message error and the container as parameters.</p>
+<p>Note you must have a message and a fn keys into your async validators object. In message you configure your custom message error (you can do that using the html attribute <code>data-message-error</code>). In fn key you set your funciton that will validate your field asynchronously. That function will receive the field, the message error and the container as parameters.</p>
 
 <hr>
 
-<h3>asyncValidationStart()</h3>
+<h3>Method <code>asyncValidationStart()</code></h3>
 <p>The method asyncValidationStart starts the async validations. This method must receive as parameters the field, the process message and the container.</p>
 
 <hr>
 
-<h3>asyncValidationFinish()</h3>
+<h3>Method <code>asyncValidationFinish()</code></h3>
 <p>The method asyncValidationFinish finishes the async validations. This method must receive as parameters the field, the error message, the container and the status of validation (true if was successful and false if was fail).</p>
 
 <hr>

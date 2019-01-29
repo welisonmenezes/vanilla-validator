@@ -131,7 +131,7 @@
 }</code>
 </pre>
 
-<p>Note you must have a message and a fn keys into your custom validate object. In message you configure your custom message error (you can do that using the html attribute 'data-message-error'). In fn key you set your funciton that will validate your field. That function will receive the field and the container as parameters. You must return true or false, where true means succesful.</p>
+<p>Note you must have a message and a fn keys into your custom validate object. In message you configure your custom message error (you can do that using the html attribute <code>data-message-error</code>). In fn key you set your funciton that will validate your field. That function will receive the field and the container as parameters. You must return true or false, where true means succesful.</p>
 
 <hr>
 
@@ -167,7 +167,7 @@ var validator = new VanillaValidator(config);</code>
 <hr>
 
 <h3>Pre existing custom validations</h3>
-<p>there is two pre existing custom validations configured in plugin. They are <em>'equal-anchored-field'</em>, that validates two fields with same values, and <em>'different-anchored-field'</em>, that validates two fields with different values.</p>
+<p>there is two pre existing custom validations configured in plugin. They are <em>'equal-anchored-field'</em>, that validates two fields with same values, and <code>different-anchored-field</code>, that validates two fields with different values.</p>
 <p>Usage example:</p>
 <pre>
 <code data-language="html">&lt;form&gt;
@@ -185,7 +185,7 @@ var validator = new VanillaValidator(config);</code>
   &lt;/div&gt;
 &lt;/form&gt;</code>
 </pre>
-<p>Here, we use the html attribute 'data-anchored-field' to refer to the target field id; and we use the html attribute 'data-validate-key' to refer to the custom validation we want to use.</p>
+<p>Here, we use the html attribute <code>data-anchored-field</code> to refer to the target field id; and we use the html attribute <code>data-validate-key</code> to refer to the custom validation we want to use.</p>
 
 
 					</article>

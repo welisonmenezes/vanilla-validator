@@ -40,6 +40,7 @@ textarea{
 	background: #fff;
 	color: #747780;
 }
+.table code{white-space: nowrap;}
 .table td, .table th{
 	border-color: #daede2 !important;
 }
