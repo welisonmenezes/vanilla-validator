@@ -124,7 +124,7 @@
   add: function(field, message, cls){
     // your logic here
   },
-  remove: function(field){
+  remove: function(field, cls){
     // your logic here
   }
 }</code>
@@ -140,31 +140,38 @@
 <hr>
 
 <h3>Method remove()</h3>
-<p>When the field clear the errors the method remove will be called, overriding the default method. This method receive as a parameter the field. if you want access the selectors you can use: <code>this.config.selectors</code></p>
+<p>When the field clear the errors the method remove will be called, overriding the default method. This method receive two parameters: the field and the error class.</p>
+
+<p>
+	If you want access other selectors you can use: <code>this.config.selectors</code>
+</p>
 
 <hr>
 
-<div class="table-wrap">
-	<table class="table table-dark">
-		<thead>
-			<tr>
-				<th>Key</th>
-				<th>Value</th>
-				<th>Default</th>
-				<th>Description</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th>container</th>
-				<td><em>string</em></td>
-				<td><em>form</em></td>
-				<td><p>Css selector of form or fields container.</p></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-
+<h3>Usage example</h3>
+<p>The javascript:</p>
+<pre>
+<code data-language="javascript">var config = {
+  customViewErrors: {
+    add: function(field, message, cls){
+      var messageContainer = document.createElement('SPAN');
+      var cls = cls || this.config.selectors.error;
+      messageContainer.innerHTML = message;
+      messageContainer.classList.add(cls);
+      field.parentElement.insertBefore(messageContainer, field);
+      field.classList.add(this.config.selectors.error);
+    },
+    remove: function(field, cls){
+      if(field.parentElement.querySelector('span')){
+        field.parentElement.querySelector('span').remove();
+        field.classList.remove(cls);
+      }
+    }
+  }	
+};
+var validator = new VanillaValidator(config);</code>
+</pre>
+<p>The functionality above will overriding the default errors view method.</p>
 
 					</article>
 					<!-- end main-post -->

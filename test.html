@@ -390,6 +390,7 @@
 			},
 			customViewErrors: {
 				add: function(field, message, cls){
+					//console.log('classe',cls)
 					var messageContainer = document.createElement('SPAN');
 					var cls = cls || this.config.selectors.error;
 					messageContainer.innerHTML = message;
@@ -397,10 +398,11 @@
 					field.parentElement.insertBefore(messageContainer, field);
 					field.classList.add(this.config.selectors.error);
 				},
-				remove: function(field){
+				remove: function(field, cls){
+					//console.log('classe',cls)
 					if(field.parentElement.querySelector('span')){
 						field.parentElement.querySelector('span').remove();
-						field.classList.remove(this.config.selectors.error);
+						field.classList.remove(cls);
 					}
 				}
 			},

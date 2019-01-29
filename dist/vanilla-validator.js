@@ -823,15 +823,16 @@ var VanillaValidator = (function(){
 	VanillaValidator.prototype.addValidationView = function(field, message, cls){
 		if(field){
 			message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
+			var errorClass = cls || this.config.selectors.messageError;
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.add)){
-				this.config.customViewErrors.add.call(this, field, message, cls);
+				this.config.customViewErrors.add.call(this, field, message, errorClass);
 			}else{
 				var parentEl = (this.isArray(field)) ? field[field.length-1].parentElement : field.parentElement;
 				if(parentEl){
 					var messageContainer = document.createElement('SPAN');
-					var messageClass = document.createAttribute('class');
+					messageClass = document.createAttribute('class');
 					$.inner(messageContainer,message);
-					messageClass.value = cls || this.config.selectors.messageError;
+					messageClass.value = errorClass;
 					messageContainer.setAttributeNode(messageClass);
 					if(this.isArray(field)){
 						var i, totalEl = field.length;
@@ -858,8 +859,9 @@ var VanillaValidator = (function(){
 	 */
 	VanillaValidator.prototype.removeValidationView = function(field, cls){
 		if(field){
+			var errorClass = cls || this.config.selectors.messageError;
 			if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.remove)){
-				this.config.customViewErrors.remove.call(this, field);
+				this.config.customViewErrors.remove.call(this, field, errorClass);
 			}else{
 				var parentEl = (this.isArray(field)) ? field[field.length-1].parentElement : field.parentElement;
 				if(parentEl){
@@ -871,7 +873,7 @@ var VanillaValidator = (function(){
 					}else{
 						field.classList.remove(this.config.selectors.error);
 					}
-					var messageErrorClass = cls || this.config.selectors.messageError;
+					var messageErrorClass = errorClass;
 					var oldMessage = $.getChild('.' + messageErrorClass, parentEl);
 					if(oldMessage){
 						oldMessage.remove();
