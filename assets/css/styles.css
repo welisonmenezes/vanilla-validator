@@ -65,6 +65,11 @@ textarea{
 }
 
 
+form .row > div{
+	margin-bottom: 1rem;
+}
+
+
 .alert{
 	color: #fff;
 	-webkit-border-radius: 0;
@@ -1343,4 +1348,9 @@ pre .close {
 pre .close:hover{
 	color: #f0c674; 
 	opacity: 1 !important;
+}
+
+.wrap-errors{
+	color: #ea2e49;
+	font-size: 80%;
 }
