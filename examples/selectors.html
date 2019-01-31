@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Vanilla Validator</title>
+	<meta name="description" content="Vanilla Validator - A pure Javascript form validator">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="../assets/images/favicon.png">
+	<link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../assets/rainbow-master/themes/css/tomorrow-night.css">
+	<link rel="stylesheet" href="../assets/css/fonts.css">
+	<link rel="stylesheet" href="../assets/css/styles.css">
+	<style>
+		body{
+			-moz-opacity: 0.00;
+			-khtml-opacity: 0.00;
+			opacity: 0.00;
+		}
+		.form-invalid{
+			border: solid 1px red;
+		}
+	</style>
+</head>
+<body class="page-about">
+	
+	<!-- header-main -->
+	<header class="header-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="navbar navbar-dark navbar-expand-md">
+						<a href="https://welisonmenezes.github.io/" class="navbar-brand" title="Portfolio Welison Menezes">
+							<img src="../assets/images/mylogo.svg" alt="Logo">
+						</a>
+						<h1>Vanilla Validator <small>A pure Javascript form validator</small></h1>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- end header-main -->
+
+	<!-- main -->
+	<main class="main">
+		<div class="container">
+		
+			<div class="row">
+				
+				<div class="col-md-4">
+					<!-- sidebar -->
+					<div class="sidebar">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="section-title">
+									<h4 class="title">Menu</h4>
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<a href="index.html" class="active">Basic Usage</a>
+									</li>
+									<li class="list-group-item">
+										<a href="configuration.html">Configurations</a>
+										<ul>
+											<li>
+												<a href="#">Selectors</a>
+											</li>
+											<li>
+												<a href="#">Messages</a>
+											</li>
+											<li>
+												<a href="#">Custom validations behavior</a>
+											</li>
+											<li>
+												<a href="#">Callbacks</a>
+											</li>
+											<li>
+												<a href="#">Custom validations</a>
+											</li>
+											<li>
+												<a href="#">Async validators</a>
+											</li>
+											<li>
+												<a href="#">Custom view errors</a>
+											</li>
+											<li>
+												<a href="#">Custom view list errors</a>
+											</li>
+											<li>
+												<a href="#">Container successful</a>
+											</li>
+											<li>
+												<a href="#">Form successful</a>
+											</li>
+										</ul>
+									</li>
+									<li class="list-group-item">
+										<a href="examples.html">Examples</a>
+									</li>
+									<li class="list-group-item">
+										<a href="download.html">Download</a>
+									</li>
+									<li class="list-group-item">
+										<a href="../index.html">Back to home</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- end sidebar -->
+				</div>
+
+				<div class="col-md-8">
+					
+					<!-- main-post -->
+					<article class="main-post">
+
+
+<header>
+	<h2>Custom Selectors</h2>
+</header>
+
+<form action="" class="my-form">
+	<div class="row">
+		<div class="col-md-6">
+			<input type="text" placeholder="Name" class="not-empty">
+		</div>
+		<div class="col-md-6">
+			<input type="email" placeholder="Email" class="not-empty email">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<input type="tel" placeholder="Phone" class="not-empty phone-number">
+		</div>
+		<div class="col-md-6">
+			<input type="text" placeholder="Subject" class="not-empty">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<textarea placeholder="Message" class="not-empty max-length" data-max-length="140"></textarea>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="wrap-errors"></div>
+			<span class="btn btn-primary my-btn-submit">Send</span>
+		</div>
+	</div>
+</form>
+
+					</article>
+					<!-- end main-post -->
+
+				</div>
+			</div>
+
+		</div>
+	</main>
+	<!-- end main -->
+	
+	<!-- footer-main -->
+	<footer class="footer-main">
+		<div class="dark-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<p><small>Created by Welison Menezes</small></p>
+					</div>
+					<div class="col-sm-6">
+						<ul class="nav-footer text-right">
+							<li>
+								<a href="https://welisonmenezes.github.io/" target="_blank" title="Portfolio Welison Menezes">
+									<i class="fas fa-briefcase"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://github.com/welisonmenezes" target="_blank" title="Github Welison Menezes">
+									<i class="fab fa-github"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://www.linkedin.com/in/welisonmenezes/" target="_blank" title="Linkedin Welison Menezes">
+									<i class="fab fa-linkedin"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- end footer-main -->
+
+	<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="../node_modules/popper.js/dist/umd/popper.min.js"></script>
+	<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../assets/rainbow-master/dist/rainbow.min.js"></script>
+    <script src="../assets/rainbow-master/src/language/generic.js"></script>
+    <script src="../assets/rainbow-master/src/language/html.js"></script>
+    <script src="../assets/rainbow-master/src/language/css.js"></script>
+    <script src="../assets/rainbow-master/src/language/javascript.js"></script>
+	<script src="../assets/js/app.js"></script>
+	
+	<script src="../dist/vanilla-validator.concat.min.js"></script>
+	<script>
+		var config = {
+			container: '.my-form', // any css selector
+			button: '.my-btn-submit', // any css selector
+			validationBy: 'onclick',
+			selectors: { // just ccs class without the dot
+				control: 'form-control',
+				required: 'not-empty',
+				phone: 'phone-number',
+				error: 'is-invalid',
+				messageError: 'invalid-feedback',
+				formError: 'form-invalid'
+			}
+		};
+		var validator = new VanillaValidator(config);
+	</script>
+</body>
+</html>
