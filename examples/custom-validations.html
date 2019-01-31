@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Vanilla Validator</title>
+	<meta name="description" content="Vanilla Validator - A pure Javascript form validator">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="../assets/images/favicon.png">
+	<link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../assets/rainbow-master/themes/css/tomorrow-night.css">
+	<link rel="stylesheet" href="../assets/css/fonts.css">
+	<link rel="stylesheet" href="../assets/css/styles.css">
+	<style>
+		body{
+			-moz-opacity: 0.00;
+			-khtml-opacity: 0.00;
+			opacity: 0.00;
+		}
+	</style>
+</head>
+<body class="page-about">
+	
+	<!-- header-main -->
+	<header class="header-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="navbar navbar-dark navbar-expand-md">
+						<a href="https://welisonmenezes.github.io/" class="navbar-brand" title="Portfolio Welison Menezes">
+							<img src="../assets/images/mylogo.svg" alt="Logo">
+						</a>
+						<h1>Vanilla Validator <small>A pure Javascript form validator</small></h1>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- end header-main -->
+
+	<!-- main -->
+	<main class="main">
+		<div class="container">
+		
+			<div class="row">
+				
+				<div class="col-md-4">
+					<!-- sidebar -->
+					<div class="sidebar">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="section-title">
+									<h4 class="title">Menu</h4>
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<a href="index.html" class="active">Basic Usage</a>
+									</li>
+									<li class="list-group-item">
+										<a href="configuration.html">Configurations</a>
+										<ul>
+											<li>
+												<a href="#">Selectors</a>
+											</li>
+											<li>
+												<a href="#">Messages</a>
+											</li>
+											<li>
+												<a href="#">Custom validations behavior</a>
+											</li>
+											<li>
+												<a href="#">Callbacks</a>
+											</li>
+											<li>
+												<a href="#">Custom validations</a>
+											</li>
+											<li>
+												<a href="#">Async validators</a>
+											</li>
+											<li>
+												<a href="#">Custom view errors</a>
+											</li>
+											<li>
+												<a href="#">Custom view list errors</a>
+											</li>
+											<li>
+												<a href="#">Container successful</a>
+											</li>
+											<li>
+												<a href="#">Form successful</a>
+											</li>
+										</ul>
+									</li>
+									<li class="list-group-item">
+										<a href="examples.html">Examples</a>
+									</li>
+									<li class="list-group-item">
+										<a href="download.html">Download</a>
+									</li>
+									<li class="list-group-item">
+										<a href="../index.html">Back to home</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- end sidebar -->
+				</div>
+
+				<div class="col-md-8">
+					
+					<!-- main-post -->
+					<article class="main-post">
+
+
+<header>
+	<h2>Custom Validations</h2>
+</header>
+
+<form action="">
+	<div class="row">
+		<div class="col-md-6">
+			<input type="text" placeholder="java or php forbiden" class="form-control required custom-validate" data-validate-key="no-bad-words">
+		</div>
+		<div class="col-md-6">
+			<input type="text" placeholder="Write: javascript" class="form-control required custom-validate" data-validate-key="must-be-javascript" data-message-error="The value must be 'javascript'">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="wrap-errors"></div>
+			<button type="submit" class="btn btn-primary">Send</button>
+		</div>
+	</div>
+</form>
+
+					</article>
+					<!-- end main-post -->
+
+				</div>
+			</div>
+
+		</div>
+	</main>
+	<!-- end main -->
+	
+	<!-- footer-main -->
+	<footer class="footer-main">
+		<div class="dark-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<p><small>Created by Welison Menezes</small></p>
+					</div>
+					<div class="col-sm-6">
+						<ul class="nav-footer text-right">
+							<li>
+								<a href="https://welisonmenezes.github.io/" target="_blank" title="Portfolio Welison Menezes">
+									<i class="fas fa-briefcase"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://github.com/welisonmenezes" target="_blank" title="Github Welison Menezes">
+									<i class="fab fa-github"></i>
+								</a>
+							</li>
+							<li>
+								<a href="https://www.linkedin.com/in/welisonmenezes/" target="_blank" title="Linkedin Welison Menezes">
+									<i class="fab fa-linkedin"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- end footer-main -->
+
+	<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="../node_modules/popper.js/dist/umd/popper.min.js"></script>
+	<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../assets/rainbow-master/dist/rainbow.min.js"></script>
+    <script src="../assets/rainbow-master/src/language/generic.js"></script>
+    <script src="../assets/rainbow-master/src/language/html.js"></script>
+    <script src="../assets/rainbow-master/src/language/css.js"></script>
+    <script src="../assets/rainbow-master/src/language/javascript.js"></script>
+	<script src="../assets/js/app.js"></script>
+	
+	<script src="../dist/vanilla-validator.concat.min.js"></script>
+	<script>
+		var config = {
+			selectors: {
+				error: 'is-invalid',
+				messageError: 'invalid-feedback'
+			},
+			customValidates: {
+				'no-bad-words' : {
+					message: '"java" and "php" words are forbiden.',
+					fn: function(field){
+						if(field.value === 'java' || field.value === 'php'){
+							return false;
+						}
+						return true;
+					}
+				},
+				'must-be-javascript' : {
+					message: '...',
+					fn: function(field){
+						if(field.value !== 'javascript'){
+							return false;
+						}
+						return true;
+					}
+				}
+			},
+		};
+		var validator = new VanillaValidator(config);
+	</script>
+</body>
+</html>
