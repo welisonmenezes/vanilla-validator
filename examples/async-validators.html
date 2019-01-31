@@ -115,49 +115,16 @@
 
 
 <header>
-	<h2>Custom Validations</h2>
+	<h2>Async validators example</h2>
 </header>
 
 <form action="">
 	<div class="row">
-		<div class="col-md-12">
-			<h5>Basic example</h5>
-		</div>
-	</div>
-	<div class="row">
 		<div class="col-md-6">
-			<input type="text" placeholder="java or php forbiden" class="form-control required custom-validate" data-validate-key="no-bad-words">
+			<input type="text" class="required async form-control"  placeholder="Write: javascript" data-async-key="async-validation-test-one">
 		</div>
 		<div class="col-md-6">
-			<input type="text" placeholder="Write: javascript" class="form-control custom-validate" data-validate-key="must-be-javascript" data-message-error="The value must be 'javascript'">
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<hr>
-			<h5>Pre-existing custom validations</h5>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-6">
-			<h6>equal-anchored-field</h6>
-			<div>
-				<input type="text" placeholder="Login" class="form-control required" id="my-id">
-			</div>
-			<br>
-			<div>
-				<input type="text" placeholder="Repeat the login" class="form-control required custom-validate" data-validate-key="equal-anchored-field" data-anchored-field="#my-id">
-			</div>
-		</div>
-		<div class="col-md-6">
-			<h6>different-anchored-field</h6>
-			<div>
-				<input type="text" placeholder="Login" class="form-control required" id="my-id-2">
-			</div>
-			<br>
-			<div>
-				<input type="text" placeholder="Do not repeat the login" class="form-control required custom-validate" data-validate-key="different-anchored-field" data-anchored-field="#my-id-2">
-			</div>
+			<input type="text" class="required async form-control"  placeholder="The word java is forbiden" data-async-key="async-validation-test-two">
 		</div>
 	</div>
 	<div class="row">
@@ -228,26 +195,34 @@
 				error: 'is-invalid',
 				messageError: 'invalid-feedback'
 			},
-			customValidates: {
-				'no-bad-words' : {
-					message: '"java" and "php" words are forbiden.',
-					fn: function(field){
-						if(field.value === 'java' || field.value === 'php'){
-							return false;
-						}
-						return true;
+			asyncValidates: {
+				'async-validation-test-one': {
+					message: 'The word must be javascript',
+					fn: function(field, message, container){
+						var self = this;
+						this.asyncValidationStart(field, 'processing...', container);
+						setTimeout(function(){
+							if(field){
+								var status = (field.value === 'javascript');
+								self.asyncValidationFinish(field, message, container, status);
+							}
+						}, 2000);
 					}
 				},
-				'must-be-javascript' : {
-					message: '...',
-					fn: function(field){
-						if(field.value !== 'javascript'){
-							return false;
-						}
-						return true;
+				'async-validation-test-two': {
+					message: 'processing...',
+					fn: function(field, message, container){
+						var self = this;
+						this.asyncValidationStart(field, 'processing...', container);
+						setTimeout(function(){
+							if(field){
+								var status = (field.value !== 'java');
+								self.asyncValidationFinish(field, 'The word should not be java', container, status);
+							}
+						}, 2000);
 					}
 				}
-			},
+			}
 		};
 		var validator = new VanillaValidator(config);
 	</script>
