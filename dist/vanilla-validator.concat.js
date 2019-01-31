@@ -1442,9 +1442,11 @@ var VanillaValidator = (function(){
 	 * @param { String } message The error message
 	 * @param { String } cls The optional class to message error
 	 */
-	VanillaValidator.prototype.addValidationView = function(field, message, cls){
-		if(field){
-			message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
+	VanillaValidator.prototype.addValidationView = function(field, message, cls, isAsyncStart){
+		if (field) {
+			if (!isAsyncStart) {
+                message = (field.getAttribute('data-message-error')) ? field.getAttribute('data-message-error') : message;
+            }
 			var errorClass = cls || this.config.selectors.messageError;
             if(this.config.customViewErrors && this.isFunction(this.config.customViewErrors.add)){
 				this.config.customViewErrors.add.call(this, field, message, errorClass);
@@ -1548,7 +1550,7 @@ var VanillaValidator = (function(){
 			container.setAttribute('data-validation-status', 'waiting');
 			field.setAttribute('data-validation-status', 'waiting');
 			this.removeValidationView(field, this.config.selectors.asyncWaiting);
-			this.addValidationView(field, message, this.config.selectors.asyncWaiting);
+			this.addValidationView(field, message, this.config.selectors.asyncWaiting, true);
 		}
 	};
 

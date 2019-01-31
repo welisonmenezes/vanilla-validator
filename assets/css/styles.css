@@ -144,6 +144,11 @@ form .row > div{
 .invalid-feedback{
 	color: #ea2e49;
 }
+.vv-async-waiting{
+	color: #f6f792;
+	font-size: 80%;
+	margin-top: .25rem;
+}
 
 .header-main{
 	background: #272a36;

@@ -18,9 +18,6 @@
 			-khtml-opacity: 0.00;
 			opacity: 0.00;
 		}
-		.form-invalid{
-			border: solid 1px red;
-		}
 	</style>
 </head>
 <body class="page-about">
@@ -118,35 +115,45 @@
 
 
 <header>
-	<h2>Custom Selectors</h2>
+	<h2>Custom Messages Examples</h2>
 </header>
 
-<form action="" class="my-form">
+<form action="">
 	<div class="row">
-		<div class="col-md-6">
-			<input type="text" placeholder="Name" class="not-empty">
-		</div>
-		<div class="col-md-6">
-			<input type="email" placeholder="Email" class="not-empty email">
+		<div class="col-md-12">
+			<h5>Messages to regular validations example:</h5>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<input type="tel" placeholder="Phone" class="not-empty phone-number">
+			<label>By messages object</label>
+			<input type="text" placeholder="Required" class="form-control required">
 		</div>
 		<div class="col-md-6">
-			<input type="text" placeholder="Subject" class="not-empty">
+			<label>By html attribute</label>
+			<input type="email" placeholder="Required" class="form-control required" data-message-error="It should not be empty.">
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<textarea placeholder="Message" class="not-empty max-length" data-max-length="140"></textarea>
+			<hr>
+			<h5>Messages to async validations example:</h5>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<label>By messages object</label>
+			<input type="text" placeholder="Async. Must be 'foo'" class="form-control required async" data-async-key="async-validation-test">
+		</div>
+		<div class="col-md-6">
+			<label>By html attribute</label>
+			<input type="email" placeholder="Async. Must be 'foo'" class="form-control required async" data-message-error="Async message error by html attribute." data-async-key="async-validation-test">
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<div class="my-list-errors-container"></div>
-			<span class="btn btn-primary my-btn-submit">Send</span>
+			<div class="wrap-errors"></div>
+			<button type="submit" class="btn btn-primary">Send</button>
 		</div>
 	</div>
 </form>
@@ -207,18 +214,28 @@
 	<script src="../dist/vanilla-validator.concat.min.js"></script>
 	<script>
 		var config = {
-			container: '.my-form', // any css selector
-			button: '.my-btn-submit', // any css selector
-			validationBy: 'onclick',
-			selectors: { // just ccs class without the dot
-				control: 'form-control',
-				required: 'not-empty',
-				phone: 'phone-number',
+			selectors: {
 				error: 'is-invalid',
-				messageError: 'invalid-feedback',
-				formError: 'form-invalid',
-				wrapErrors: 'my-list-errors-container'
-			}
+				messageError: 'invalid-feedback'
+			},
+			messages: {
+				required: 'Write something here'
+			},
+			asyncValidates: {
+				'async-validation-test': {
+					message: 'Async error message',
+					fn: function(field, message, container){
+						var self = this;
+						this.asyncValidationStart(field, 'Async process message', container);
+						setTimeout(function(){
+							if(field){
+								var status = (field.value === 'foo')
+								self.asyncValidationFinish(field, message, container, status);
+							}
+						}, 2000);
+					}
+				}
+			},
 		};
 		var validator = new VanillaValidator(config);
 	</script>
