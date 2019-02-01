@@ -18,6 +18,9 @@
 			-khtml-opacity: 0.00;
 			opacity: 0.00;
 		}
+		.invalid-feedback{
+			display: block;
+		}
 	</style>
 </head>
 <body class="page-about">
@@ -115,16 +118,24 @@
 
 
 <header>
-	<h2>Async validators example</h2>
+	<h2>Custom view errors example</h2>
 </header>
 
 <form action="">
 	<div class="row">
 		<div class="col-md-6">
-			<input type="text" class="required async form-control"  placeholder="Write: javascript" data-async-key="async-validation-test-one">
+			<input type="text" placeholder="Name" class="form-control required min-length" data-min-length="2" data-my-errors-container-id="my-errors">
 		</div>
 		<div class="col-md-6">
-			<input type="text" class="required async form-control"  placeholder="The word java is forbiden" data-async-key="async-validation-test-two">
+			<div id="my-errors"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<input type="text" placeholder="Email" class="form-control required email" data-my-errors-container-id="my-errors-2">
+		</div>
+		<div class="col-md-6">
+			<div id="my-errors-2"></div>
 		</div>
 	</div>
 	<div class="row">
@@ -190,37 +201,29 @@
 	
 	<script src="../dist/vanilla-validator.concat.min.js"></script>
 	<script>
+		function updateErrorContainer(field, message, cls){
+			var containerErrorsID = field.getAttribute('data-my-errors-container-id');
+			if(containerErrorsID){
+				var containerErrors = document.getElementById(containerErrorsID);
+				if(message){
+					containerErrors.classList.add(cls);
+				}else{
+					containerErrors.classList.remove(cls);
+				}
+				containerErrors.innerHTML = message;
+			}
+		}
 		var config = {
 			selectors: {
 				error: 'is-invalid',
 				messageError: 'invalid-feedback'
 			},
-			asyncValidates: {
-				'async-validation-test-one': {
-					message: 'The word must be javascript',
-					fn: function(field, message, container){
-						var self = this;
-						this.asyncValidationStart(field, 'processing...', container);
-						setTimeout(function(){
-							if(field){
-								var status = (field.value === 'javascript');
-								self.asyncValidationFinish(field, message, container, status);
-							}
-						}, 2000);
-					}
+			customViewErrors: {
+				add: function(field, message, cls){
+					updateErrorContainer(field, message, cls);
 				},
-				'async-validation-test-two': {
-					message: 'The word should not be java',
-					fn: function(field, message, container){
-						var self = this;
-						this.asyncValidationStart(field, 'processing...', container);
-						setTimeout(function(){
-							if(field){
-								var status = (field.value !== 'java');
-								self.asyncValidationFinish(field, message, container, status);
-							}
-						}, 2000);
-					}
+				remove: function(field, cls){
+					updateErrorContainer(field, '', cls);
 				}
 			}
 		};
